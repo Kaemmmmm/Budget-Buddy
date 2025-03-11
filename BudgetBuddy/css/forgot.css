@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: prompt, sans-serif;
+}
+
+body {
+    background-color: #f8f9fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    width: 95%;
+    overflow: hidden;
+    align-items: stretch; /* Ensures both sides stretch evenly */
+    justify-content: center;
+    padding: 0;
+}
+
+.image-container {
+    flex: 1.2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eef1f8;
+    padding: 0;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the full area */
+}
+
+.form-container {
+    padding: 50px;
+    flex: 1;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.back-link {
+    display: block;
+    text-decoration: none;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #3366ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+button:hover {
+    background-color: #274bcc;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .image-container {
+        order: -1;
+        height: 250px;
+    }
+
+    .image-container img {
+        object-fit: contain; /* Ensures the full image is visible on smaller screens */
+    }
+
+    .form-container {
+        padding: 30px;
+    }
+}
