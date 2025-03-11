@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/saving(goal).css">
+    <link rel="stylesheet" href="../css/saving(goal).css">
 </head>
 <body>
     <div class="sidebar">
@@ -59,28 +59,6 @@
 
         </form>
     </div>
-    <script>
-                document.querySelectorAll('.toggle-submenu').forEach(menu => {
-            menu.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                let submenu = this.nextElementSibling;
-    
-                // Toggle submenu visibility
-                submenu.classList.toggle('active');
-    
-                // Rotate the arrow
-                this.classList.toggle('rotate');
-    
-                // Close other submenus when one is opened
-                document.querySelectorAll('.submenu').forEach(sub => {
-                    if (sub !== submenu) {
-                        sub.classList.remove('active');
-                        sub.previousElementSibling.classList.remove('rotate');
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="/BudgetBuddy/javascript/nav.js"></script>
 </body>
 </html>
