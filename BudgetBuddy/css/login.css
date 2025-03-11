@@ -43,7 +43,7 @@ label {
     margin-top: 10px;
 }
 
-input[type="email"], input[type="password"] {
+input {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -188,4 +188,8 @@ input[type="email"], input[type="password"] {
 
 .submenu.active {
     display: block;
+}
+
+.text-container {
+    text-align: center;
 }

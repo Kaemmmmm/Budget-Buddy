@@ -7,6 +7,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
+    min-height: 100vh;
+    padding: 20px 20px 20px 320px;  /* top, right, bottom, left */
 }
 
 /* Sidebar */

@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <div class="illustration">
-            <img src="/picture/login.png" alt="Signup Illustration">
+            <img src="../picture/login.png" alt="Signup Illustration">
         </div>
         <div class="signup-box">
             <h1>Budget Buddy</h1>
@@ -50,7 +50,7 @@
 
                 <button type="submit" class="signup-btn">ลงทะเบียน</button>
 
-                <p class="login-text">มีบัญชีอยู่แล้ว? <a href="/html/login.html">ลงชื่อเข้าใช้</a></p>
+                <p class="login-text">มีบัญชีอยู่แล้ว? <a href="../html/login.html">ลงชื่อเข้าใช้</a></p>
             </form>
         </div>
     </div>
@@ -70,7 +70,7 @@
     <!-- Firebase Authentication and Firestore Integration -->
     <script type="module">
         // Import necessary functions from firebase.js
-        import { auth, createUserWithEmailAndPassword, db, doc, setDoc } from '/javascript/firebase.js';
+        import { auth, createUserWithEmailAndPassword, db, doc, setDoc } from '../javascript/firebase.js';
 
         // Add event listener to the sign-up form
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
@@ -105,7 +105,7 @@
                 });
 
                 alert('Signup successful!');
-                window.location.href = '/html/login.html';
+                window.location.href = '../html/login.html';
             } catch (error) {
                 console.error('Signup Error:', error);
                 alert('Error: ' + error.message);

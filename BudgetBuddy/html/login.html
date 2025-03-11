@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <div class="illustration">
-            <img src="/picture/login.png" alt="Login Illustration">
+            <img src="../picture/login.png" alt="Login Illustration">
         </div>
         <div class="login-box">
             <h1>Budget Buddy</h1>
@@ -27,11 +27,11 @@
                     <span class="toggle-password" onclick="togglePassword('password')">👁</span>
                 </div>
 
-                <button type="submit" class="login-btn">เข้าสู่ระบบ</button>
+                <button type="submit" class="login-btn" onclick="window.location.href='../html/start.html';">เข้าสู่ระบบ</button>
 
                 <div class="text-container">
-                    <p class="signup-text">ยังไม่มีบัญชี? <a href="/html/signup.html">ลงทะเบียน</a></p>
-                    <p class="forgot-password-text">ลืมรหัสผ่าน? <a href="/html/forgot.html">รีเซ็ตรหัสผ่าน</a></p>
+                    <p class="signup-text">ยังไม่มีบัญชี? <a href="../html/signup.html">ลงทะเบียน</a></p>
+                    <p class="forgot-password-text">ลืมรหัสผ่าน? <a href="../html/forgot.html">รีเซ็ตรหัสผ่าน</a></p>
                 </div>
                 
             </form>
@@ -49,7 +49,7 @@
     <!-- Firebase Authentication Integration -->
     <script type="module">
         // Import necessary functions from firebase.js
-        import { auth, signInWithEmailAndPassword } from '/javascript/firebase.js';
+        import { auth, signInWithEmailAndPassword } from '../javascript/firebase.js';
 
         // Add event listener to the login form
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -66,7 +66,7 @@
 
                 // Redirect to the dashboard or home page after successful login
                 alert('Login successful!');
-                window.location.href = '/html/start.html'; // Update this to your desired post-login page
+                window.location.href = '../html/start.html'; // Update this to your desired post-login page
             } catch (error) {
                 console.error('Login Error:', error);
                 alert('Error: ' + error.message);
