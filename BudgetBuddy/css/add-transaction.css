@@ -1,0 +1,187 @@
+/* รีเซ็ตค่าพื้นฐาน */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Prompt';
+}
+
+/* Body */
+body {
+  background-color: #f4f4f4;
+  padding: 20px 20px 20px 320px;
+  margin: 0;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.menu li {
+  margin-bottom: 10px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+  content: "\25BC";
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}
+
+
+/* Main Container */
+.container {
+  background: #fff;
+  width: 800px;
+  max-width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  margin: 50px auto;
+}
+
+
+/* ชื่อหน้า */
+.page-title {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* วันที่ */
+.date-display {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px; /* เว้นช่องก่อนเริ่มฟอร์ม */
+}
+
+/* ฟอร์ม */
+.transaction-form {
+  max-width: 400px;   /* ความกว้างฟอร์ม */
+  margin: 0 auto;      /* จัดกึ่งกลางใน container */
+}
+
+/* กลุ่มฟอร์ม */
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* label */
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+/* input, textarea */
+.form-group input,
+.form-group textarea {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* ถ้าอยากให้ช่องกรอกข้อความสูงขึ้นสำหรับ textarea */
+.form-group textarea {
+  resize: vertical; /* ให้ผู้ใช้ย่อขยาย textarea ได้ตามต้องการ */
+}
+
+/* กรณี checkbox + label อยู่แถวเดียวกัน */
+.receipt-group {
+  flex-direction: row;
+  align-items: center;
+}
+.receipt-group label {
+  margin-bottom: 0; /* ไม่ต้องเว้นบรรทัดล่าง */
+  margin-left: 8px; /* เว้นช่องระหว่าง checkbox กับข้อความ */
+}
+
+/* ปุ่ม */
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ปุ่มยกเลิก */
+.cancel-btn {
+  background-color: #d84444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.cancel-btn:hover {
+  background-color: #d84444;
+}
+
+/* ปุ่มบันทึก */
+.submit {
+  background-color: #0099ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.submit:hover {
+  background-color: #0056b3;
+}

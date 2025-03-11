@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Enhanced User Interface</title>
+    <link rel="stylesheet" href="/css/plan.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>แผนการเงินปัจจุบัน</h1>
+        </header>
+
+        <section class="info">
+            <div class="card">
+                <h2>เงินออม</h2>
+                <p>คงสะสมเป็นเงินออมทั้งหมดที่จำเป็น 2,500 บาท หรือสัดส่วนเงินทุนที่ 10 % ของรายได้</p>
+            </div>
+            <div class="card">
+                <h2>เงินลงทุน</h2>
+                <p>ลงทุนอย่างและหัดลงทุนเพิ่มเงินเหลือได้อีกทั้งหมด 12,500 บาทที่ดีเด่น</p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <button class="btn green" onclick="window.location.href='xxx.html';">ปรับแต่ง</button>
+            <!-- Button that opens the modal -->
+            <button class="btn orange" onclick="openModal()">ยืนยัน</button>
+        </footer>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal" id="myModal" style="display: none;">
+      <div class="modal-content">
+        <!-- Close button (X) -->
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="checkmark">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="38" fill="#fff" stroke="#4CAF50" stroke-width="4"/>
+              <path d="M28 40l8 8 16-20" stroke="#4CAF50" stroke-width="4" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        <p>แผนการเงินของคุณอัพเดตแล้ว</p>
+        <button class="btn" onclick="window.location.href='calendar.html'">OK</button>
+      </div>
+    </div>
+
+    <script src="/javascript/plan.js"></script>
+</body>
+</html>

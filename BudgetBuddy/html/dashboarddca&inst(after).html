@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รายการธุรกรรม</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/dashboard(dca&inst).css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <ul class="menu">
+        <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+        <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+        <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+        
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="calculator.html">คำนวณDCA</a></li>
+                <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+            </ul>
+        </li>
+
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+            </ul>
+        </li>
+
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+            </ul>
+        </li>
+
+        <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+    </ul>
+</div>
+  <div class="container">
+    <div class="header">
+      <div class="title">รายการธุรกรรม</div>
+      <div class="subtitle">มกราคม <strong>2568</strong></div>
+    </div>
+
+    <canvas id="transactionChart" class="chart"></canvas>
+
+    <div class="button-group">
+      <button class="button-edit" onclick="window.location.href='edit-dash(dca&inst).html';">แก้ไข</button>
+      <button class="button-dca" onclick="window.location.href='calculator.html';">โปรแกรมคำนวณ DCA</button>
+      <button class="button-assess" onclick="window.location.href='assess.html';">ประเมินสุขภาพการเงิน</button>
+      <button class="button-milestone" onclick="window.location.href='xxx.html';">ดูความคืบหน้า</button>
+    </div>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('transactionChart').getContext('2d');
+
+    /**
+     * We use two datasets to achieve a stacked bar effect.
+     * - The first dataset covers most bars fully, except "เงินออม (DCA)" 
+     *   which is partially allocated to the second dataset.
+     * - For "เงินออม (DCA)" we split 3,566.67 in the first dataset and 2,000 in the second.
+     */
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['รายรับ', 'รายจ่าย', 'เงินออม (DCA, ซ้อมผ่อน)', 'หนี้สิน', 'เงินคงเหลือ'],
+        datasets: [
+          {
+            label: 'Segment 1',
+            data: [18000, 12000, 3566.67, 5000, 4000],
+            backgroundColor: [
+              '#28a745', // รายรับ
+              '#dc3545', // รายจ่าย
+              '#4da6ff', // เงินออม (DCA) - lower part
+              '#ff0000', // หนี้สิน
+              '#ffc107'  // เงินคงเหลือ
+            ]
+          },
+          {
+            label: 'Segment 2',
+            data: [0, 0, 2000, 0, 0], // Only the "เงินออม (DCA)" bar has an upper portion
+            backgroundColor: [
+              '#28a745', // not used (0)
+              '#dc3545', // not used (0)
+              '#b3d9ff', // เงินออม (DCA) - top part
+              '#ff0000', // not used (0)
+              '#ffc107'  // not used (0)
+            ]
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                // Display the bar value with commas and "บาท"
+                const value = context.parsed.y;
+                if (!value) return '';
+                return value.toLocaleString() + ' บาท';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true
+          },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString() + ' บาท';
+              }
+            }
+          }
+        }
+      }
+    });
+  </script>
+  <script>
+    document.querySelectorAll('.toggle-submenu').forEach(menu => {
+  menu.addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  let submenu = this.nextElementSibling;
+  
+  // Toggle submenu visibility
+  submenu.classList.toggle('active');
+  
+  // Rotate the arrow
+  this.classList.toggle('rotate');
+  
+  // Close other submenus when one is opened
+  document.querySelectorAll('.submenu').forEach(sub => {
+  if (sub !== submenu) {
+    sub.classList.remove('active');
+    sub.previousElementSibling.classList.remove('rotate');
+  }
+  });
+  });
+  });
+  </script>
+</body>
+</html>

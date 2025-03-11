@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เริ่มต้นวางแผน DCA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dca.css">
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+            <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+            
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="calculator.html">คำนวณDCA</a></li>
+                    <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                    <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <div class="title">เริ่มต้นวางแผน <strong>DCA</strong></div>
+        <form class="dca-form">
+            <label for="investment-amount" class="form-label">จำนวนเงินที่ต้องการลงทุนต่อเดือน</label>
+            <input type="text" id="investment-amount" class="form-input" placeholder="บาท">
+
+            <label for="investment-date" class="form-label">ต้องการลงทุนทุกวันที่</label>
+            <select id="investment-date" class="form-input">
+                <option value="">-- เลือกวันที่ --</option>
+                <!-- Generate options from 1 to 30 -->
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+                <option value="26">26</option>
+                <option value="27">27</option>
+                <option value="28">28</option>
+                <option value="29">29</option>
+                <option value="30">30</option>
+            </select>
+
+            <label for="investment-duration" class="form-label">ระยะเวลาที่ต้องการลงทุน</label>
+            <input type="text" id="investment-duration" class="form-input" placeholder="เดือน">
+
+            <p class="form-note">** อัตราผลตอบแทนที่คำนวณ + ระยะเวลา ขึ้นอยู่กับการวางแผนส่วนตัวที่สอดคล้องกับข้อมูลทางการเงินของคุณ</p>
+
+            <button type="button" class="submit-button" onclick="window.location.href='in-ex(dca).html';">ถัดไป &rarr;</button>
+
+        </form>
+    </div>
+    <script>
+                document.querySelectorAll('.toggle-submenu').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                let submenu = this.nextElementSibling;
+    
+                // Toggle submenu visibility
+                submenu.classList.toggle('active');
+    
+                // Rotate the arrow
+                this.classList.toggle('rotate');
+    
+                // Close other submenus when one is opened
+                document.querySelectorAll('.submenu').forEach(sub => {
+                    if (sub !== submenu) {
+                        sub.classList.remove('active');
+                        sub.previousElementSibling.classList.remove('rotate');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

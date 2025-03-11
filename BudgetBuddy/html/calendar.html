@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ปฏิทินธุรกรรม</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/calendar.css">
+    <script src="../javascript/changemonth.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+            <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+            
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="calculator.html">คำนวณDCA</a></li>
+                    <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                    <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <div class="calendar-wrapper">
+            
+            <!-- คอลัมน์ซ้าย: ปฏิทิน -->
+            <div class="calendar-content">
+                <div class="header">
+                    <div class="search-bar">
+                        <input type="text" placeholder="ค้นหาธุรกรรม">
+                        <button>🔍</button>
+                    </div>
+                    <div class="month-year">
+                        <button class="nav-button" id="prevBtn">&lt;</button>
+                        <p id="monthYearText">มกราคม <strong>2568</strong></p>
+                        <button class="nav-button" id="nextBtn">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar">
+                    <div class="days">Sun</div>
+                    <div class="days">Mon</div>
+                    <div class="days">Tue</div>
+                    <div class="days">Wed</div>
+                    <div class="days">Thu</div>
+                    <div class="days">Fri</div>
+                    <div class="days">Sat</div>
+                    <!-- วันที่ -->
+                    <div class="date">1</div> <div class="date">2</div> <div class="date">3</div> <div class="date">4</div>
+                    <div class="date">5</div> <div class="date">6</div> <div class="date">7</div> <div class="date">8</div>
+                    <div class="date">9</div> <div class="date">10</div> <div class="date">11</div> <div class="date">12</div>
+                    <div class="date">13</div> <div class="date">14</div> <div class="date">15</div> <div class="date">16</div>
+                    <div class="date">17</div> <div class="date">18</div> <div class="date">19</div> <div class="date">20</div>
+                    <div class="date">21</div> <div class="date">22</div> <div class="date">23</div> <div class="date">24</div>
+                    <div class="date">25</div> <div class="date">26</div> <div class="date">27</div> <div class="date">28</div>
+                    <div class="date">29</div> <div class="date">30</div> <div class="date">31</div>
+                </div>
+                <div class="footer">
+                    <button class="edit-btn">แก้ไขธุรกรรม</button>
+                    <button class="add-btn" onclick="window.location.href='add-transaction.html'">
+                        เพิ่มธุรกรรม
+                    </button>
+                </div>
+            </div>
+            
+            <!-- คอลัมน์ขวา: การแจ้งเตือน -->
+            <div class="alert-row">
+                <div class="alert">
+                    <p>การแจ้งเตือนค่าใช้จ่าย</p>
+                    <span>ยังไม่มียอดค้างชำระขณะนี้</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+         
+
+    <script>
+        document.querySelectorAll('.toggle-submenu').forEach(menu => {
+    menu.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        let submenu = this.nextElementSibling;
+
+        // Toggle submenu visibility
+        submenu.classList.toggle('active');
+
+        // Rotate the arrow
+        this.classList.toggle('rotate');
+
+        // Close other submenus when one is opened
+        document.querySelectorAll('.submenu').forEach(sub => {
+            if (sub !== submenu) {
+                sub.classList.remove('active');
+                sub.previousElementSibling.classList.remove('rotate');
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

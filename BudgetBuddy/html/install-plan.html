@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนการผ่อนชำระ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/install-plan.css">
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+            <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+            
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="calculator.html">คำนวณDCA</a></li>
+                    <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                    <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <div class="title">แผนการชำระผ่อน</div>
+        <div class="grid-container">
+            <div class="grid-item">1</div>
+            <div class="grid-item">2</div>
+            <div class="grid-item">3</div>
+            <div class="grid-item">4</div>
+            <div class="grid-item">5</div>
+            <div class="grid-item">6</div>
+            <div class="grid-item">7</div>
+            <div class="grid-item">8</div>
+            <div class="grid-item">9</div>
+            <div class="grid-item">10</div>
+            <div class="grid-item">11</div>
+            <div class="grid-item">12</div>
+        </div>
+
+        <div class="payment-info">5,566.67 บาท ต่อเดือน</div>
+        <p class="form-note">** การซ้อมผ่อนมีระยะเวลาจำลองเพียง 1 ปี</p>
+
+         <!-- ปุ่มสรุปรายการธุรกรรม -->
+         <button class="summary-btn" onclick="window.location.href='dashboardinstall(before).html'">
+            สรุปรายการธุรกรรม
+        </button>
+    </div>
+    <script>
+                document.querySelectorAll('.toggle-submenu').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                let submenu = this.nextElementSibling;
+    
+                // Toggle submenu visibility
+                submenu.classList.toggle('active');
+    
+                // Rotate the arrow
+                this.classList.toggle('rotate');
+    
+                // Close other submenus when one is opened
+                document.querySelectorAll('.submenu').forEach(sub => {
+                    if (sub !== submenu) {
+                        sub.classList.remove('active');
+                        sub.previousElementSibling.classList.remove('rotate');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

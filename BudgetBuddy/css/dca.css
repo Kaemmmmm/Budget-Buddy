@@ -1,0 +1,166 @@
+/* Global Reset and Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'prompt';
+}
+
+/* Body with a subtle gradient background
+   - Removed display:flex and align-items/justify-content
+   - Added padding-left so the container isn't hidden by the sidebar */
+body {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  min-height: 100vh;
+  padding: 50px 20px 20px 320px; /* top-right-bottom-left */
+}
+
+/* Sidebar (fixed on the left) */
+.sidebar {
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text horizontally */
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+  content: "\25BC"; /* Down arrow */
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}
+
+/* Main container styling
+   - Use margin: 0 auto for horizontal centering
+   - Fixed width + max-width for responsiveness */
+.container {
+  width: 600px;
+  max-width: 90%;
+  margin: 0 auto;  
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Title styling with a stylish underline */
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #007bff;
+}
+
+/* Form label styling */
+.form-label {
+  font-size: 16px;
+  margin: 15px 0 5px;
+  display: block;
+  text-align: left;
+  color: #555;
+}
+
+/* Form input and select styling */
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Input focus effects */
+.form-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Form note styling */
+.form-note {
+  font-size: 14px;
+  color: #ff4d4d;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+/* Submit button styling */
+.submit-button {
+  padding: 15px 30px;
+  background-color: #ffcc00;
+  color: #333;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 10px;
+}
+
+/* Submit button hover effect */
+.submit-button:hover {
+  background-color: #e6b800;
+  transform: translateY(-3px);
+}
+
+/* Right align text in text inputs */
+input[type="text"] {
+  text-align: right;
+}

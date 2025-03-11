@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กรอกข้อมูลการเงินเบื้องต้น</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/in-ex(dca).css">
+</head>
+<body>
+  <div class="container">
+    <div class="title">กรอกข้อมูลการเงินเบื้องต้น</div>
+    <form class="financial-form">
+      <label for="income" class="form-label">รายรับ</label>
+      <input type="text" id="income" class="form-input" placeholder="บาท" required>
+
+      <label for="expense" class="form-label">รายจ่าย</label>
+      <input type="text" id="expense" class="form-input" placeholder="บาท" required>
+
+      <label for="debt" class="form-label">หนี้สิน</label>
+      <input type="text" id="debt" class="form-input" placeholder="บาท" required>
+
+      <button type="submit" class="submit-button" onclick="window.location.href='dashboarddca&inst(before).html';">
+        บันทึก &rarr;
+      </button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+/* Global Reset & Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'prompt';
+}
+
+/* Body with a subtle gradient background */
+/* Removed flex centering and added left padding for the sidebar */
+body {
+  background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
+  min-height: 100vh;
+  padding: 20px 20px 20px 320px;  /* top, right, bottom, left */
+}
+
+/* Container Card */
+.container {
+  background: #fff;
+  width: 600px;
+  max-width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin: 50px auto; /* Center horizontally within the remaining space */
+}
+
+/* Title Styling */
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Grid Container */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin: 30px 0;
+}
+
+/* Grid Items with hover effect */
+.grid-item {
+  background-color: #e0f0ff;
+  color: #007bff;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1 / 1; /* Enforces a square shape */
+  width: 75%;  /* Occupies 75% of the grid cell width */
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Payment Info */
+.payment-info {
+  font-size: 24px;
+  font-weight: 600;
+  color: #d9534f;
+  margin: 30px 0;
+}
+
+/* Form Note */
+.form-note {
+  font-size: 14px;
+  color: #ff0000;
+  margin-top: 10px;
+  text-align: left;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text horizontally */
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+  content: "\25BC"; /* Down arrow */
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}
+
+.summary-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #28a745; /* สีเขียว */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.summary-btn:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+

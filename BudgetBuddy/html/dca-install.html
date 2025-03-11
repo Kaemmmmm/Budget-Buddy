@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>วางแผนDCAและการผ่อนชำระ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dca-install.css">
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+            <li><a href="dashboarddca&inst(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+            
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="calculator.html">คำนวณDCA</a></li>
+                    <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                    <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <div class="title">เริ่มต้นวางแผนDCAและการผ่อนชำระ</div>
+
+        <div class="dca-frame">
+            <h2 class="dca-header">DCA</h2>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="monthly-investment">จำนวนเงินที่ต้องการลงทุนต่อเดือน</label>
+                    <input type="text" id="monthly-investment" placeholder="บาท">
+                </div>
+                <div class="form-group">
+                    <label for="investment-date">เลือกวันที่ลงทุน</label>
+                    <input type="date" id="investment-date">
+                </div>
+                <div class="form-group">
+                    <label for="investment-duration">ระยะเวลาที่ต้องการลงทุน</label>
+                    <input type="text" id="investment-duration" placeholder="ปี">
+                </div>
+               </form>
+        </div>
+
+        <div class="install-frame">
+            <h2 class="install-header">การซ้อมผ่อน</h2>
+            <form action="#" method="POST">
+                <label for="asset-type" class="form-label">เลือกประเภทสินทรัพย์</label>
+                <select id="asset-type" class="form-input" required>
+                    <option value=""></option>
+                    <option value="house">บ้าน</option>
+                    <option value="car">รถ</option>
+                </select>
+                <div class="form-group">
+                    <label for="installment-duration">ระยะเวลาที่ต้องการผ่อน</label>
+                    <input type="text" id="installment-duration" placeholder="ปี">
+                </div>
+                <div class="form-group">
+                    <label for="installment-amount">ราคาสินทรัพย์ที่ต้องการ</label>
+                    <input type="text" id="installment-amount" placeholder="บาท">
+                </div>  
+                
+                <div class="button-container">
+                    <a href="dashboarddca&inst(before).html" class="submit-button">บันทึก</a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    <script>
+                document.querySelectorAll('.toggle-submenu').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                let submenu = this.nextElementSibling;
+    
+                // Toggle submenu visibility
+                submenu.classList.toggle('active');
+    
+                // Rotate the arrow
+                this.classList.toggle('rotate');
+    
+                // Close other submenus when one is opened
+                document.querySelectorAll('.submenu').forEach(sub => {
+                    if (sub !== submenu) {
+                        sub.classList.remove('active');
+                        sub.previousElementSibling.classList.remove('rotate');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

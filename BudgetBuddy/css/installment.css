@@ -1,0 +1,177 @@
+/* Global Reset and Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'prompt';
+}
+
+/* Body with a subtle gradient background */
+/* Removed flex centering and added left padding to make room for the sidebar */
+body {
+  background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
+  min-height: 100vh;
+  padding: 20px 20px 20px 320px; /* top, right, bottom, left */
+}
+
+/* Container Card */
+.container {
+  background: #fff;
+  width: 600px;
+  max-width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin: 50px auto; /* centers horizontally and gives a top margin */
+}
+
+/* Title Styling */
+.title {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+/* Form Styles */
+.installment-form {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: #fff;
+}
+
+.form-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
+}
+
+/* Custom Select Arrow */
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10"><path fill="%23777" d="M7 10l7-10H0z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 10px;
+}
+
+/* Form Note */
+.form-note {
+  font-size: 14px;
+  color: #ff4d4d;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+/* Button Wrapper */
+.button-wrapper {
+  margin-top: 40px;
+}
+
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text horizontally */
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+  content: "\25BC"; /* Down arrow */
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}

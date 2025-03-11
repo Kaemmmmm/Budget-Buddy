@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password - Budget Buddy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/forgot.css">
+</head>
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img src="/picture/forgot.png" alt="Password Reset Illustration">
+        </div>
+        <div class="form-container">
+            <h1>Budget Buddy</h1>
+            <a href="/html/login.html" class="back-link">← กลับหน้า login</a>
+            <h2>รีเซ็ตรหัสผ่าน</h2>
+            <form id="forgot-form">
+                <label for="email">อีเมล์</label>
+                <input type="email" id="email" name="email" placeholder="john.doe@gmail.com" required>
+                <button type="submit">รีเซ็ตรหัสผ่าน</button>
+            </form>
+        </div>
+    </div>
+    <script type="module">
+        import { sendResetEmail } from "/javascript/firebase.js";
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("forgot-form");
+            if (form) {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault();
+                    const email = document.getElementById("email").value;
+                    sendResetEmail(email);
+                });
+            } else {
+                console.error("Error: forgot-form not found in the DOM.");
+            }
+        });
+    </script>
+    
+    
+</body>
+</html>
+

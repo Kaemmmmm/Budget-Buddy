@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ความคืบหน้าการชำระผ่อน</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/install-progress.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <ul class="menu">
+            <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+            <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+            
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="calculator.html">คำนวณDCA</a></li>
+                    <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                    <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+                </ul>
+            </li>
+    
+            <li class="has-submenu">
+                <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+                </ul>
+            </li>
+    
+            <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="dashboard.html">←</a>
+        </div>
+
+        <!-- Title -->
+        <h2 class="title">ความคืบหน้าการชำระผ่อน</h2>
+        
+        <!-- Payment Details -->
+        <p class="installment-text">
+            <span class="highlight">5,566.67</span> บาท ต่อเดือน
+        </p>
+        <p class="installment-info">
+            ชำระแล้ว <span class="highlight-month">1</span> เดือน | ค่างวดที่ต้องชำระต่อ <span class="highlight-month">23</span> เดือน
+        </p>
+
+        <!-- Chart -->
+        <div class="chart-container">
+            <canvas id="installmentChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('installmentChart').getContext('2d');
+
+        // Data for installment payments
+        const paidMonths = 1;
+        const totalMonths = 24;
+        const paidPercentage = ((paidMonths / totalMonths) * 100).toFixed(2);
+        const remainingPercentage = (100 - paidPercentage).toFixed(2);
+
+        // Custom Chart.js Plugin for Center Text
+        const centerText = {
+            id: 'centerText',
+            beforeDraw(chart) {
+                const { width, height } = chart;
+                const ctx = chart.ctx;
+                ctx.restore();
+                
+                const fontSize = (height / 10).toFixed(2);
+                ctx.font = `bold ${fontSize}px Prompt, sans-serif`;
+                ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center';
+
+                // Centered text
+                const text = `${paidPercentage}%`;
+                const x = width / 2;
+                const y = height / 2;
+                ctx.fillText(text, x, y);
+
+                ctx.save();
+            }
+        };
+
+        new Chart(ctx, {
+            type: 'doughnut', // Changed from 'pie' to 'doughnut'
+            data: {
+                labels: [`${paidPercentage}%`, `${remainingPercentage}%`],
+                datasets: [{
+                    data: [paidPercentage, remainingPercentage],
+                    backgroundColor: ['#ffb3d9', '#ffd1e3'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%', // Creates the donut effect
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                }
+            },
+            plugins: [centerText] // Add center text
+        });
+
+        document.querySelectorAll('.toggle-submenu').forEach(menu => {
+            menu.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                let submenu = this.nextElementSibling;
+    
+                // Toggle submenu visibility
+                submenu.classList.toggle('active');
+    
+                // Rotate the arrow
+                this.classList.toggle('rotate');
+    
+                // Close other submenus when one is opened
+                document.querySelectorAll('.submenu').forEach(sub => {
+                    if (sub !== submenu) {
+                        sub.classList.remove('active');
+                        sub.previousElementSibling.classList.remove('rotate');
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+

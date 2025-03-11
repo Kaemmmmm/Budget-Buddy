@@ -1,0 +1,205 @@
+ /* รีเซ็ตเบื้องต้น */
+ * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+
+  body {
+    display: flex;
+    background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
+    min-height: 100vh;
+    padding: 20px 20px 20px 320px; /* top, right, bottom, left */
+  }
+
+.container {
+    background-color: #fff;
+    width: 600px;
+    max-width: 100%;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    margin: 50px auto; 
+}
+ /* Sidebar Styles */
+.sidebar {
+    width: 280px;
+    background: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow-y: auto;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center text horizontally */
+    padding: 12px;
+    border-radius: 5px;
+    transition: background 0.3s, color 0.3s;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+}
+
+
+.menu a:hover {
+    background: #e6f0ff;
+    color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+    content: "\25BC"; /* Down arrow */
+    position: absolute;
+    right: 10px;
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+    transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+    display: none;
+    list-style: none;
+    padding-left: 0;
+}
+
+.submenu.active {
+    display: block;
+}
+
+  /* ส่วนหัวเรื่องและ user info */
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .header-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+  }
+
+  .user-name {
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  /* กล่องแสดงสถานะ "พอใช้" และ "ดีมาก" */
+  .status-wrapper {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 20px;
+  }
+
+  .status-box {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 150px;
+  }
+
+  /* วงกลม */
+  .circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .circle-orange {
+    background-color: #f8b54a; /* โทนส้ม */
+  }
+
+  .circle-green {
+    background-color: #4CAF50; /* โทนเขียว */
+  }
+
+  .status-text {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .status-detail {
+    font-size: 0.9rem;
+    color: #666;
+    text-align: center;
+  }
+
+  /* ปุ่มด้านล่าง */
+  .action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .action-buttons button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .action-buttons button:hover {
+    background: #0056c2;
+  }
+
+  .btn-orange {
+    background: #ff9900;
+  }
+
+  .btn-green {
+    background: #28a745;
+  }
