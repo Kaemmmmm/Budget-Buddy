@@ -56,52 +56,7 @@
     </div>
 
     <script src="../javascript/togglePassword.js"></script>
+    <script type="module" src="../javascript/signup.js"></script>
 
-
-    <!-- Firebase Authentication and Firestore Integration -->
-    <script type="module">
-        // Import necessary functions from firebase.js
-        import { auth, createUserWithEmailAndPassword, db, doc, setDoc } from '../javascript/firebase.js';
-
-        // Add event listener to the sign-up form
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Retrieve input values
-            const firstName = document.getElementById('first-name').value;
-            const lastName = document.getElementById('last-name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            // Validate password match
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-
-            try {
-                // Create user with email and password
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Store additional user information in Firestore
-                await setDoc(doc(db, "users", user.uid), {
-                    firstName,
-                    lastName,
-                    phone,
-                    email,
-                    createdAt: new Date()
-                });
-
-                alert('Signup successful!');
-                window.location.href = '../html/login.html';
-            } catch (error) {
-                console.error('Signup Error:', error);
-                alert('Error: ' + error.message);
-            }
-        });
-    </script>
 </body>
 </html>
