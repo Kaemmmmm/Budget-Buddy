@@ -1,27 +1,41 @@
 // firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import {getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    sendPasswordResetEmail, 
+    signInWithEmailAndPassword, 
+    confirmPasswordReset 
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCzweQFQb-y7vXMzHfHEhCfcYz2t05frQM",
-  authDomain: "budgetbuddy-cac4f.firebaseapp.com",
-  projectId: "budgetbuddy-cac4f",
+    apiKey: "AIzaSyCzweQFQb-y7vXMzHfHEhCfcYz2t05frQM",
+    authDomain: "budgetbuddy-cac4f.firebaseapp.com",
+    projectId: "budgetbuddy-cac4f",
+    storageBucket: "budgetbuddy-cac4f.firebasestorage.app",
+    messagingSenderId: "785181671270",
+    appId: "1:785181671270:web:f7a9cac1029431dd3752a7"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+// **Login User Function**
 function loginUser(email, password) {
-    signInWithEmailAndPassword(auth, email, password)
+    return signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            console.log("User signed in:", userCredential.user);
+            console.log("User signed in:", userCredential.user); // Debugging log
+            return userCredential.user; // Return the user
         })
         .catch((error) => {
-            console.error("Login error:", error.message);
+            console.error("Login error:", error.code, error.message);
+            throw error; // Ensure error is caught in auth.js
         });
 }
+
 
 // **Forgot Password: Send Reset Email**
 function sendResetEmail(email) {
@@ -35,10 +49,10 @@ function sendResetEmail(email) {
         });
 }
 
-
 // **Confirm Password Reset**
 function resetUserPassword(oobCode, newPassword) {
     return confirmPasswordReset(auth, oobCode, newPassword);
 }
 
-export { app, db, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, doc, setDoc, sendResetEmail, resetUserPassword  };
+// Export Firebase functions
+export { app, db, auth, loginUser, createUserWithEmailAndPassword, sendResetEmail, resetUserPassword, doc, setDoc };
