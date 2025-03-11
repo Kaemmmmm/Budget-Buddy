@@ -1,7 +1,7 @@
 // firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import {getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzweQFQb-y7vXMzHfHEhCfcYz2t05frQM",
@@ -12,6 +12,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+function loginUser(email, password) {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log("User signed in:", userCredential.user);
+        })
+        .catch((error) => {
+            console.error("Login error:", error.message);
+        });
+}
 
 // **Forgot Password: Send Reset Email**
 function sendResetEmail(email) {
@@ -25,9 +35,10 @@ function sendResetEmail(email) {
         });
 }
 
+
 // **Confirm Password Reset**
 function resetUserPassword(oobCode, newPassword) {
     return confirmPasswordReset(auth, oobCode, newPassword);
 }
 
-export { app, db, auth, createUserWithEmailAndPassword, doc, setDoc, sendResetEmail, resetUserPassword  };
+export { app, db, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, doc, setDoc, sendResetEmail, resetUserPassword  };
