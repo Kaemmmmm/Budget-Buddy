@@ -27,7 +27,8 @@
                     <span class="toggle-password" onclick="togglePassword('password')">👁</span>
                 </div>
 
-                <button type="submit" class="login-btn" onclick="window.location.href='../html/start.html';">เข้าสู่ระบบ</button>
+                <button type="submit" class="login-btn">เข้าสู่ระบบ</button>
+
 
                 <div class="text-container">
                     <p class="signup-text">ยังไม่มีบัญชี? <a href="../html/signup.html">ลงทะเบียน</a></p>
@@ -39,33 +40,6 @@
     </div>
 
     <script src="../javascript/togglePassword.js"></script>
-
-    <!-- Firebase Authentication Integration -->
-    <script type="module">
-        // Import necessary functions from firebase.js
-        import { auth, signInWithEmailAndPassword } from '../javascript/firebase.js';
-
-        // Add event listener to the login form
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Retrieve input values
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                // Sign in user with email and password
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // Redirect to the dashboard or home page after successful login
-                alert('Login successful!');
-                window.location.href = '../html/start.html'; // Update this to your desired post-login page
-            } catch (error) {
-                console.error('Login Error:', error);
-                alert('Error: ' + error.message);
-            }
-        });
-    </script>
+    <script type="module" src="../javascript/auth.js"></script>
 </body>
 </html>
