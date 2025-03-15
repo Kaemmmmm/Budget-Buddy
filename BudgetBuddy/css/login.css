@@ -1,13 +1,13 @@
 /* General Styles */
 body {
-    font-family: 'prompt';
+    font-family: 'Prompt', sans-serif;
     margin: 0;
     padding: 0;
     background: #f4f4f4;
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center; /* Center content vertically */
 }
 
 /* Container */
@@ -18,8 +18,10 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    max-width: 90%;  
+    max-width: 90%;
+    align-items: center; /* Align items in the middle */
 }
+
 
 /* Login Box */
 .login-box {

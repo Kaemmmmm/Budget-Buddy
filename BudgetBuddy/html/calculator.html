@@ -49,43 +49,78 @@
         <form class="dca-form" id="dcaForm">
             <label for="monthly-investment" class="form-label">ลงทุนเดือนละ:</label>
             <input type="number" id="monthly-investment" class="form-input" placeholder="บาท" required>
-
+    
             <label for="investment-duration" class="form-label">ทำซ้ำเป็นเวลา:</label>
             <input type="number" id="investment-duration" class="form-input" placeholder="ปี" required>
-
+    
             <label for="interest-rate" class="form-label">อัตราดอกเบี้ย:</label>
             <input type="number" id="interest-rate" class="form-input" placeholder="%" required>
-
-            <a href="dca-progress.html" class="submit-button" onclick="calculateDCA()">Calculate &rarr;</a>
-
+    
+            <!-- Calculate button inside container -->
+            <button type="button" class="submit-button" id="calculate-btn">Calculate &rarr;</button>
         </form>
-
+        <div id="results">
+            <h3>ผลการคำนวณ</h3>
+            <p id="total-invested">เงินลงทุนทั้งหมด: -</p>
+            <p id="final-amount">มูลค่ารวมที่ได้รับ: -</p>
+        </div>
         <canvas id="dcaChart" class="chart"></canvas>
     </div>
 
+
+    
+    
+    
     <script>
+        document.getElementById("calculate-btn").addEventListener("click", function() {
+            calculateDCA();
+        });
+    
+        let dcaChart; // Declare chart variable globally to update it dynamically
+    
         function calculateDCA() {
             const monthlyInvestment = parseFloat(document.getElementById('monthly-investment').value);
-            const duration = parseFloat(document.getElementById('investment-duration').value) * 12; // Convert years to months
-            const interestRate = parseFloat(document.getElementById('interest-rate').value) / 100;
-            
-            let totalInvested = 0;
-            let finalAmount = 0;
-
-            for (let i = 0; i < duration; i++) {
-                totalInvested += monthlyInvestment;
-                finalAmount = (finalAmount + monthlyInvestment) * (1 + interestRate / 12);
+            const years = parseFloat(document.getElementById('investment-duration').value);
+            const annualInterestRate = parseFloat(document.getElementById('interest-rate').value);
+    
+            // Validate input
+            if (isNaN(monthlyInvestment) || isNaN(years) || isNaN(annualInterestRate) || monthlyInvestment <= 0 || years <= 0 || annualInterestRate < 0) {
+                alert("กรุณากรอกข้อมูลให้ครบทุกช่องและต้องเป็นค่าที่ถูกต้อง");
+                return;
             }
-
-            updateChart(totalInvested, finalAmount);
+    
+            const months = years * 12; // Convert years to months
+            const monthlyRate = annualInterestRate / 100 / 12; // Convert annual interest rate to monthly rate
+    
+            let futureValue = 0;
+            if (monthlyRate > 0) {
+                futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+            } else {
+                futureValue = monthlyInvestment * months; // No interest case
+            }
+    
+            const totalInvested = monthlyInvestment * months;
+            displayResults(totalInvested, futureValue);
+            updateChart(totalInvested, futureValue);
         }
-
+    
+        function displayResults(totalInvested, finalAmount) {
+            document.getElementById("total-invested").textContent = `เงินลงทุนทั้งหมด: ${totalInvested.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท`;
+            document.getElementById("final-amount").textContent = `มูลค่ารวมที่ได้รับ: ${finalAmount.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท`;
+        }
+    
         function updateChart(totalInvested, finalAmount) {
             const ctx = document.getElementById('dcaChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
+    
+            // Destroy existing chart to prevent duplication
+            if (dcaChart) {
+                dcaChart.destroy();
+            }
+    
+            dcaChart = new Chart(ctx, {
+                type: 'doughnut',
                 data: {
-                    labels: ['Total Invested', 'Final Amount'],
+                    labels: ['เงินลงทุนทั้งหมด', 'กำไรจากดอกเบี้ย'],
                     datasets: [{
                         data: [totalInvested, finalAmount - totalInvested],
                         backgroundColor: ['#007bff', '#ffc107']
@@ -97,12 +132,14 @@
                         legend: {
                             display: true,
                             position: 'bottom'
+                        },
+                        tooltip: {
+                            enabled: true
                         }
                     }
                 }
             });
         }
-        
     </script>
     <script src="/BudgetBuddy/javascript/nav.js"></script>
 </body>
