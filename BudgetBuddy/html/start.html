@@ -47,37 +47,20 @@
         <div class="title">ตั้งเป้าหมายทางการเงิน</div>
         <div class="subtitle">เลือกแผนการเงินของคุณ</div>
         <div class="button-grid">
-            <a href="dca.html" class="option-button">DCA</a>
-            <a href="installment.html" class="option-button">การซ้อมผ่อน</a>
-            <a href="dca-install.html" class="option-button">DCA และ การซ้อมผ่อน</a>
-            <a href="saving(goal).html" class="option-button">ออมเงิน</a>
+            <button type="button" class="option-button" data-goal="DCA">DCA</button>
+            <button type="button" class="option-button" data-goal="Installment Trial">การซ้อมผ่อน</button>
+            <button type="button" class="option-button" data-goal="DCA & Installment Trial">DCA และ การซ้อมผ่อน</button>
+            <button type="button" class="option-button" data-goal="Saving">ออมเงิน</button>
         </div>
-            <p class="form-note">หากยังไม่มีเป้าหมายทางการเงินในตอนนี้ สามารถกดถัดไปโดยไม่ต้องเลือกเป้าหมาย</p>
+        
+        <p class="form-note">หากยังไม่มีเป้าหมายทางการเงินในตอนนี้ สามารถกดถัดไปโดยไม่ต้องเลือกเป้าหมาย</p>
+        
+        <button type="button" class="submit-button">ถัดไป &rarr;</button>
+        
+        
+    <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/goal.js"></script>
 
-            <button type="button" class="submit-button" onclick="window.location.href='saving.html';">ถัดไป &rarr;</button>
-            <script>
-                        document.querySelectorAll('.toggle-submenu').forEach(menu => {
-            menu.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                let submenu = this.nextElementSibling;
-    
-                // Toggle submenu visibility
-                submenu.classList.toggle('active');
-    
-                // Rotate the arrow
-                this.classList.toggle('rotate');
-    
-                // Close other submenus when one is opened
-                document.querySelectorAll('.submenu').forEach(sub => {
-                    if (sub !== submenu) {
-                        sub.classList.remove('active');
-                        sub.previousElementSibling.classList.remove('rotate');
-                    }
-                });
-            });
-        });
-            </script>
 </body>
 </html>
 

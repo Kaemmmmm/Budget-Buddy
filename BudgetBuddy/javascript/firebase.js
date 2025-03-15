@@ -6,7 +6,8 @@ import {
     createUserWithEmailAndPassword, 
     sendPasswordResetEmail, 
     signInWithEmailAndPassword, 
-    confirmPasswordReset 
+    confirmPasswordReset,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -22,6 +23,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("User is logged in:", user.uid);
+    } else {
+        console.log("No user logged in.");
+    }
+});
 
 // **Login User Function**
 function loginUser(email, password) {

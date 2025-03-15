@@ -55,10 +55,13 @@
             <label for="debt" class="form-label">หนี้สิน</label>
             <input type="text" id="debt" class="form-input" placeholder="บาท" required>
 
-            <button type="button" class="submit-button" onclick="window.location.href='dashboardsav(before).html';">บันทึก</button>
+            <p class="form-note">** หากไม่มีหนี้สินกรุณากรอก 0 ในช่องหนี้สิน</p>
+
+            <button type="button" class="submit-button">บันทึก</button>
 
         </form>
     </div>
     <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/in-ex.js"></script>
 </body>
 </html>
