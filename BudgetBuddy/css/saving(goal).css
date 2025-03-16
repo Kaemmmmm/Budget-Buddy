@@ -5,11 +5,7 @@
     box-sizing: border-box;
     font-family: 'prompt';
   }
-  
-  /* Body:
-     - Give the sidebar room on the left (280px),
-     - Provide some top padding (50px) so content isn't flush against the top,
-     - Remove the old margin-top from .container. */
+
   body {
     background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
     min-height: 100vh;
@@ -94,6 +90,44 @@
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
     text-align: center;
   }
+  
+  /* Center the form */
+.saving-container {
+  max-width: 500px;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin: auto;
+}
+
+/* Style the labels */
+.saving-container label {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+/* Style the input fields */
+.saving-container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Change input focus */
+.saving-container input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3)
+}
   
   /* Title */
   .title {

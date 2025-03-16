@@ -6,8 +6,8 @@
     <title>ความคืบหน้าการออมเงิน</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/saving-progress.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -43,84 +43,29 @@
             <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
         </ul>
     </div>
-    
+
     <div class="container">
+        <div class="progress-section">
+            <h2 class="title">ความคืบหน้าการออมเงิน</h2>
 
-        <!-- Title -->
-        <h2 class="title">ความคืบหน้าการออมเงิน</h2>
-        
-        <!-- Savings Progress -->
-        <p class="savings-progress">
-            ออมไปแล้ว <span class="highlight">2,500</span> บาท จากเป้าหมาย <span class="highlight-goal">20,000</span> บาท
-        </p>
+            <p class="savings-progress">
+                ออมไปแล้ว <span class="highlight" id="saved-amount">0</span> บาท จากเป้าหมาย <span class="highlight-goal" id="goal-amount">0</span> บาท
+            </p>
 
-        <!-- Chart Container -->
-        <div class="chart-container">
-            <canvas id="savingsChart"></canvas>
+            <div class="chart-container">
+                <canvas id="savingsChart"></canvas>
+            </div>
+
+            <button id="update-progress-btn" class="progress-button">อัปเดตความคืบหน้า</button>
+        </div>
+
+        <div class="history-section">
+            <h3>ประวัติการออมเงิน</h3>
+            <ul id="history-list" class="history-list"></ul>
         </div>
     </div>
 
-    <script>
-        const ctx = document.getElementById('savingsChart').getContext('2d');
-
-        // Data for savings progress
-        const savedAmount = 2500;
-        const goalAmount = 20000;
-        const progressPercentage = ((savedAmount / goalAmount) * 100).toFixed(1);
-        const remainingPercentage = (100 - progressPercentage).toFixed(1);
-
-        // Chart.js Plugin to add text inside the chart
-        const centerText = {
-            id: 'centerText',
-            beforeDraw(chart) {
-                const { width } = chart;
-                const { height } = chart;
-                const ctx = chart.ctx;
-                ctx.restore();
-                
-                const fontSize = (height / 10).toFixed(2);
-                ctx.font = `bold ${fontSize}px Prompt, sans-serif`;
-                ctx.textBaseline = 'middle';
-                ctx.textAlign = 'center';
-
-                // Position the text in the center
-                const text = `${progressPercentage}%`;
-                const x = width / 2;
-                const y = height / 2;
-                ctx.fillText(text, x, y);
-
-                ctx.save();
-            }
-        };
-
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: [`${progressPercentage}%`, `${remainingPercentage}%`],
-                datasets: [{
-                    data: [progressPercentage, remainingPercentage],
-                    backgroundColor: ['#28a745', '#fbbc04'],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '70%',
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        enabled: false
-                    }
-                }
-            },
-            plugins: [centerText] // Add custom plugin to the chart
-        });
-
-       
-    </script>
-<script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/saving-progress.js"></script>
+    <script src="../javascript/nav.js"></script>
 </body>
 </html>

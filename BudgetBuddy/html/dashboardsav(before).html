@@ -56,46 +56,20 @@
       <button class="button-edit" onclick="window.location.href='edit-dash(sav).html';">แก้ไข</button>
       <button class="button-dca" onclick="window.location.href='calculator.html';">โปรแกรมคำนวณ DCA</button>
       <button class="button-assess" onclick="window.location.href='assess.html';">ประเมินสุขภาพการเงิน</button>
-      <button class="button-milestone" onclick="window.location.href='saving-progress.html';">ดูความคืบหน้าการออม</button>
+      <button class="button-milestone" onclick="window.location.href='progress.html';">ดูความคืบหน้าการออม</button>
     </div>
   </div>
 
-  <script>
-    const ctx = document.getElementById('transactionChart').getContext('2d');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['รายรับ', 'รายจ่าย', 'เงินออม', 'หนี้สิน', 'เงินคงเหลือ'],
-        datasets: [{
-          label: 'จำนวนเงิน (บาท)',
-          data: [18000, 12000, 2400, 5000, 4000],
-          backgroundColor: [
-            '#28a745',
-            '#dc3545',
-            '#007bff',
-            '#ff0000',
-            '#ffc107'
-          ]
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              callback: function(value) {
-                return value.toLocaleString() + ' บาท';
-              }
-            }
-          }
-        }
-      }
-    });
-  </script>
-  <script src="/BudgetBuddy/javascript/nav.js"></script>
+  <!-- Load Firebase SDK -->
+<script type="module" src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+<script type="module" src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
+
+<!-- Load Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Load external script -->
+<script type="module" src="../javascript/dashboard.js"></script>
+<script src="../javascript/nav.js"></script>
+
 </body>
 </html>

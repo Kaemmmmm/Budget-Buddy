@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DCA Progress - Budget Buddy</title>
-    <link rel="stylesheet" href="../css/dca-progress.css">
+    <title>ความคืบหน้า DCA</title>
+    
+    <!-- Google Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/dca-progress.css">
+
+    <!-- Load Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -45,45 +49,30 @@
     </div>
     
     <div class="container">
+        <!-- Left Side: DCA Progress -->
+        <div class="progress-section">
+            <h2 class="title">ความคืบหน้า DCA</h2>
 
-        <!-- Main Content -->
-        <main class="content">
-            <header>
-                <h1>รายการธุรกรรม</h1>
-            </header>
+            <p class="dca-progress">
+                ลงทุนไปแล้ว <span class="highlight" id="invested-amount">-</span> บาท จากเป้าหมาย <span class="highlight-goal" id="goal-amount">-</span> บาท
+            </p>
 
-            <section class="dca-progress">
-                <h2>ความคืบหน้าการ DCA</h2>
-                <div class="chart-container">
-                    <canvas id="dcaChart"></canvas>
-                </div>
-                <button class="btn">รีเฟรช</button>
-            </section>
-        </main>
+            <div class="chart-container">
+                <canvas id="dcaChart"></canvas>
+            </div>
+
+            <button id="update-progress-btn" class="progress-button">อัปเดตความคืบหน้า</button>
+        </div>
+
+        <!-- Right Side: Investment History -->
+        <div class="history-section">
+            <h3>ประวัติการลงทุน</h3>
+            <ul id="history-list" class="history-list"></ul>
+        </div>
     </div>
 
-    <script>
-        // DCA Progress Chart
-        const ctx = document.getElementById('dcaChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['ดำเนินการแล้ว', 'ยังเหลือ'],
-                datasets: [{
-                    data: [1, 11],  // Example: 1/12 months completed
-                    backgroundColor: ['#007bff', '#e0e0e0'],
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
-                }
-            }
-        });
-        
-    </script>
-    <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <!-- Load External JS -->
+    <script type="module" src="../javascript/dca-progress.js"></script>
+
 </body>
 </html>

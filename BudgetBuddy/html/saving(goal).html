@@ -43,22 +43,20 @@
         </ul>
     </div>
     
-    <div class="container">
-        <div class="title">เริ่มต้นวางแผนการออม</div>
-        <form class="financial-form">
-            <label for="savingamount" class="form-label">จำนวนเงินที่ต้องการออม</label>
-            <input type="text" id="income" class="form-input" placeholder="บาท">
-
-            <label for="duration" class="form-label">ระยะเวลาที่ต้องการออม</label>
-            <input type="text" id="expense" class="form-input" placeholder="เดือน">
-
-            <div class="button-container">
-                <button type="button" class="submit-button" onclick="window.location.href='dashboardsav(before).html';">บันทึก</button>
-            </div>
-           
-
-        </form>
+    <div class="saving-container">
+        <h2>เริ่มต้นวางแผนการออม</h2>
+    
+        <label for="savingAmount">จำนวนเงินที่ต้องการออม</label>
+        <input type="number" id="savingAmount" placeholder="ระบุจำนวนเงิน (บาท)">
+    
+        <label for="savingDuration">ระยะเวลาที่ต้องการออม</label>
+        <input type="number" id="savingDuration" placeholder="ระบุระยะเวลา (เดือน)">
+    
+        <button type="button" class="submit-button" id="save-savings">บันทึก</button>
     </div>
+    
     <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/saving-goal.js"></script>
+
 </body>
 </html>
