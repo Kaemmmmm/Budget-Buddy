@@ -168,6 +168,16 @@ body {
   text-align: center;
 }
 
+.non-alert {
+  display: block;
+  margin-top: 100px; /* หรือปรับตามต้องการ */
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+
 .month-year {
   display: flex;            /* จัดให้อยู่ในบรรทัดเดียวกัน */
   align-items: center;      /* จัดแนวให้อยู่กลางแนวตั้ง */
