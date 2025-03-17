@@ -14,14 +14,10 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   detailEl.textContent = detailText;
 }
 
+//เทส
 // ฟังก์ชันสำหรับดึงข้อมูลจริงและประเมินสถานะ
 async function loadAssessmentData() {
-  try {
-    // ตรวจสอบให้แน่ใจว่าผู้ใช้ล็อกอินแล้ว
-    if (!auth.currentUser) {
-      console.log("No user logged in.");
-      return;
-    }
+  
     const userId = auth.currentUser.uid;
     const data = await fetchFinancialData(userId);
     // สมมติข้อมูลที่ดึงมามีฟิลด์: income, saving, netAssets, debtStatus, emergencyMonth
@@ -125,10 +121,9 @@ async function loadAssessmentData() {
         "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน ไม่เพียงพอต่อเหตุฉุกเฉิน"
       );
     }
-  } catch (error) {
-    console.error("Error fetching financial data:", error);
-  }
-}
+  } 
+  
+
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
