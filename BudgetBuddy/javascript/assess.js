@@ -14,6 +14,7 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   detailEl.textContent = detailText;
 }
 
+//เทส
 // ฟังก์ชันสำหรับดึงข้อมูลจริงและประเมินสถานะ
 async function loadAssessmentData() {
   
