@@ -83,36 +83,37 @@
   
   /* History Items */
   .history-item {
-    display: flex;       /* turn each list item into a horizontal row */
+    display: flex;
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding: 8px;
-    gap: 10px;           /* optional horizontal spacing */
+    gap: 0px; /* space between columns */
   }
+  
   
   /* For each span, choose how much horizontal space you want */
   .history-date {
-    flex: 2;             /* e.g., date might be longer, so give it more space */
+    flex: 2;  /* date might be longer, give it more space */
   }
   .history-type {
-    flex: 1;             /* narrower column, center the text if you want */
-    text-align: center;
+    flex: 1;
+    text-align: left;
   }
   .history-amount {
-    flex: 1;             /* align amounts on the right */
-    text-align: right;
+    flex: 1;
+    text-align: left;
   }
   
   
-  /* Delete Button */
   .delete-btn {
+    flex: 0;            /* or remove flex and let it be auto */
     background: red;
     color: white;
     border: none;
-    padding: 6px 10px;
+    padding: 5px 10px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
   }
   /* Update Button */
   .progress-button {

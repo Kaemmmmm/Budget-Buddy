@@ -9,7 +9,8 @@ import {
   getDocs,
   query,
   orderBy,
-  serverTimestamp
+  serverTimestamp,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
@@ -126,26 +127,51 @@ async function loadHistory(userId) {
     const historyDocs = await getDocs(historyQuery);
   
     // The first doc in this loop is the newest
-    historyDocs.forEach((docItem) => {
-      const data = docItem.data();
-      const dateText = data.date || "";
-      const entryType = data.type || "unknown";
-      const amountText = data.amount
-        ? `${data.amount.toLocaleString('th-TH')} บาท`
-        : "";
-  
-      // Create an <li> with spans for date, type, amount
-      const historyItem = document.createElement("li");
-      historyItem.classList.add("history-item");
-      historyItem.innerHTML = `
-        <span class="history-date">${dateText}</span>
-        <span class="history-type">${entryType}</span>
-        <span class="history-amount">${amountText}</span>
-      `;
-  
-      // Append newest doc first => appears at the top
-      historyList.appendChild(historyItem);
-    });
+    historyDocs.forEach((docSnap) => {
+        const docId = docSnap.id;
+        const data = docSnap.data();
+        const dateText = data.date || "";
+        const entryType = data.type || "unknown";
+        const amountText = data.amount
+          ? `${data.amount.toLocaleString('th-TH')} บาท`
+          : "";
+      
+        // 1) Create the <li>
+        const historyItem = document.createElement("li");
+        historyItem.classList.add("history-item");
+            
+        // 2) Create separate <span> elements for date, type, amount
+        const dateSpan = document.createElement("span");
+        dateSpan.classList.add("history-date");
+        dateSpan.textContent = dateText;
+            
+        const typeSpan = document.createElement("span");
+        typeSpan.classList.add("history-type");
+        typeSpan.textContent = entryType;
+            
+        const amountSpan = document.createElement("span");
+        amountSpan.classList.add("history-amount");
+        amountSpan.textContent = amountText;
+            
+        // 3) Create a delete <button>
+        const deleteBtn = document.createElement("button");
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.textContent = "ลบ";
+        deleteBtn.addEventListener("click", async () => {
+          await deleteHistoryEntry(userId, docId, entryType, data.amount);
+        });
+        
+        // 4) Append all four in order
+        historyItem.appendChild(dateSpan);
+        historyItem.appendChild(typeSpan);
+        historyItem.appendChild(amountSpan);
+        historyItem.appendChild(deleteBtn);
+        
+        // 5) Finally, append <li> to the list
+        historyList.appendChild(historyItem);
+
+      });
+      
   }
   
 
@@ -371,3 +397,78 @@ async function updateDcaProgress() {
     }
   });
 }
+
+async function deleteHistoryEntry(userId, historyId, entryType, deleteAmount = 0) {
+    const userDoc = doc(db, "goal", userId);
+  
+    try {
+      // 1) Revert logic (like subtract from dca.invested if type === 'investment')
+      const snap = await getDoc(userDoc);
+      if (!snap.exists()) throw new Error("No user doc found");
+      
+      const data = snap.data();
+  
+      if (entryType === "investment") {
+        const dcaData = data.dca || {};
+        dcaData.invested = dcaData.invested || 0;
+        dcaData.invested -= deleteAmount;
+        if (dcaData.invested < 0) dcaData.invested = 0;
+  
+        await updateDoc(userDoc, {
+          "dca.invested": dcaData.invested
+        });
+      }
+      else if (entryType === "installment") {
+        const inst = data.installment || {};
+        inst.paidMonths = inst.paidMonths || 0;
+        inst.paidMonths--; // if you want to revert by 1 month
+        if (inst.paidMonths < 0) inst.paidMonths = 0;
+  
+        await updateDoc(userDoc, {
+          "installment.paidMonths": inst.paidMonths
+        });
+      }
+  
+      // 2) Delete the doc from history
+      await deleteDoc(doc(db, "goal", userId, "history", historyId));
+  
+      // 3) Re-fetch the doc to get the new, updated values
+      const newSnap = await getDoc(userDoc);
+      if (newSnap.exists()) {
+        const newData = newSnap.data();
+  
+        // Re-draw your charts. For example, if you have:
+        //   - dcaInvested = newData.dca.invested
+        //   - totalMonths = newData.installment.installmentDuration * 12
+        //   - paidMonths = newData.installment.paidMonths
+        // Then call your chart update functions:
+  
+        const newDcaInvested = newData.dca?.invested ?? 0;
+        const newDcaDuration = newData.dca?.investmentDuration ?? 0;
+        const newDcaMonthlyInvestment = newData.dca?.monthlyInvestment ?? 0;
+        const newDcaGoal = newDcaDuration * 12 * newDcaMonthlyInvestment;
+  
+        updateDcaChart(newDcaInvested, newDcaGoal);
+        document.getElementById("invested-amount").textContent = newDcaInvested;
+        document.getElementById("goal-amount").textContent = newDcaGoal;
+  
+        const newPaidMonths = newData.installment?.paidMonths ?? 0;
+        const newInstallmentDuration = newData.installment?.installmentDuration ?? 0;
+        const newTotalMonths = newInstallmentDuration * 12;
+        const remain = newTotalMonths - newPaidMonths;
+  
+        updateInstallmentChart(newPaidMonths, remain);
+        document.getElementById("paid-months").textContent = newPaidMonths;
+        document.getElementById("total-months").textContent = remain;
+      }
+  
+      // 4) Reload the history list
+      await loadHistory(userId);
+  
+      alert("ลบข้อมูลเรียบร้อย!");
+    } catch (error) {
+      console.error("❌ Error deleting history entry:", error);
+      alert("เกิดข้อผิดพลาดในการลบ");
+    }
+  }
+  
