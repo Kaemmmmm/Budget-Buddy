@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -6,15 +5,12 @@
   font-family: 'prompt';
 }
 
-/* Body with a subtle gradient background */
-/* Removed flex centering and added left padding for the sidebar */
 body {
   background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
   min-height: 100vh;
   padding: 20px 20px 20px 320px; /* top, right, bottom, left */
 }
 
-/* Container Card */
 .container {
   background-color: #fff;
   width: 600px;
@@ -26,7 +22,6 @@ body {
   margin: 50px auto;  /* centers container horizontally */
 }
 
-/* Title */
 .title {
   font-size: 36px;
   font-weight: 600;
@@ -34,7 +29,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Form Styles */
 .dca-form {
   margin-bottom: 30px;
 }
@@ -66,7 +60,6 @@ body {
   outline: none;
 }
 
-/* Submit Button */
 .submit-button {
   display: inline-block;
   margin-top: 20px;
@@ -87,7 +80,7 @@ body {
   transform: translateY(-3px);
 }
 
-/* Chart Container */
+
 .chart-container {
   margin-top: 30px;
 }

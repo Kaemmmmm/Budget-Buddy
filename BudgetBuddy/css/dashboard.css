@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -10,11 +9,11 @@ body {
   font-family: 'prompt';
   background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
   min-height: 100vh;
-  /* Add left padding so the container is not hidden behind the sidebar */
-  padding: 50px 20px 20px 320px; /* top-right-bottom-left (adjust as needed) */
+
+  padding: 50px 20px 20px 320px; /* top-right-bottom-left */
 }
 
-/* Sidebar (fixed on the left) */
+/* Sidebar */
 .sidebar {
   width: 280px;
   background: #fff;
@@ -58,7 +57,7 @@ body {
 
 /* Dropdown Arrow */
 .has-submenu > a::after {
-  content: "\25BC"; /* Down arrow */
+  content: "\25BC"; 
   position: absolute;
   right: 10px;
   font-size: 12px;
@@ -80,7 +79,6 @@ body {
   display: block;
 }
 
-/* Main Container */
 .container {
   /* Center within the remaining space */
   margin: 0 auto;
@@ -93,7 +91,6 @@ body {
   text-align: center;
 }
 
-/* Header */
 .header {
   margin-bottom: 30px;
 }
@@ -110,13 +107,11 @@ body {
   color: #555;
 }
 
-/* Chart */
 .chart {
   margin: 30px 0;
-  height: 300px; /* example height, adjust as needed */
+  height: 300px; 
 }
 
-/* Button Group */
 .button-group {
   display: flex;
   justify-content: center;
@@ -124,7 +119,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* Base Button Style */
+/* Base Button */
 button {
   padding: 12px 25px;
   font-size: 16px;
@@ -135,7 +130,6 @@ button {
   transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Specific Buttons */
 .button-edit {
   background-color: #f78f09;
   color: #fff;
@@ -149,6 +143,7 @@ button {
   background-color: #28a745;
   color: #fff;
 }
+
 .button-dca:hover {
   background-color: #1e7e34;
   transform: translateY(-2px);
@@ -158,6 +153,7 @@ button {
   background-color: #ffc107;
   color: #fff;
 }
+
 .button-assess:hover {
   background-color: #e0a800;
   transform: translateY(-2px);
@@ -167,6 +163,7 @@ button {
   background-color: #0777ff;
   color: #fff;
 }
+
 .button-milestone:hover {
   background-color: #035ac4;
   transform: translateY(-2px);

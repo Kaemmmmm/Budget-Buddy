@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -8,7 +7,6 @@
 body {
   font-family: 'prompt';
   background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
-  /* Reserve left space for sidebar (280px + extra gap) */
   padding: 20px 20px 20px 320px;
   min-height: 100vh;
   display: flex;
@@ -60,7 +58,7 @@ body {
 
 /* Dropdown Arrow */
 .has-submenu > a::after {
-  content: "\25BC"; /* Down arrow */
+  content: "\25BC";
   position: absolute;
   right: 10px;
   font-size: 12px;
@@ -82,7 +80,6 @@ body {
   display: block;
 }
 
-/* Main Container Card */
 .container {
   background: #fff;
   width: 600px;
@@ -91,10 +88,9 @@ body {
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin: 50px auto; /* Centers container horizontally */
+  margin: 50px auto; 
 }
 
-/* Header */
 .header {
   margin-bottom: 30px;
 }
@@ -111,13 +107,11 @@ body {
   color: #555;
 }
 
-/* Chart */
 .chart {
   margin: 30px 0;
   height: 300px;
 }
 
-/* Button Group */
 .button-group {
   display: flex;
   justify-content: center;
@@ -125,7 +119,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* Base Button Style */
+/* Base Button */
 button {
   padding: 12px 25px;
   font-size: 16px;
@@ -136,7 +130,6 @@ button {
   transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Specific Buttons */
 .button-edit {
   background-color: #f78f09;
   color: #fff;

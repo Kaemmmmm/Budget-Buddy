@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -10,10 +9,8 @@ body {
   background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
   min-height: 100vh;
   padding: 20px 20px 20px 320px;  /* Reserve left space for sidebar */
-  /* Removed display: flex; justify-content: center; align-items: center; */
 }
 
-/* Container Card */
 .container {
   background: #fff;
   width: 600px;
@@ -22,10 +19,9 @@ body {
   border-radius: 20px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin: 50px auto; /* Centers container horizontally */
+  margin: 50px auto; 
 }
 
-/* Title Styling */
 .title {
   font-size: 28px;
   font-weight: 600;
@@ -33,7 +29,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Frame Styles for DCA and Installment Sections */
 .dca-frame,
 .install-frame {
   background: #fff;
@@ -44,7 +39,6 @@ body {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Header Styling for Frames */
 .dca-header,
 .install-header {
   font-size: 20px;
@@ -53,7 +47,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* Form Styles */
 .form-group {
   margin-bottom: 20px;
   text-align: left;
@@ -86,7 +79,6 @@ body {
   outline: none;
 }
 
-/* Additional Form Label and Input Styles */
 .form-label {
   font-size: 16px;
   color: #555;
@@ -105,13 +97,11 @@ body {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* Button Container */
 .button-container {
   text-align: center;
   margin-top: 20px;
 }
 
-/* Submit Button */
 .submit-button {
   display: inline-block;
   padding: 15px 60px;
@@ -131,7 +121,6 @@ body {
   transform: translateY(-3px);
 }
 
-/* Sidebar Styles */
 .sidebar {
   width: 280px;
   background: #fff;

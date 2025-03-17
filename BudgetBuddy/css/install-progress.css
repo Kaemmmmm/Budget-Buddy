@@ -1,14 +1,15 @@
-/* Global Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-/* Body - Full Centering */
-body {
     font-family: 'Prompt', sans-serif;
+  }
+
+body {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    min-height: 100vh;
+    padding: 50px 20px 20px 320px;
     margin: 0;
-    padding: 0;
     background: #f8f9fa;
     display: flex;
     justify-content: center;
@@ -16,22 +17,19 @@ body {
     height: 100vh;
 }
 
-/* Container - Equal Size Sections */
 .container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
     align-items: flex-start;
-    width: 90%; /* Make it wider */
-    max-width: 1200px; /* Increase maximum width */
+    width: 90%; 
+    max-width: 1200px; 
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
-
-/* Progress & History Sections - Same Height */
 .progress-section{
     flex: 1;
     background: white;
@@ -53,12 +51,11 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     min-height: 600px;
-    max-height: 600px; /* Match height with progress section */
+    max-height: 600px; 
     width: 300px;
     text-align: left;
   }
 
-/* History List */
 .history-list {
     list-style: none;
     padding: 0;
@@ -66,7 +63,6 @@ body {
     overflow-y: auto;
   }
   
-  /* History Items */
   .history-item {
     display: flex;
     justify-content: space-between;
@@ -75,7 +71,6 @@ body {
     border-bottom: 1px solid #ddd;
   }
 
-/* Chart Container */
 .chart-container {
     width: 350px;
     height: 350px;
@@ -88,8 +83,6 @@ body {
     align-items: center;
 }
 
-
-/* Buttons */
 .progress-button {
     background-color: #ff4d94;
     color: white;

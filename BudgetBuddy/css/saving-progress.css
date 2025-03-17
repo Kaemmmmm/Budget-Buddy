@@ -1,13 +1,14 @@
-/* Global Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
   }
 body {
-    font-family: 'Prompt', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    min-height: 100vh;
+    padding: 50px 20px 20px 320px; /* top-right-bottom-left */
     margin: 0;
-    padding: 0;
     background: #f8f9fa;
     display: flex;
     justify-content: center;
@@ -15,22 +16,19 @@ body {
     height: 100vh;
 }
 
-/* Centered Container */
 .container {
     display: flex;
     justify-content: space-between;
     gap: 20px;
     align-items: flex-start;
-    width: 90%; /* Make it wider */
-    max-width: 1200px; /* Increase maximum width */
+    width: 90%;
+    max-width: 1200px; 
     background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
-
-/* Progress & History Section */
 .progress-section, .history-section {
     flex: 1;
     background: white;
@@ -44,7 +42,6 @@ body {
     min-height: 600px;
 }
 
-/* Chart Styling */
 .chart-container {
     width: 350px;
     height: 350px;
@@ -64,12 +61,11 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    max-height: 600px; /* Match height with progress section */
+    max-height: 600px;
     width: 300px;
     text-align: left;
   }
 
-/* History List */
 .history-list {
     list-style: none;
     padding: 0;
@@ -77,7 +73,6 @@ body {
     overflow-y: auto;
 }
 
-/* History Items */
 .history-item {
     display: flex;
     justify-content: space-between;
@@ -86,7 +81,6 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-/* Button */
 .progress-button {
     background-color: #28a745;
     color: white;
@@ -112,8 +106,6 @@ body {
     font-size: 12px;
 }
 
-
-/* Sidebar Styles */
 .sidebar {
     width: 280px;
     background: #fff;
@@ -149,7 +141,6 @@ body {
     font-weight: 600;
     position: relative;
   }
-  
   
   .menu a:hover {
     background: #e6f0ff;

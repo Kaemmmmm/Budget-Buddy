@@ -84,9 +84,6 @@ body {
     background-color: #FFA500;
 }
 
-
-
-/* Modal (background) */
 .modal {
     position : fixed;
     display: none;           
@@ -99,8 +96,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5); 
     align-items: center;
 }
-  
-  /* Modal Content */
+
 .modal-content {
     background-color: #fff;
     margin: 15% auto;         /* 15% from the top and centered */
@@ -124,7 +120,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* Checkmark */
 .checkmark {
     margin: 0 auto 20px auto;
     width: 80px;
