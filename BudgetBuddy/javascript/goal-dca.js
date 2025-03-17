@@ -28,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     await setDoc(doc(db, "goal", userId), {
                         investmentType: "DCA",
-                        amount: investmentAmount,
-                        date: investmentDate,
-                        duration: investmentDuration,
+                        dca: {
+                        monthlyInvestment: investmentAmount,
+                        investmentDate: investmentDate,
+                        investmentDuration: investmentDuration,
+                        },
                         timestamp: new Date(),
                     }, { merge: true });
 

@@ -22,17 +22,28 @@ document.addEventListener("DOMContentLoaded", () => {
             const docSnap = await getDoc(userDoc);
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                
-                monthlyInvestment = parseFloat(data.amount) || 0;
-                const durationYears = parseFloat(data.duration) || 1;
-                investedAmount = parseFloat(data.invested) || 0;
-                goalAmount = monthlyInvestment * (durationYears * 12);
 
-                document.getElementById("invested-amount").textContent = investedAmount.toLocaleString('th-TH');
-                document.getElementById("goal-amount").textContent = goalAmount.toLocaleString('th-TH');
+                if (data.dca) {
+                    monthlyInvestment = parseFloat(data.dca.monthlyInvestment) || 0;
+                    const investmentDuration = parseFloat(data.dca.investmentDuration) || 1;
+                    investedAmount = parseFloat(data.dca.invested) || 0;
+                    
+                    goalAmount = monthlyInvestment * (investmentDuration * 12);
 
-                updateChart(investedAmount, goalAmount);
+                    document.getElementById("invested-amount").textContent =
+                        investedAmount.toLocaleString("th-TH");
+                    document.getElementById("goal-amount").textContent =
+                        goalAmount.toLocaleString("th-TH");
+
+                    updateChart(investedAmount, goalAmount);
+                } else {
+                    console.error("No dca object found in user data.");
+                    updateChart(0, 0);
+                }
+
+                // Now load from dca_history instead of history
                 loadInvestmentHistory(userId);
+
             } else {
                 console.error("No data found for user.");
                 updateChart(0, 0);
@@ -55,18 +66,25 @@ async function updateProgress() {
         const userId = user.uid;
         const userDoc = doc(db, "goal", userId);
 
+        // Increase the invested amount
         investedAmount += monthlyInvestment;
 
         try {
-            await updateDoc(userDoc, { invested: investedAmount });
-
-            const timestamp = new Date().toLocaleString("th-TH");
-            await addDoc(collection(db, "goal", userId, "history"), {
-                amount: monthlyInvestment,
-                date: timestamp
+            // Update nested field "dca.invested"
+            await updateDoc(userDoc, {
+                "dca.invested": investedAmount
             });
 
-            document.getElementById("invested-amount").textContent = investedAmount.toLocaleString('th-TH');
+            // Add an entry to the new subcollection 'dca_history'
+            const timestamp = new Date().toLocaleString("th-TH");
+            await addDoc(collection(db, "goal", userId, "dca_history"), {
+                monthlyInvestment: monthlyInvestment,
+                investmentDate: timestamp
+            });
+
+            // Update UI
+            document.getElementById("invested-amount").textContent =
+                investedAmount.toLocaleString("th-TH");
             updateChart(investedAmount, goalAmount);
             loadInvestmentHistory(userId);
 
@@ -82,16 +100,27 @@ async function loadInvestmentHistory(userId) {
     const historyList = document.getElementById("history-list");
     historyList.innerHTML = ""; // Clear list
 
-    const historyQuery = query(collection(db, "goal", userId, "history"));
+    // Rename subcollection to dca_history
+    const historyQuery = query(collection(db, "goal", userId, "dca_history"));
     const historyDocs = await getDocs(historyQuery);
 
-    historyDocs.forEach((doc) => {
-        const data = doc.data();
+    historyDocs.forEach((docItem) => {
+        const data = docItem.data();
         const historyItem = document.createElement("li");
         historyItem.classList.add("history-item");
+
         historyItem.innerHTML = `
-            <span>${data.date}: <strong>${data.amount.toLocaleString('th-TH')}</strong> บาท</span>
-            <button class="delete-btn" data-id="${doc.id}" data-amount="${data.amount}">ลบ</button>
+            <span>
+                ${data.investmentDate}:
+                <strong>${data.monthlyInvestment.toLocaleString("th-TH")}</strong> บาท
+            </span>
+            <button
+                class="delete-btn"
+                data-id="${docItem.id}"
+                data-monthlyinvestment="${data.monthlyInvestment}"
+            >
+                ลบ
+            </button>
         `;
 
         historyList.appendChild(historyItem);
@@ -101,8 +130,7 @@ async function loadInvestmentHistory(userId) {
     document.querySelectorAll(".delete-btn").forEach((btn) => {
         btn.addEventListener("click", async (event) => {
             const historyId = event.target.getAttribute("data-id");
-            const deleteAmount = parseFloat(event.target.getAttribute("data-amount"));
-
+            const deleteAmount = parseFloat(event.target.getAttribute("data-monthlyinvestment"));
             await deleteInvestmentEntry(userId, historyId, deleteAmount);
         });
     });
@@ -112,28 +140,28 @@ async function deleteInvestmentEntry(userId, historyId, deleteAmount) {
     const userDoc = doc(db, "goal", userId);
 
     try {
-        // Reduce the invested amount
+        // Reduce the invested amount in memory
         investedAmount -= deleteAmount;
         if (investedAmount < 0) investedAmount = 0; // Prevent negative values
 
-        // Update Firebase
-        await updateDoc(userDoc, { invested: investedAmount });
+        // Update the nested "dca.invested" field
+        await updateDoc(userDoc, { "dca.invested": investedAmount });
 
-        // Delete history record
-        await deleteDoc(doc(db, "goal", userId, "history", historyId));
+        // Delete the document from dca_history
+        await deleteDoc(doc(db, "goal", userId, "dca_history", historyId));
 
         // Update UI
-        document.getElementById("invested-amount").textContent = investedAmount.toLocaleString('th-TH');
+        document.getElementById("invested-amount").textContent =
+            investedAmount.toLocaleString("th-TH");
         updateChart(investedAmount, goalAmount);
         loadInvestmentHistory(userId);
-        
+
         alert("ลบข้อมูลเรียบร้อย!");
     } catch (error) {
         console.error("❌ Error deleting investment entry:", error);
         alert("เกิดข้อผิดพลาดในการลบ");
     }
 }
-
 
 function updateChart(investedAmount, goalAmount) {
     const ctx = document.getElementById("dcaChart").getContext("2d");
@@ -143,22 +171,26 @@ function updateChart(investedAmount, goalAmount) {
         dcaChart.destroy();
     }
 
-    const progressPercentage = goalAmount > 0 ? ((investedAmount / goalAmount) * 100).toFixed(1) : 0;
+    const progressPercentage = goalAmount > 0
+        ? ((investedAmount / goalAmount) * 100).toFixed(1)
+        : 0;
     const remainingPercentage = 100 - progressPercentage;
 
     dcaChart = new Chart(ctx, {
         type: "doughnut",
         data: {
-            datasets: [{
-                data: [progressPercentage, remainingPercentage],
-                backgroundColor: ['#007bff', '#e0e0e0'],
-                borderWidth: 2
-            }]
+            datasets: [
+                {
+                    data: [progressPercentage, remainingPercentage],
+                    backgroundColor: ["#007bff", "#e0e0e0"],
+                    borderWidth: 2
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '70%',
+            cutout: "70%",
             plugins: {
                 legend: {
                     display: false
@@ -179,20 +211,16 @@ function centerTextPlugin(progressPercentage) {
         beforeDraw: (chart) => {
             const { width, height, ctx } = chart;
             ctx.restore();
-            
-            const fontSize = (height / 6).toFixed(2); // Adjust size dynamically
-            ctx.font = `bold ${fontSize}px 'Prompt', sans-serif`; // Custom font
+
+            const fontSize = (height / 6).toFixed(2);
+            ctx.font = `bold ${fontSize}px 'Prompt', sans-serif`;
             ctx.textBaseline = "middle";
             ctx.textAlign = "center";
 
             const text = `${progressPercentage}%`;
-            const textX = width / 2;
-            const textY = height / 2;
-
-            ctx.fillStyle = "#007bff"; // Text color
-            ctx.fillText(text, textX, textY);
+            ctx.fillStyle = "#007bff";
+            ctx.fillText(text, width / 2, height / 2);
             ctx.save();
         }
     };
 }
-

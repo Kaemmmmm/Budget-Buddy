@@ -34,10 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 try {
                     await setDoc(doc(db, "goal", userId), {
-                        installmentType: "Installment",
+                        installment:{
                         assetType: assetType,
                         assetPrice: parseFloat(assetPrice),
-                        duration: parseInt(installmentDuration),
+                        installmentDuration: parseInt(installmentDuration),
+                    },
                         timestamp: new Date(),
                     }, { merge: true });
 

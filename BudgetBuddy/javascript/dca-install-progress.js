@@ -16,8 +16,8 @@ import {
 const auth = getAuth();
 
 // Installment variables
-let paidMonths = 0;           // from data.installment.paidMonths
-let installmentDuration = 0;  // in years (data.installment.installmentDuration)
+let paidMonths = 0;            // from data.installment.paidMonths
+let installmentDuration = 0;   // in years (data.installment.installmentDuration)
 
 // DCA variables
 let dcaInvested = 0;           // data.dca.invested
@@ -65,9 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update text
       document.getElementById("paid-months").textContent = paidMonths;
-      // CORRECT for your HTML
-        document.getElementById("total-months").textContent = remainMonths;
-
+      document.getElementById("total-months").textContent = remainMonths;
 
       // Draw installment chart => [paidMonths, remainMonths]
       updateInstallmentChart(paidMonths, remainMonths);
@@ -85,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dcaMonthlyInvestment = 0;
       }
 
-      dcaGoal = (dcaDuration * 12) * dcaMonthlyInvestment;
+      dcaGoal = dcaDuration * 12 * dcaMonthlyInvestment;
 
       // Update text
       document.getElementById("invested-amount").textContent = dcaInvested;
@@ -108,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("update-installment-btn")
     .addEventListener("click", updateInstallmentProgress);
+
   document
     .getElementById("update-dca-btn")
     .addEventListener("click", updateDcaProgress);
@@ -117,63 +116,55 @@ document.addEventListener("DOMContentLoaded", () => {
 // loadHistory
 // ---------------------
 async function loadHistory(userId) {
-    const historyList = document.getElementById("history-list");
-    historyList.innerHTML = "";
-  
-    // Order by 'timestamp' descending so newest doc is first
-    const historyRef = collection(db, "goal", userId, "history");
-    const historyQuery = query(historyRef, orderBy("timestamp", "desc"));
-  
-    const historyDocs = await getDocs(historyQuery);
-  
-    // The first doc in this loop is the newest
-    historyDocs.forEach((docSnap) => {
-        const docId = docSnap.id;
-        const data = docSnap.data();
-        const dateText = data.date || "";
-        const entryType = data.type || "unknown";
-        const amountText = data.amount
-          ? `${data.amount.toLocaleString('th-TH')} บาท`
-          : "";
-      
-        // 1) Create the <li>
-        const historyItem = document.createElement("li");
-        historyItem.classList.add("history-item");
-            
-        // 2) Create separate <span> elements for date, type, amount
-        const dateSpan = document.createElement("span");
-        dateSpan.classList.add("history-date");
-        dateSpan.textContent = dateText;
-            
-        const typeSpan = document.createElement("span");
-        typeSpan.classList.add("history-type");
-        typeSpan.textContent = entryType;
-            
-        const amountSpan = document.createElement("span");
-        amountSpan.classList.add("history-amount");
-        amountSpan.textContent = amountText;
-            
-        // 3) Create a delete <button>
-        const deleteBtn = document.createElement("button");
-        deleteBtn.classList.add("delete-btn");
-        deleteBtn.textContent = "ลบ";
-        deleteBtn.addEventListener("click", async () => {
-          await deleteHistoryEntry(userId, docId, entryType, data.amount);
-        });
-        
-        // 4) Append all four in order
-        historyItem.appendChild(dateSpan);
-        historyItem.appendChild(typeSpan);
-        historyItem.appendChild(amountSpan);
-        historyItem.appendChild(deleteBtn);
-        
-        // 5) Finally, append <li> to the list
-        historyList.appendChild(historyItem);
+  const historyList = document.getElementById("history-list");
+  historyList.innerHTML = "";
 
-      });
-      
-  }
-  
+  // Changed subcollection name to "dca&installment_history"
+  const historyRef = collection(db, "goal", userId, "dca&installment_history");
+  const historyQuery = query(historyRef, orderBy("timestamp", "desc"));
+
+  const historyDocs = await getDocs(historyQuery);
+
+  historyDocs.forEach((docSnap) => {
+    const docId = docSnap.id;
+    const data = docSnap.data();
+    const dateText = data.date || "";
+    const entryType = data.type || "unknown";
+    const amountText = data.amount
+      ? `${data.amount.toLocaleString('th-TH')} บาท`
+      : "";
+
+    // Build the <li> element
+    const historyItem = document.createElement("li");
+    historyItem.classList.add("history-item");
+
+    const dateSpan = document.createElement("span");
+    dateSpan.classList.add("history-date");
+    dateSpan.textContent = dateText;
+
+    const typeSpan = document.createElement("span");
+    typeSpan.classList.add("history-type");
+    typeSpan.textContent = entryType;
+
+    const amountSpan = document.createElement("span");
+    amountSpan.classList.add("history-amount");
+    amountSpan.textContent = amountText;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.textContent = "ลบ";
+    deleteBtn.addEventListener("click", async () => {
+      await deleteHistoryEntry(userId, docId, entryType, data.amount);
+    });
+
+    historyItem.appendChild(dateSpan);
+    historyItem.appendChild(typeSpan);
+    historyItem.appendChild(amountSpan);
+    historyItem.appendChild(deleteBtn);
+
+    historyList.appendChild(historyItem);
+  });
+}
 
 // ---------------------
 // Installment Chart
@@ -193,19 +184,19 @@ function updateInstallmentChart(paid, remain) {
       datasets: [
         {
           data: [paid, remain],
-          backgroundColor: ["#ff4d94", "#ffd1e3"],
-        },
-      ],
+          backgroundColor: ["#ff4d94", "#ffd1e3"]
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "65%",          // <--- higher means thinner ring
+      cutout: "65%",
       plugins: {
-        legend: { display: false },
-      },
+        legend: { display: false }
+      }
     },
-    plugins: [centerTextPlugin(pct)],
+    plugins: [centerTextPlugin(pct)]
   });
 }
 
@@ -227,19 +218,19 @@ function updateDcaChart(invested, goal) {
       datasets: [
         {
           data: dataArr,
-          backgroundColor: ["#007bff", "#e0e0e0"],
-        },
-      ],
+          backgroundColor: ["#007bff", "#e0e0e0"]
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "65%",          // <--- higher means thinner ring
+      cutout: "65%",
       plugins: {
-        legend: { display: false },
-      },
+        legend: { display: false }
+      }
     },
-    plugins: [centerTextPlugin(pct)],
+    plugins: [centerTextPlugin(pct)]
   });
 }
 
@@ -261,7 +252,7 @@ function centerTextPlugin(percentage) {
 
       ctx.fillText(`${percentage}%`, width / 2, height / 2);
       ctx.save();
-    },
+    }
   };
 }
 
@@ -269,70 +260,67 @@ function centerTextPlugin(percentage) {
 // Update Installment
 // ---------------------
 async function updateInstallmentProgress() {
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
-        return;
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
+      return;
+    }
+
+    const userId = user.uid;
+    const userDoc = doc(db, "goal", userId);
+
+    try {
+      const snap = await getDoc(userDoc);
+      if (!snap.exists()) return;
+
+      const data = snap.data();
+      const inst = data.installment || {};
+
+      // 1) Extract needed fields
+      //    RENAMED: installmentAmount -> assetPrice
+      inst.assetPrice = inst.assetPrice || 0;
+      inst.installmentDuration = inst.installmentDuration || 1; // in years
+      inst.paidMonths = inst.paidMonths || 0;
+
+      // 2) Calculate monthlyPayment based on assetPrice
+      const totalMonths = inst.installmentDuration * 12;
+      const monthlyPayment = totalMonths > 0 ? inst.assetPrice / totalMonths : 0;
+
+      // 3) Increment paidMonths
+      inst.paidMonths++;
+      if (inst.paidMonths > totalMonths) {
+        inst.paidMonths = totalMonths;
       }
-  
-      const userId = user.uid;
-      const userDoc = doc(db, "goal", userId);
-  
-      try {
-        const snap = await getDoc(userDoc);
-        if (!snap.exists()) return;
-  
-        const data = snap.data();
-        const inst = data.installment || {};
-  
-        // 1) Extract needed fields
-        inst.installmentAmount = inst.installmentAmount || 0;
-        inst.installmentDuration = inst.installmentDuration || 1; // in years
-        inst.paidMonths = inst.paidMonths || 0;
-  
-        // 2) Calculate monthlyPayment
-        const totalMonths = inst.installmentDuration * 12;
-        const monthlyPayment = inst.installmentAmount / totalMonths || 0;
-  
-        // 3) Increment paidMonths
-        inst.paidMonths++;
-        if (inst.paidMonths > totalMonths) {
-          inst.paidMonths = totalMonths;
-        }
-  
-        // 4) Update Firestore
-        await updateDoc(userDoc, {
-          "installment.paidMonths": inst.paidMonths
-        });
-  
-        // 5) Record the payment in history with 'amount'
-        await addDoc(collection(db, "goal", userId, "history"), {
-            type: "installment",
-            amount: monthlyPayment,
-            date: new Date().toLocaleString("th-TH"),
-            timestamp: serverTimestamp() // from Firestore
-          });
-  
-        // 6) Recompute local + UI
-        // Re-draw chart, re-display text, etc. 
-        // (sample code below)
-        paidMonths = inst.paidMonths;
-        const remain = totalMonths - paidMonths;
-  
-        document.getElementById("paid-months").textContent = paidMonths;
-        document.getElementById("total-months").textContent = remain;
-  
-        updateInstallmentChart(paidMonths, remain);
-        await loadHistory(userId);
-  
-        alert("อัปเดตความคืบหน้าการซ้อมผ่อนเรียบร้อย!");
-      } catch (err) {
-        console.error("Error updating installment progress:", err);
-      }
-    });
-  }
-  
-  
+
+      // 4) Update Firestore
+      await updateDoc(userDoc, {
+        "installment.paidMonths": inst.paidMonths
+      });
+
+      // 5) Record the payment in **dca&installment_history** subcollection
+      await addDoc(collection(db, "goal", userId, "dca&installment_history"), {
+        type: "installment",
+        amount: monthlyPayment,
+        date: new Date().toLocaleString("th-TH"),
+        timestamp: serverTimestamp()
+      });
+
+      // 6) Update local UI
+      paidMonths = inst.paidMonths;
+      const remain = totalMonths - paidMonths;
+
+      document.getElementById("paid-months").textContent = paidMonths;
+      document.getElementById("total-months").textContent = remain;
+
+      updateInstallmentChart(paidMonths, remain);
+      await loadHistory(userId);
+
+      alert("อัปเดตความคืบหน้าการผ่อนเรียบร้อย!");
+    } catch (err) {
+      console.error("Error updating installment progress:", err);
+    }
+  });
+}
 
 // ---------------------
 // Update DCA
@@ -363,14 +351,13 @@ async function updateDcaProgress() {
 
       // Write back
       await updateDoc(userDoc, {
-        "dca.invested": dcaData.invested,
+        "dca.invested": dcaData.invested
       });
 
-      // Add to history
-      const timestamp = new Date().toLocaleString("th-TH");
-      await addDoc(collection(db, "goal", userId, "history"), {
+      // Add to **dca&installment_history**
+      await addDoc(collection(db, "goal", userId, "dca&installment_history"), {
         type: "investment",
-        amount: dcaData.monthlyInvestment, // this is the actual DCA amount
+        amount: dcaData.monthlyInvestment, 
         date: new Date().toLocaleString("th-TH"),
         timestamp: serverTimestamp()
       });
@@ -399,76 +386,73 @@ async function updateDcaProgress() {
 }
 
 async function deleteHistoryEntry(userId, historyId, entryType, deleteAmount = 0) {
-    const userDoc = doc(db, "goal", userId);
-  
-    try {
-      // 1) Revert logic (like subtract from dca.invested if type === 'investment')
-      const snap = await getDoc(userDoc);
-      if (!snap.exists()) throw new Error("No user doc found");
-      
-      const data = snap.data();
-  
-      if (entryType === "investment") {
-        const dcaData = data.dca || {};
-        dcaData.invested = dcaData.invested || 0;
-        dcaData.invested -= deleteAmount;
-        if (dcaData.invested < 0) dcaData.invested = 0;
-  
-        await updateDoc(userDoc, {
-          "dca.invested": dcaData.invested
-        });
-      }
-      else if (entryType === "installment") {
-        const inst = data.installment || {};
-        inst.paidMonths = inst.paidMonths || 0;
-        inst.paidMonths--; // if you want to revert by 1 month
-        if (inst.paidMonths < 0) inst.paidMonths = 0;
-  
-        await updateDoc(userDoc, {
-          "installment.paidMonths": inst.paidMonths
-        });
-      }
-  
-      // 2) Delete the doc from history
-      await deleteDoc(doc(db, "goal", userId, "history", historyId));
-  
-      // 3) Re-fetch the doc to get the new, updated values
-      const newSnap = await getDoc(userDoc);
-      if (newSnap.exists()) {
-        const newData = newSnap.data();
-  
-        // Re-draw your charts. For example, if you have:
-        //   - dcaInvested = newData.dca.invested
-        //   - totalMonths = newData.installment.installmentDuration * 12
-        //   - paidMonths = newData.installment.paidMonths
-        // Then call your chart update functions:
-  
-        const newDcaInvested = newData.dca?.invested ?? 0;
-        const newDcaDuration = newData.dca?.investmentDuration ?? 0;
-        const newDcaMonthlyInvestment = newData.dca?.monthlyInvestment ?? 0;
-        const newDcaGoal = newDcaDuration * 12 * newDcaMonthlyInvestment;
-  
-        updateDcaChart(newDcaInvested, newDcaGoal);
-        document.getElementById("invested-amount").textContent = newDcaInvested;
-        document.getElementById("goal-amount").textContent = newDcaGoal;
-  
-        const newPaidMonths = newData.installment?.paidMonths ?? 0;
-        const newInstallmentDuration = newData.installment?.installmentDuration ?? 0;
-        const newTotalMonths = newInstallmentDuration * 12;
-        const remain = newTotalMonths - newPaidMonths;
-  
-        updateInstallmentChart(newPaidMonths, remain);
-        document.getElementById("paid-months").textContent = newPaidMonths;
-        document.getElementById("total-months").textContent = remain;
-      }
-  
-      // 4) Reload the history list
-      await loadHistory(userId);
-  
-      alert("ลบข้อมูลเรียบร้อย!");
-    } catch (error) {
-      console.error("❌ Error deleting history entry:", error);
-      alert("เกิดข้อผิดพลาดในการลบ");
+  const userDoc = doc(db, "goal", userId);
+
+  try {
+    // 1) Revert logic
+    const snap = await getDoc(userDoc);
+    if (!snap.exists()) throw new Error("No user doc found");
+    
+    const data = snap.data();
+
+    if (entryType === "investment") {
+      // DCA revert
+      const dcaData = data.dca || {};
+      dcaData.invested = dcaData.invested || 0;
+      dcaData.invested -= deleteAmount;
+      if (dcaData.invested < 0) dcaData.invested = 0;
+
+      await updateDoc(userDoc, {
+        "dca.invested": dcaData.invested
+      });
     }
+    else if (entryType === "installment") {
+      // Installment revert
+      const inst = data.installment || {};
+      inst.paidMonths = inst.paidMonths || 0;
+      inst.paidMonths--; 
+      if (inst.paidMonths < 0) inst.paidMonths = 0;
+
+      await updateDoc(userDoc, {
+        "installment.paidMonths": inst.paidMonths
+      });
+    }
+
+    // 2) Delete the doc from **dca&installment_history**
+    await deleteDoc(doc(db, "goal", userId, "dca&installment_history", historyId));
+
+    // 3) Re-fetch to update charts
+    const newSnap = await getDoc(userDoc);
+    if (newSnap.exists()) {
+      const newData = newSnap.data();
+
+      // Update DCA chart
+      const newDcaInvested = newData.dca?.invested ?? 0;
+      const newDcaDuration = newData.dca?.investmentDuration ?? 0;
+      const newDcaMonthlyInvestment = newData.dca?.monthlyInvestment ?? 0;
+      const newDcaGoal = newDcaDuration * 12 * newDcaMonthlyInvestment;
+
+      updateDcaChart(newDcaInvested, newDcaGoal);
+      document.getElementById("invested-amount").textContent = newDcaInvested;
+      document.getElementById("goal-amount").textContent = newDcaGoal;
+
+      // Update Installment chart
+      const newPaidMonths = newData.installment?.paidMonths ?? 0;
+      const newInstallmentDuration = newData.installment?.installmentDuration ?? 0;
+      const newTotalMonths = newInstallmentDuration * 12;
+      const remain = newTotalMonths - newPaidMonths;
+
+      updateInstallmentChart(newPaidMonths, remain);
+      document.getElementById("paid-months").textContent = newPaidMonths;
+      document.getElementById("total-months").textContent = remain;
+    }
+
+    // 4) Reload the list
+    await loadHistory(userId);
+
+    alert("ลบข้อมูลเรียบร้อย!");
+  } catch (error) {
+    console.error("❌ Error deleting history entry:", error);
+    alert("เกิดข้อผิดพลาดในการลบ");
   }
-  
+}
