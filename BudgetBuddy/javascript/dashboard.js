@@ -39,7 +39,7 @@ async function loadTransactionData(userId) {
       // Savings: data.savings.amount
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
 
-      // Calculate how much has been paid in installments so far
+      const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration*12));
 
       // Combine them for your "savings" figure
       const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
