@@ -32,7 +32,7 @@ body {
   
 
 /* Progress & History Sections - Same Height */
-.progress-section, .history-section {
+.progress-section{
     flex: 1;
     background: white;
     padding: 20px;
@@ -52,6 +52,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    min-height: 600px;
     max-height: 600px; /* Match height with progress section */
     width: 300px;
     text-align: left;

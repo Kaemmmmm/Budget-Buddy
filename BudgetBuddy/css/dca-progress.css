@@ -31,7 +31,7 @@ body {
 }
 
 /* Progress Section - Maintain Height */
-.progress-section, .history-section {
+.progress-section{
   flex: 1;
   background: white;
   padding: 20px;
@@ -47,10 +47,11 @@ body {
 .history-section {
   flex: 1;
   background: white;
-  padding: 15px;
+  padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
+  min-height: 600px;
   max-height: 600px; /* Match height with progress section */
   width: 300px;
   text-align: left;
@@ -69,18 +70,6 @@ body {
   align-items: center;
 }
 
-/* History Section - Same Height as Progress */
-.history-section {
-  flex: 1;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  max-height: 500px; /* Match height with progress section */
-  width: 300px;
-  text-align: left;
-}
 
 /* Ensure History List Fills Section */
 .history-list {
