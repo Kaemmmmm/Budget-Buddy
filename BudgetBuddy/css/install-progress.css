@@ -2,12 +2,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
   }
 
 body {
-    font-family: 'Prompt', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    min-height: 100vh;
+    padding: 50px 20px 20px 320px;
     margin: 0;
-    padding: 0;
     background: #f8f9fa;
     display: flex;
     justify-content: center;
