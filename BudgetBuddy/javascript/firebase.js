@@ -1,6 +1,6 @@
 // firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
@@ -65,3 +65,13 @@ function resetUserPassword(oobCode, newPassword) {
 
 // Export Firebase functions
 export { app, db, auth, loginUser, createUserWithEmailAndPassword, sendResetEmail, resetUserPassword, doc, setDoc };
+
+export async function fetchFinancialData(userId) {
+    const docRef = doc(db, "users", userId, "financialData", "summary");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      throw new Error("No financial data found");
+    }
+  }

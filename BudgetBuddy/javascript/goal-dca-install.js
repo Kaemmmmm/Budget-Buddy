@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         installment: {
                             assetType: assetType,
                             installmentDuration: parseInt(installmentDuration),
-                            installmentAmount: parseFloat(installmentAmount),
+                            assetPrice: parseFloat(installmentAmount),
                         },
                         timestamp: new Date(),
                     }, { merge: true });

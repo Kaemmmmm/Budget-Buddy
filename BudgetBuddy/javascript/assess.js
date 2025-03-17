@@ -1,37 +1,32 @@
- // ------------------------------
-    // ตัวอย่างค่าจำลอง (สมมติ)
-    // ------------------------------
-    // 1) เปอร์เซ็นต์การออม (เทียบกับรายได้ต่อเดือน)
-    const savingPercent = 10; 
-    // 2) สัดส่วนสินทรัพย์สุทธิ (หลังหักหนี้) เทียบกับรายได้ต่อเดือน (%)
-    const netAssetsPercent = 10;
-    // 3) สถานะหนี้ ("no-debt", "managed", "outstanding")
-    const debtStatus = "managed";
-    // 4) จำนวนเดือนที่เงินฉุกเฉินครอบคลุมรายจ่าย
-    const emergencyMonth = 2;
+// นำเข้าจากโมดูลที่คุณสร้าง
+import { fetchFinancialData, auth } from "./firebase.js";
 
-    // ฟังก์ชันอัปเดตสถานะ (วงกลม+ข้อความ) ตามสีและข้อความที่ต้องการ
-    function updateStatus(circleId, textId, detailId, colorClass, titleText, detailText) {
-      const circleEl = document.getElementById(circleId);
-      const textEl   = document.getElementById(textId);
-      const detailEl = document.getElementById(detailId);
+// ฟังก์ชันอัปเดตสถานะ (ไม่ต้องแก้ไขส่วนนี้)
+function updateStatus(circleId, textId, detailId, colorClass, titleText, detailText) {
+  const circleEl = document.getElementById(circleId);
+  const textEl   = document.getElementById(textId);
+  const detailEl = document.getElementById(detailId);
 
-      // ลบ class สีเก่า
-      circleEl.classList.remove("circle-green", "circle-yellow", "circle-red");
-      // เพิ่ม class สีใหม่
-      circleEl.classList.add(colorClass);
+  circleEl.classList.remove("circle-green", "circle-yellow", "circle-red");
+  circleEl.classList.add(colorClass);
 
-      // อัปเดตข้อความ
-      textEl.textContent   = titleText;
-      detailEl.textContent = detailText;
-    }
+  textEl.textContent   = titleText;
+  detailEl.textContent = detailText;
+}
 
-    // ------------------------------------------------
-    // 1) ประเมิน "สัดส่วนการออม (Good Liquidity)"
-    //    - Green: >= 10%
-    //    - Yellow: 5-9.9%
-    //    - Red: < 5%
-    // ------------------------------------------------
+//เทส
+// ฟังก์ชันสำหรับดึงข้อมูลจริงและประเมินสถานะ
+async function loadAssessmentData() {
+  
+    const userId = auth.currentUser.uid;
+    const data = await fetchFinancialData(userId);
+    // สมมติข้อมูลที่ดึงมามีฟิลด์: income, saving, netAssets, debtStatus, emergencyMonth
+    const savingPercent = (data.saving / data.income) * 100;
+    const netAssetsPercent = (data.netAssets / data.income) * 100;
+    const debtStatus = data.debtStatus; // เช่น "managed", "no-debt", "outstanding"
+    const emergencyMonth = data.emergencyMonth; // จำนวนเดือนที่เงินฉุกเฉินครอบคลุม
+
+    // ประเมิน "สัดส่วนการออม (Good Liquidity)"
     if (savingPercent >= 10) {
       updateStatus(
         "saving-circle", "saving-text", "saving-detail",
@@ -55,12 +50,7 @@
       );
     }
 
-    // ------------------------------------------------
-    // 2) ประเมิน "ความมั่งคั่ง (Wealth Assessment)"
-    //    - Green: >= 50%
-    //    - Yellow: 20-49%
-    //    - Red: < 20%
-    // ------------------------------------------------
+    // ประเมิน "ความมั่งคั่ง (Wealth Assessment)"
     if (netAssetsPercent >= 50) {
       updateStatus(
         "wealth-circle", "wealth-text", "wealth-detail",
@@ -84,12 +74,7 @@
       );
     }
 
-    // ------------------------------------------------
-    // 3) ประเมิน "สถานะหนี้ (Debt-Free Status)"
-    //    - Green: no-debt
-    //    - Yellow: managed
-    //    - Red: outstanding
-    // ------------------------------------------------
+    // ประเมิน "สถานะหนี้ (Debt-Free Status)"
     if (debtStatus === "no-debt") {
       updateStatus(
         "debt-circle", "debt-text", "debt-detail",
@@ -113,12 +98,7 @@
       );
     }
 
-    // ------------------------------------------------
-    // 4) ประเมิน "เงินฉุกเฉิน (Emergency Funds)"
-    //    - Green: > 6 เดือน
-    //    - Yellow: 3-6 เดือน
-    //    - Red: < 3 เดือน
-    // ------------------------------------------------
+    // ประเมิน "เงินฉุกเฉิน (Emergency Funds)"
     if (emergencyMonth > 6) {
       updateStatus(
         "emergency-circle", "emergency-text", "emergency-detail",
@@ -141,18 +121,18 @@
         "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน ไม่เพียงพอต่อเหตุฉุกเฉิน"
       );
     }
+  } 
+  
 
-    // ------------------------------
-    // เมนูย่อย (toggle) หากต้องการให้กดแล้วแสดง
-    // ------------------------------
-    const toggles = document.querySelectorAll('.toggle-submenu');
-    toggles.forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const submenu = toggle.nextElementSibling;
-        if (submenu.style.display === 'block') {
-          submenu.style.display = 'none';
-        } else {
-          submenu.style.display = 'block';
-        }
-      });
-    });
+
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is logged in in assess.js:", user.uid);
+    // เมื่อยืนยันว่าผู้ใช้ล็อกอินแล้ว จึงเรียก loadAssessmentData
+    loadAssessmentData(user.uid);
+  } else {
+    console.log("No user logged in in assess.js");
+  }
+});

@@ -41,9 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 console.log("📤 Saving data to Firebase...");
                 await setDoc(doc(db, "goal", userId), {
+                    savings:{
                     savingAmount,
                     savingDuration,
-                    createdAt: new Date().toISOString()
+                },
+                timestamp: new Date(),
                 }, { merge: true });
 
                 console.log("✅ Data saved successfully!");
