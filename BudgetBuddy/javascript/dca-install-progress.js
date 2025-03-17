@@ -174,7 +174,7 @@ function updateInstallmentChart(paid, remain) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "60%",          // <--- higher means thinner ring
+      cutout: "65%",          // <--- higher means thinner ring
       plugins: {
         legend: { display: false },
       },
@@ -208,7 +208,7 @@ function updateDcaChart(invested, goal) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      cutout: "60%",          // <--- higher means thinner ring
+      cutout: "65%",          // <--- higher means thinner ring
       plugins: {
         legend: { display: false },
       },
