@@ -76,10 +76,14 @@ function saveGoalAndRedirect(goalValue, nextPage) {
             const userId = user.uid;
 
             try {
-                await setDoc(doc(db, "goal", userId), {
-                    goal: goalValue,
-                    timestamp: new Date(),
-                });
+                await setDoc(
+                    doc(db, "goal", userId),
+                    {
+                        goal: goalValue,
+                        timestamp: new Date(),
+                    },
+                    { merge: true }
+                );
 
                 console.log("Goal saved successfully:", goalValue);
             } catch (error) {
