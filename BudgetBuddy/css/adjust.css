@@ -24,7 +24,6 @@ body {
     text-align: center;
   }
   
-  /* Header */
   .header {
     margin-bottom: 30px;
   }
@@ -42,9 +41,9 @@ body {
   }
   
   /* Chart */
-  .chart {
+.chart {
     margin: 30px 0;
-    height: 300px; /* example height, adjust as needed */
+    height: 300px; 
   }
 
 .button-group {
@@ -89,7 +88,6 @@ button {
 .button-goal:hover {
     background-color: #e0a800;
 }
-
 
 /* Sidebar Styles */
 .sidebar {

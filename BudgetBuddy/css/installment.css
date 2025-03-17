@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -6,15 +5,12 @@
   font-family: 'prompt';
 }
 
-/* Body with a subtle gradient background */
-/* Removed flex centering and added left padding to make room for the sidebar */
 body {
   background: linear-gradient(135deg, #f0f4f8, #c3cfe2);
   min-height: 100vh;
   padding: 20px 20px 20px 320px; /* top, right, bottom, left */
 }
 
-/* Container Card */
 .container {
   background: #fff;
   width: 600px;
@@ -26,7 +22,6 @@ body {
   margin: 50px auto; /* centers horizontally and gives a top margin */
 }
 
-/* Title Styling */
 .title {
   font-size: 32px;
   font-weight: 600;
@@ -34,7 +29,6 @@ body {
   margin-bottom: 30px;
 }
 
-/* Form Styles */
 .installment-form {
   margin-bottom: 20px;
   text-align: left;
@@ -67,7 +61,6 @@ body {
   outline: none;
 }
 
-/* Custom Select Arrow */
 .select {
   appearance: none;
   -webkit-appearance: none;
@@ -78,7 +71,6 @@ body {
   background-size: 10px;
 }
 
-/* Form Note */
 .form-note {
   font-size: 14px;
   color: #ff4d4d;
@@ -86,12 +78,10 @@ body {
   margin-bottom: 30px;
 }
 
-/* Button Wrapper */
 .button-wrapper {
   margin-top: 40px;
 }
 
-/* Submit Button */
 .submit-button {
   width: 100%;
   padding: 15px;

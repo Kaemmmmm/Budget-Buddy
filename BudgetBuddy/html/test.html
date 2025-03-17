@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>รายงานสุขภาพการเงิน</title>
+ 
+  <!-- Font Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Font Awesome (icons) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-d7hPcZ7ZDxWs8uN4Mc41bvv9BJokKMDBKeAo1Al1YHMTncKCy28tkQ5LkIfp/4+pYP6dB+P9KM+3ckx2+pKAfQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Chart.js (ถ้าต้องการใช้งานกราฟ) -->
+  <link rel="stylesheet" href="../css/test.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <ul class="menu">
+        <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+        <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+        <li><a href="dashboard(before).html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+        
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="calculator.html">คำนวณDCA</a></li>
+                <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+            </ul>
+        </li>
+
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+            </ul>
+        </li>
+
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน <i class="fas fa-chevron-down arrow"></i></a>
+            <ul class="submenu">
+                <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+            </ul>
+        </li>
+
+        <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+    </ul>
+</div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <div class="header-section">
+      <h2>รายงานสุขภาพการเงิน</h2>
+    </div>
+
+    <!-- ส่วนแสดงสถานะสุขภาพการเงิน (ตาม rubric) -->
+    <div class="status-wrapper">
+      <!-- 1) สัดส่วนการออม (Good Liquidity) -->
+      <div class="status-box">
+        <div id="saving-circle" class="circle">-</div>
+        <div id="saving-text" class="status-text">--</div>
+        <div id="saving-detail" class="status-detail">--</div>
+      </div>
+
+      <!-- 2) ความมั่งคั่ง (Wealth Assessment) -->
+      <div class="status-box">
+        <div id="wealth-circle" class="circle">-</div>
+        <div id="wealth-text" class="status-text">--</div>
+        <div id="wealth-detail" class="status-detail">--</div>
+      </div>
+
+      <!-- 3) สถานะหนี้ (Debt-Free Status) -->
+      <div class="status-box">
+        <div id="debt-circle" class="circle">-</div>
+        <div id="debt-text" class="status-text">--</div>
+        <div id="debt-detail" class="status-detail">--</div>
+      </div>
+
+      <!-- 4) เงินฉุกเฉิน (Emergency Funds) -->
+      <div class="status-box">
+        <div id="emergency-circle" class="circle">-</div>
+        <div id="emergency-text" class="status-text">--</div>
+        <div id="emergency-detail" class="status-detail">--</div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-buttons">
+      <button>เพิ่มรายละเอียดการเงิน</button>
+      <button class="btn-orange">ปรับแผน</button>
+      <button class="btn-green">ถัดไป</button>
+    </div>
+
+    <p style="margin-top: 20px; color: #666; font-size: 0.9rem;">
+      คำแนะนำ: หากต้องการทราบรายงานสุขภาพการเงินของท่านอย่างละเอียด 
+      โปรดบันทึกการหารายรับ-รายจ่ายอย่างน้อย 1 เดือน
+    </p>
+  </div>
+
+  <!-- JS ประมวลผลสถานะตาม Rubric -->
+  <script src="/BudgetBuddy/javascript/nav.js"></script>
+  <script src="/BudgetBuddy/javascript/test.js"></script>
+ 
+</body>
+</html>

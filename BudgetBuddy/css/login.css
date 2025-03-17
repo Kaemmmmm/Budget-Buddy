@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     font-family: 'Prompt', sans-serif;
     margin: 0;
@@ -10,7 +9,6 @@ body {
     align-items: center; /* Center content vertically */
 }
 
-/* Container */
 .container {
     display: flex;
     background: white;
@@ -22,8 +20,6 @@ body {
     align-items: center; /* Align items in the middle */
 }
 
-
-/* Login Box */
 .login-box {
     width: 50%;
     padding: 40px;
@@ -53,7 +49,6 @@ input {
     border-radius: 5px;
 }
 
-/* Password Input */
 .password-container {
     position: relative;
 }
@@ -65,7 +60,6 @@ input {
     cursor: pointer;
 }
 
-/* Remember Me & Forgot Password */
 .remember-forgot {
     display: flex;
     justify-content: space-between;
@@ -78,7 +72,6 @@ input {
     text-decoration: none;
 }
 
-/* Login Button */
 .login-btn {
     width: 100%;
     background-color: #4a4aff;
@@ -94,7 +87,6 @@ input {
     background-color: #3a3aff;
 }
 
-/* Register Text */
 .register-text {
     text-align: center;
     margin-top: 10px;
@@ -106,7 +98,6 @@ input {
     text-decoration: none;
 }
 
-/* Illustration Box */
 .illustration {
     width: 50%;
     background-color: #f0f0ff;
@@ -116,7 +107,6 @@ input {
     overflow: hidden; /* Ensures the image doesn't exceed the container */
 }
 
-/* Make Image Fit Fully */
 .illustration img {
     width: 100%;
     height: 100%;

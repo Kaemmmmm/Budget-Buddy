@@ -1,5 +1,5 @@
-/* Apply Prompt Font Globally */
 body {
+    box-sizing: border-box;
     font-family: 'prompt';
     margin: 0;
     padding: 0;

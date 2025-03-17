@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
     margin: 0;
     padding: 0;
@@ -13,8 +12,7 @@
     align-items: center;
     min-height: 100vh;
   }
-  
-  /* Container Card */
+
   .container {
     background: #fff;
     width: 600px;
@@ -25,7 +23,6 @@
     text-align: center;
   }
   
-  /* Title Styling */
   .title {
     font-size: 28px;
     font-weight: 600;
@@ -33,7 +30,6 @@
     margin-bottom: 30px;
   }
   
-  /* Form Styling */
   .financial-form {
     width: 100%;
   }
@@ -62,7 +58,6 @@
     outline: none;
   }
   
-  /* Submit Button */
   .submit-button {
     width: 100%;
     padding: 15px;
@@ -118,7 +113,6 @@
     font-weight: 600;
     position: relative;
 }
-
 
 .menu a:hover {
     background: #e6f0ff;

@@ -1,4 +1,3 @@
-/* Global Reset */
 * {
     margin: 0;
     padding: 0;
@@ -8,20 +7,18 @@
   body {
     font-family: 'Prompt', sans-serif;
     background: #f8f9fa;
-    /* Center the container both horizontally & vertically */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
   }
   
-  /* Main Container */
   .container {
     display: flex;
     gap: 20px;
     align-items: flex-start;
-    width: 90%;               /* Make it wider */
-    max-width: 1500px;        /* Increase maximum width if you like */
+    width: 90%;               
+    max-width: 1500px;        
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -53,14 +50,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     min-height: 500px;
-    max-height: 500px; /* Keep the same height limit, or remove if you like */
-    width: 700px;      /* Expanded width for more text space */
+    max-height: 500px; 
+    width: 700px;    
     text-align: left;
   }
   
-  
-  
-  /* Chart Container - a bit bigger now (260×260) */
   .chart-container {
     width: 260px;
     height: 260px;
@@ -73,7 +67,6 @@
     align-items: center;
   }
   
-  /* History List */
   .history-list {
     list-style: none;
     padding: 0;
@@ -81,7 +74,6 @@
     overflow-y: auto;
   }
   
-  /* History Items */
   .history-item {
     display: flex;
     align-items: center;
@@ -91,14 +83,15 @@
   }
   
   
-  /* For each span, choose how much horizontal space you want */
   .history-date {
-    flex: 2;  /* date might be longer, give it more space */
+    flex: 2;  
   }
+
   .history-type {
     flex: 1;
     text-align: left;
   }
+
   .history-amount {
     flex: 1;
     text-align: left;
@@ -106,7 +99,7 @@
   
   
   .delete-btn {
-    flex: 0;            /* or remove flex and let it be auto */
+    flex: 0;          
     background: red;
     color: white;
     border: none;
@@ -115,7 +108,7 @@
     border-radius: 4px;
     font-size: 0.8rem;
   }
-  /* Update Button */
+
   .progress-button {
     background-color: #007bff;
     color: white;
@@ -132,9 +125,6 @@
     background-color: #0056b3;
   }
   
-  /* Sidebar (Optional)
-     If you have a pinned sidebar, you can keep these styles 
-     or remove them if you're not using a sidebar. */
   .sidebar {
     width: 280px;
     background: #fff;

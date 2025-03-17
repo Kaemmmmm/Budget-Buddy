@@ -1,4 +1,3 @@
-/* Global Reset and Font */
 * {
     margin: 0;
     padding: 0;
@@ -6,14 +5,10 @@
     font-family: 'prompt';
   }
   
-  /* Body with a subtle gradient background
-     - Removed flex centering to avoid conflict with the fixed sidebar
-     - Added padding to ensure content doesn't overlap the sidebar */
   body {
     background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
     min-height: 100vh;
     padding: 50px 20px 20px 320px; /* top-right-bottom-left */
-    /* Alternatively, you can do margin-left on .container instead of padding here. */
   }
   
   /* Sidebar (fixed on the left) */
@@ -82,9 +77,6 @@
     display: block;
   }
   
-  /* Main container with a modern card look
-     - Use a fixed width and max-width for responsiveness
-     - Center it horizontally with margin: 0 auto */
   .container {
     width: 600px;
     max-width: 90%;
