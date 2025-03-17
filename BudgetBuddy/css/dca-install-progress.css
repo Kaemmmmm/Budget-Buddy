@@ -1,3 +1,4 @@
+/* Global Reset */
 * {
     margin: 0;
     padding: 0;
@@ -5,108 +6,135 @@
   }
   
   body {
-    font-family: 'prompt';
-    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
-    /* Reserve left space for sidebar (280px + extra gap) */
-    padding: 20px 20px 20px 320px;
+    font-family: 'Prompt', sans-serif;
+    background: #f8f9fa;
+    /* Center the container both horizontally & vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
+  }
+  
+  /* Main Container */
+  .container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    width: 90%;               /* Make it wider */
+    max-width: 1500px;        /* Increase maximum width if you like */
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 30px auto 30px 350px;
+  }
+  
+  /* Progress & History Sections */
+  .progress-section{
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 500px; /* Slightly bigger for more space */
+  }
+  
+  .history-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    min-height: 500px;
+    max-height: 500px; /* Keep the same height limit, or remove if you like */
+    width: 700px;      /* Expanded width for more text space */
+    text-align: left;
+  }
+  
+  
+  
+  /* Chart Container - a bit bigger now (260×260) */
+  .chart-container {
+    width: 260px;
+    height: 260px;
+    margin: 0 auto;
+    position: relative;
+    background: white;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
+  
+  /* History List */
+  .history-list {
+    list-style: none;
+    padding: 0;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+  
+  /* History Items */
+  .history-item {
+    display: flex;       /* turn each list item into a horizontal row */
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    gap: 10px;           /* optional horizontal spacing */
+  }
+  
+  /* For each span, choose how much horizontal space you want */
+  .history-date {
+    flex: 2;             /* e.g., date might be longer, so give it more space */
+  }
+  .history-type {
+    flex: 1;             /* narrower column, center the text if you want */
     text-align: center;
-}
-
-h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-
-.charts-container {
-    margin-top: 70px; 
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    flex-wrap: wrap;
-}
-
-.chart-type {
-    font-size: 1.5rem; 
-    font-weight: 700;  
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-}
-
-.chart {
-    background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    padding: 25px;
-    width: 320px; /* slight increase for better spacing */
-}
-
-
-.pie-chart {
-    width: 280px;  
-    height: 280px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    position: relative;
-}
-
-.donut-hole {
-    width: 180px; 
-    height: 180px;
-    background-color: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.donut-1 {
-    background: conic-gradient(#FFBBCC 0% 8.33%, #E8E8E8 8.33% 100%);
-}
-
-.donut-2 {
-    background: conic-gradient(#3b82f6 0% 16.67%, #E8E8E8 16.67% 100%);
-}
-
-
-.chart-info {
-    text-align: center;
-    font-size: 14px;
-    color: #333;
-}
-
-.chart-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.outer-container {
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-    padding: 50px;  /* Increased padding for more space */
-    margin: 50px auto;
-    width: 100%;     /* Wider container, responsive to page width */
-    max-width: 1200px; /* Maximum container width */
-    box-sizing: border-box;
-}
-
-
-
-/* Sidebar Styles (from your existing CSS) */
-.sidebar {
+  }
+  .history-amount {
+    flex: 1;             /* align amounts on the right */
+    text-align: right;
+  }
+  
+  
+  /* Delete Button */
+  .delete-btn {
+    background: red;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+  /* Update Button */
+  .progress-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+  }
+  
+  .progress-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Sidebar (Optional)
+     If you have a pinned sidebar, you can keep these styles 
+     or remove them if you're not using a sidebar. */
+  .sidebar {
     width: 280px;
     background: #fff;
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
@@ -116,19 +144,19 @@ h2 {
     left: 0;
     top: 0;
     overflow-y: auto;
-}
-
-.menu {
+  }
+  
+  .menu {
     list-style: none;
     padding: 0;
-}
-
-.menu li {
+  }
+  
+  .menu li {
     margin-bottom: 10px;
     text-align: center;
-}
-
-.menu a {
+  }
+  
+  .menu a {
     text-decoration: none;
     color: #666;
     display: flex;
@@ -140,31 +168,34 @@ h2 {
     font-size: 16px;
     font-weight: 600;
     position: relative;
-}
-
-.menu a:hover {
+  }
+  
+  .menu a:hover {
     background: #e6f0ff;
     color: #007bff;
-}
-
-.has-submenu > a::after {
-    content: "\25BC";
+  }
+  
+  /* Dropdown Arrow */
+  .has-submenu > a::after {
+    content: '\25BC';
     position: absolute;
     right: 10px;
     font-size: 12px;
     transition: transform 0.3s;
-}
-
-.has-submenu > a.rotate::after {
+  }
+  
+  .has-submenu > a.rotate::after {
     transform: rotate(180deg);
-}
-
-.submenu {
+  }
+  
+  /* Submenu */
+  .submenu {
     display: none;
     list-style: none;
     padding-left: 0;
-}
-
-.submenu.active {
+  }
+  
+  .submenu.active {
     display: block;
-}
+  }
+  

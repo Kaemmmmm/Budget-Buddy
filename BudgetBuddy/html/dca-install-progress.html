@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ความคืบหน้าการซ้อมผ่อน & DCA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dca-install-progress.css">
-    <title>DCA & Installment Progress</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="sidebar">
@@ -44,41 +45,50 @@
     </div>
 
     <div class="container">
-        <div class="outer-container">
-            <h1 class="title">ความคืบหน้าการซ้อมผ่อน & DCA</h1>
-            <div class="charts-container">
-                <div class="chart">
-                    <h3 class="chart-type">การซ้อมผ่อน</h3>
-                    <div class="pie-chart donut donut-1">
-                        <div class="donut-hole"></div>
-                    </div>
-                    <div class="chart-info">
-                        <p class="chart-title">8.33%</p>
-                        <p>ชำระแล้ว 1 เดือน | คงเหลืออีก 23 เดือน</p>
-                    </div>
-                </div>
-    
-                <div class="chart">
-                    <h3 class="chart-type">DCA</h3>
-                    <div class="pie-chart donut donut-2">
-                        <div class="donut-hole"></div>
-                    </div>
-                    <div class="chart-info">
-                        <p class="chart-title">1/10 ปี</p>
-                        <p>ชำระแล้ว 1 เดือน | คงเหลืออีก 119 เดือน</p>
-                    </div>
-                </div>
+        <!-- Installment Section -->
+        <div class="progress-section">
+            <h2 class="title">ความคืบหน้าการซ้อมผ่อน</h2>
+            <p>
+              ชำระแล้ว 
+              <span id="paid-months">0</span> 
+              เดือน | ค่างวดที่ต้องชำระต่อ 
+              <span id="total-months">0</span> 
+              เดือน
+            </p>
+            <div class="chart-container">
+                <canvas id="installmentChart"></canvas>
             </div>
+            <button id="update-installment-btn" class="progress-button">
+              อัปเดตความคืบหน้าการซ้อมผ่อน
+            </button>
+        </div>
+
+        <!-- DCA Section -->
+        <div class="progress-section">
+            <h2 class="title">ความคืบหน้า DCA</h2>
+            <p>
+              ลงทุนไปแล้ว 
+              <span id="invested-amount">0</span> 
+              บาท จากเป้าหมาย 
+              <span id="goal-amount">0</span> 
+              บาท
+            </p>
+            <div class="chart-container">
+                <canvas id="dcaChart"></canvas>
+            </div>
+            <button id="update-dca-btn" class="progress-button">
+              อัปเดตความคืบหน้า DCA
+            </button>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <h2>ประวัติการชำระเงิน & การลงทุน</h2>
+            <ul id="history-list" class="history-list"></ul>
         </div>
     </div>
     
-    
-    
-
-    <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/dca-install-progress.js"></script>
+    <script src="../javascript/nav.js"></script>
 </body>
 </html>
-
-
-
-
