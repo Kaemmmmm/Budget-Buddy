@@ -109,8 +109,10 @@
     font-size: 0.8rem;
   }
 
-  .progress-button {
-    background-color: #007bff;
+
+
+  .dca-button {
+    background-color: #007bff ;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -121,8 +123,24 @@
     margin-top: 20px;
   }
   
-  .progress-button:hover {
+  .dca-button:hover {
     background-color: #0056b3;
+  }
+
+  .installment-button {
+    background-color: #fd7db0;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+  }
+  
+  .installment-button:hover {
+    background-color: #ff4d94;
   }
   
   .sidebar {
