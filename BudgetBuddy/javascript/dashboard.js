@@ -4,7 +4,6 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase
 
 const auth = getAuth();
 
-
 document.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, async (user) => {
     if (user) {
@@ -13,7 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("User not authenticated.");
     }
   });
+
+  // ✅ Dynamically update the month and year in the subtitle
+  updateSubtitleDate();
 });
+
+// Function to update the subtitle date
+function updateSubtitleDate() {
+  const subtitleElement = document.querySelector(".subtitle");
+
+  if (subtitleElement) {
+    const monthsThai = [
+      "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+      "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+    ];
+    
+    const currentDate = new Date();
+    const month = monthsThai[currentDate.getMonth()];
+    const year = currentDate.getFullYear() + 543; // Convert to Buddhist Era
+
+    subtitleElement.innerHTML = `${month} <strong>${year}</strong>`;
+  }
+}
 
 async function loadTransactionData(userId) {
   const userDoc = doc(db, "goal", userId);
@@ -68,14 +88,24 @@ function updateChart(financialData, detailedData) {
     data: {
       labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
       datasets: [{
-        data: financialData, // <-- Remove the "label" property
+        data: financialData,
         backgroundColor: ["#28a745", "#dc3545", "#007bff", "#ff0000", "#ffc107"]
       }]
     },
     options: {
       plugins: {
-        legend: { display: false }, // Keep this to hide legend
+        legend: { 
+          display: false 
+        },
         tooltip: {
+          titleFont: { 
+            family: 'Prompt', 
+            size: 14 
+          }, 
+          bodyFont: { 
+            family: 'Prompt', 
+            size: 14 
+          },
           callbacks: {
             label: function(context) {
               const labelIndex = context.dataIndex;
@@ -92,13 +122,25 @@ function updateChart(financialData, detailedData) {
               }
             }
           }
-        },
+        }
       },
       scales: {
+        x: {
+          ticks: {
+            font: {
+              family: 'Prompt',
+              size: 14
+            }
+          }
+        },
         y: {
           beginAtZero: true,
           ticks: {
-            callback: value => value.toLocaleString() + " บาท"
+            callback: value => value.toLocaleString() + " บาท",
+            font: {
+              family: 'Prompt',
+              size: 14
+            }
           }
         }
       }

@@ -112,36 +112,73 @@ async function updateTransactionData() {
   }
   
   
-function updateChart(financialData) {
-  const ctx = document.getElementById("transactionChart").getContext("2d");
-
-  if (transactionChart) {
-    transactionChart.destroy();
-  }
-
-  transactionChart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
-      datasets: [{
-        label: "จำนวนเงิน (บาท)",
-        data: financialData,
-        backgroundColor: ["#28a745", "#dc3545", "#007bff", "#ff0000", "#ffc107"]
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false }
+  function updateChart(financialData, detailedData) {
+    const ctx = document.getElementById("transactionChart").getContext("2d");
+  
+    if (transactionChart) transactionChart.destroy();
+  
+    transactionChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
+        datasets: [{
+          data: financialData,
+          backgroundColor: ["#28a745", "#dc3545", "#007bff", "#ff0000", "#ffc107"]
+        }]
       },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: value => `${value.toLocaleString()} บาท`
+      options: {
+        plugins: {
+          legend: { 
+            display: false 
+          },
+          tooltip: {
+            titleFont: { 
+              family: 'Prompt', 
+              size: 14 
+            }, 
+            bodyFont: { 
+              family: 'Prompt', 
+              size: 14 
+            },
+            callbacks: {
+              label: function(context) {
+                const labelIndex = context.dataIndex;
+                const value = context.raw.toLocaleString() + " บาท";
+                if (labelIndex === 2) {
+                  return [
+                    `เงินออมรวม: ${value}`,
+                    ` - DCA: ${detailedData.dca.toLocaleString()} บาท`,
+                    ` - เงินออมปกติ: ${detailedData.savings.toLocaleString()} บาท`,
+                    ` - เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                  ];
+                } else {
+                  return `${context.label}: ${value}`;
+                }
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              font: {
+                family: 'Prompt',
+                size: 14
+              }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: value => value.toLocaleString() + " บาท",
+              font: {
+                family: 'Prompt',
+                size: 14
+              }
+            }
           }
         }
       }
-    }
-  });
-}
+    });
+  }
+  
