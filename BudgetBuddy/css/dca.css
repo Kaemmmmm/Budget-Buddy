@@ -148,3 +148,7 @@ body {
 input[type="text"] {
   text-align: right;
 }
+
+.menu a i {
+  margin-right: 8px;
+}

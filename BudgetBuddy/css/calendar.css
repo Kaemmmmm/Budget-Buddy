@@ -194,3 +194,6 @@ body {
   cursor: pointer;
   color: #007bff;
 }
+.menu a i {
+  margin-right: 8px;
+}

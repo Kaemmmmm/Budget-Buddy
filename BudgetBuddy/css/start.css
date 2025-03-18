@@ -160,3 +160,6 @@
     text-align: center;
   }
   
+  .menu a i {
+    margin-right: 8px;
+  }
