@@ -34,9 +34,11 @@ async function loadTransactionData(userId) {
       const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1; // avoid division by 0
       const paidMonths = parseFloat(data.installment?.paidMonths) || 0;
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
+      
+      let emergencyFund = parseFloat(data.emergencyFund?.amount) || 0; // ✅ Declare emergencyFund
 
       const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
+      const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
 
       const remaining = income - expense - savings - debt;
 
@@ -44,75 +46,95 @@ async function loadTransactionData(userId) {
       document.getElementById("expense").value = expense;
       document.getElementById("debt").value = debt;
 
-      updateChart([income, expense, savings, debt, remaining]);
+      updateChart(
+        [income, expense, savings, debt, remaining], 
+        {
+          dca: dcaInvested,
+          savings: savingsAmount,
+          emergencyFund: emergencyFund, // ✅ Now correctly defined
+          installment: totalInstallmentPaid
+        }
+      );
 
     } else {
       console.error("No data found for user.");
-      updateChart([0, 0, 0, 0, 0]);
+      updateChart([0, 0, 0, 0, 0], { dca: 0, savings: 0, emergencyFund: 0, installment: 0 });
     }
   } catch (error) {
     console.error("Error fetching financial data:", error);
   }
 }
 
+
 async function updateTransactionData() {
-    const user = auth.currentUser;
-  
-    if (!user) {
-      alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
-      return;
-    }
-  
-    // User inputs only these fields
-    const income = parseFloat(document.getElementById("income").value) || 0;
-    const expense = parseFloat(document.getElementById("expense").value) || 0;
-    const debt = parseFloat(document.getElementById("debt").value) || 0;
-  
-    try {
-      // Fetch existing data from Firebase first
-      const docRef = doc(db, "goal", user.uid);
-      const docSnap = await getDoc(docRef);
-  
-      let dcaInvested = 0, assetPrice = 0, installmentDuration = 1, paidMonths = 0, savingsAmount = 0;
-  
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        dcaInvested = parseFloat(data.dca?.invested) || 0;
-        assetPrice = parseFloat(data.installment?.assetPrice) || 0;
-        installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
-        paidMonths = parseFloat(data.installment?.paidMonths) || 0;
-        savingsAmount = parseFloat(data.savings?.amount) || 0;
-      } else {
-        console.error("No existing data found. Defaulting to zeroes.");
-      }
-  
-      // Perform calculations based on fetched data
-      const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
-  
-      const remaining = income - expense - savings - debt;
-  
-      // Now update the necessary fields
-      await setDoc(doc(db, "goal", user.uid), {
-        income,
-        expense,
-        debt,
-        remaining,
-        timestamp: new Date()
-      }, { merge: true });
-  
-      alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
-      updateChart([income, expense, savings, debt, remaining]);
-      window.location.href = "dashboardsav(before).html";
-  
-    } catch (error) {
-      console.error("❌ Error updating data:", error);
-      alert("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
-    }
+  const user = auth.currentUser;
+
+  if (!user) {
+    alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
+    return;
   }
+
+  // User inputs only these fields
+  const income = parseFloat(document.getElementById("income").value) || 0;
+  const expense = parseFloat(document.getElementById("expense").value) || 0;
+  const debt = parseFloat(document.getElementById("debt").value) || 0;
+
+  try {
+    // Fetch existing data from Firebase first
+    const docRef = doc(db, "goal", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    let dcaInvested = 0, assetPrice = 0, installmentDuration = 1, paidMonths = 0, savingsAmount = 0;
+    let emergencyFund = 0; // ✅ Declare emergencyFund before using it
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      dcaInvested = parseFloat(data.dca?.invested) || 0;
+      assetPrice = parseFloat(data.installment?.assetPrice) || 0;
+      installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
+      paidMonths = parseFloat(data.installment?.paidMonths) || 0;
+      savingsAmount = parseFloat(data.savings?.amount) || 0;
+      emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
+    } else {
+      console.error("No existing data found. Defaulting to zeroes.");
+    }
+
+    // Perform calculations based on fetched data
+    const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
+    const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
+
+    const remaining = income - expense - savings - debt;
+
+    // Now update the necessary fields
+    await setDoc(doc(db, "goal", user.uid), {
+      income,
+      expense,
+      debt,
+      remaining,
+      timestamp: new Date()
+    }, { merge: true });
+
+    alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
+    updateChart(
+      [income, expense, savings, debt, remaining], 
+      {
+        dca: dcaInvested,
+        savings: savingsAmount,
+        emergencyFund: emergencyFund, // ✅ Now correctly defined
+        installment: totalInstallmentPaid
+      }
+    );
+    window.location.href = "dashboardsav(before).html";
+
+  } catch (error) {
+    console.error("❌ Error updating data:", error);
+    alert("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
+  }
+}
+
   
   
-  function updateChart(financialData, detailedData) {
+  function updateChart(financialData, detailedData = {}) { // ✅ Default to empty object
     const ctx = document.getElementById("transactionChart").getContext("2d");
   
     if (transactionChart) transactionChart.destroy();
@@ -147,9 +169,10 @@ async function updateTransactionData() {
                 if (labelIndex === 2) {
                   return [
                     `เงินออมรวม: ${value}`,
-                    ` - DCA: ${detailedData.dca.toLocaleString()} บาท`,
-                    ` - เงินออมปกติ: ${detailedData.savings.toLocaleString()} บาท`,
-                    ` - เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                    ` • DCA: ${(detailedData.dca || 0).toLocaleString()} บาท`,
+                    ` • เงินออม: ${(detailedData.savings || 0).toLocaleString()} บาท`,
+                    ` • เงินสำรองฉุกเฉิน: ${(detailedData.emergencyFund || 0).toLocaleString()} บาท`, // ✅ Handle undefined emergencyFund
+                    ` • เงินซ้อมผ่อน: ${(detailedData.installment || 0).toLocaleString()} บาท`
                   ];
                 } else {
                   return `${context.label}: ${value}`;
