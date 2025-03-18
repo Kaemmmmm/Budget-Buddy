@@ -56,26 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const docSnap = await getDoc(userDoc);
 
       if (!docSnap.exists()) {
-        console.warn("No data found for user. Initializing goal document...");
-
-        // Create a new document with nested 'savings'
-        await setDoc(
-          userDoc,
-          {
-            savings: {
-              savingAmount: 100000,  // default
-              savingDuration: 10,    // default
-              amount: 0,            // how much saved so far
-            },
-            timestamp: new Date(),
-          },
-          { merge: true } // <--- Merge so we don't overwrite anything else
-        );
-
-        savingGoal = 100000;
-        savingDuration = 10;
-        amount = 0;
-      } else {
+        console.warn("No data found for user.");
+        
+        // Don't create any default savings data, just return
+        return;
+    }else {
         // Document exists; read the nested fields
         const data = docSnap.data();
         if (data.savings) {
