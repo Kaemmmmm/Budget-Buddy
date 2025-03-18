@@ -1,9 +1,9 @@
-import { db } from "../javascript/firebase.js";  // Import Firestore from firebase.js
+import { db } from "../javascript/firebase.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
-let transactionChart;
+
 
 document.addEventListener("DOMContentLoaded", () => {
   onAuthStateChanged(auth, async (user) => {
@@ -23,82 +23,86 @@ async function loadTransactionData(userId) {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      // Safely extract nested fields with optional chaining (?.) and fallback (|| 0)
       const income  = parseFloat(data.income)  || 0;
       const expense = parseFloat(data.expense) || 0;
       const debt    = parseFloat(data.debt)    || 0;
 
-      // DCA: data.dca.invested
       const dcaInvested = parseFloat(data.dca?.invested) || 0;
-
-      // Installment: data.installment.assetPrice, data.installment.installmentDuration, data.installment.paidMonths
-      const assetPrice          = parseFloat(data.installment?.assetPrice)          || 0;
-      const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1; // avoid division by 0
-      const paidMonths          = parseFloat(data.installment?.paidMonths)          || 0;
-
-      // Savings: data.savings.amount
+      const assetPrice  = parseFloat(data.installment?.assetPrice) || 0;
+      const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
+      const paidMonths  = parseFloat(data.installment?.paidMonths) || 0;
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
 
-      const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration*12));
+      const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
+      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount;
 
-      // Combine them for your "savings" figure
-      const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
+      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + debt);
 
-      // Calculate remaining (optional)
-      const remaining = income - expense - savings - debt;
-
-      // Pass data to the chart
-      updateChart([income, expense, savings, debt, remaining]);
+      updateChart(
+        [income, expense, totalInstallmentPaid + dcaInvested + savingsAmount, debt, remaining],
+        {
+          dca: dcaInvested,
+          savings: savingsAmount,
+          installment: totalInstallmentPaid
+        }
+      );
 
     } else {
       console.error("No data found for user.");
-      updateChart([0, 0, 0, 0, 0]); // Show empty chart if no data
+      updateChart([0, 0, 0, 0, 0], {dca: 0, savings: 0, installment: 0});
     }
   } catch (error) {
     console.error("Error fetching financial data:", error);
   }
 }
 
-function updateChart(financialData) {
+let transactionChart;
+
+function updateChart(financialData, detailedData) {
   const ctx = document.getElementById("transactionChart").getContext("2d");
 
-  if (transactionChart) {
-    transactionChart.destroy();
-  }
+  if (transactionChart) transactionChart.destroy();
 
   transactionChart = new Chart(ctx, {
-    type: "bar",
+    type: 'bar',
     data: {
       labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
-      datasets: [
-        {
-          label: "จำนวนเงิน (บาท)",
-          data: financialData,
-          backgroundColor: [
-            "#28a745", // Income (Green)
-            "#dc3545", // Expense (Red)
-            "#007bff", // Savings (Blue)
-            "#ff0000", // Debt (Dark Red)
-            "#ffc107"  // Remaining (Yellow)
-          ]
-        }
-      ]
+      datasets: [{
+        data: financialData, // <-- Remove the "label" property
+        backgroundColor: ["#28a745", "#dc3545", "#007bff", "#ff0000", "#ffc107"]
+      }]
     },
     options: {
-      responsive: true,
       plugins: {
-        legend: { display: false }
+        legend: { display: false }, // Keep this to hide legend
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const labelIndex = context.dataIndex;
+              const value = context.raw.toLocaleString() + " บาท";
+              if (labelIndex === 2) {
+                return [
+                  `เงินออมรวม: ${value}`,
+                  ` - DCA: ${detailedData.dca.toLocaleString()} บาท`,
+                  ` - เงินออมปกติ: ${detailedData.savings.toLocaleString()} บาท`,
+                  ` - เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                ];
+              } else {
+                return `${context.label}: ${value}`;
+              }
+            }
+          }
+        },
       },
       scales: {
         y: {
           beginAtZero: true,
           ticks: {
-            callback: function(value) {
-              return value.toLocaleString() + " บาท";
-            }
+            callback: value => value.toLocaleString() + " บาท"
           }
         }
       }
     }
   });
 }
+
