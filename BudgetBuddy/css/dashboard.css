@@ -168,3 +168,6 @@ button {
   background-color: #035ac4;
   transform: translateY(-2px);
 }
+.menu a i {
+  margin-right: 8px;
+}

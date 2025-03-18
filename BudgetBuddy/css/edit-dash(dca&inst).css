@@ -194,3 +194,7 @@ body {
   margin-top: 30px;
   text-align: left;            /* Align labels and inputs to the left */
 }
+
+.menu a i {
+  margin-right: 8px;
+}

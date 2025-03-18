@@ -154,3 +154,6 @@ body {
   transform: translateY(-2px);
 }
 
+.menu a i {
+  margin-right: 8px;
+}

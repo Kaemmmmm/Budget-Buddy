@@ -165,3 +165,7 @@ body {
 .submenu.active {
   display: block;
 }
+
+.menu a i {
+  margin-right: 8px;
+}

@@ -139,3 +139,7 @@ body {
   background-color: #0056b3;
   transform: translateY(-3px);
 }
+
+.menu a i {
+  margin-right: 8px;
+}
