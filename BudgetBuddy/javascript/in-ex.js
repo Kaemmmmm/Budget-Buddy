@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("✅ Financial data saved successfully!");
 
                     // Redirect after saving data
-                    window.location.href = "../html/dashboardsav(before).html";
+                    window.location.href = "../html/dashboard.html";
                 } catch (error) {
                     console.error("❌ Error saving financial data:", error);
                     alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง");

@@ -124,7 +124,7 @@ async function updateTransactionData() {
         installment: totalInstallmentPaid
       }
     );
-    window.location.href = "dashboardsav(before).html";
+    window.location.href = "dashboard.html";
 
   } catch (error) {
     console.error("❌ Error updating data:", error);

@@ -23,8 +23,8 @@ async function handleLogin(event) {
                 
                 // Check if "goal" field exists and is not empty
                 if (userData.goal && Object.keys(userData.goal).length > 0) {
-                    console.log("Goal exists, redirecting to dashboardsav(before).html");
-                    window.location.href = '../html/dashboardsav(before).html'; // Redirect if goal exists
+                    console.log("Goal exists, redirecting to dashboard.html");
+                    window.location.href = '../html/dashboard.html'; // Redirect if goal exists
                 } else {
                     console.log("No goal found, redirecting to start.html");
                     window.location.href = '../html/start.html'; // Redirect if no goal
