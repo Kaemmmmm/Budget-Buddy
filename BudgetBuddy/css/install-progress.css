@@ -103,6 +103,7 @@ body {
     cursor: pointer;
     border-radius: 5px;
     font-size: 12px;
+    font-family: 'prompt',sans-serif;
 }
 
 .progress-button:hover {

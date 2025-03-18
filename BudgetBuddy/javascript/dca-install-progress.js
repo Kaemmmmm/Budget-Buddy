@@ -218,7 +218,7 @@ function updateDcaChart(invested, goal) {
       datasets: [
         {
           data: dataArr,
-          backgroundColor: ["#007bff", "#e0e0e0"]
+          backgroundColor: ["#007bff", "#66adfa"],
         }
       ]
     },

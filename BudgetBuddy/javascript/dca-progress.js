@@ -182,7 +182,7 @@ function updateChart(investedAmount, goalAmount) {
             datasets: [
                 {
                     data: [progressPercentage, remainingPercentage],
-                    backgroundColor: ["#007bff", "#e0e0e0"],
+                    backgroundColor: ["#007bff", "#66adfa"],
                     borderWidth: 2
                 }
             ]

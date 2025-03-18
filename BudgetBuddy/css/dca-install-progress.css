@@ -106,7 +106,8 @@
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 4px;
-    font-size: 0.8rem;
+    font-size: 12px;
+    font-family: 'prompt',sans-serif;
   }
 
 
@@ -117,6 +118,7 @@
     border: none;
     padding: 12px 20px;
     font-size: 16px;
+    font-family: 'prompt',sans-serif;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
@@ -133,6 +135,7 @@
     border: none;
     padding: 12px 20px;
     font-size: 16px;
+    font-family: 'prompt',sans-serif;
     border-radius: 8px;
     cursor: pointer;
     transition: 0.3s;
@@ -142,6 +145,10 @@
   .installment-button:hover {
     background-color: #ff4d94;
   }
+
+
+    
+  
   
   .sidebar {
     width: 280px;
