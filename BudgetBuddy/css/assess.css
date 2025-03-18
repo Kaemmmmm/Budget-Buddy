@@ -209,17 +209,20 @@ body {
   border-radius: 4px;
   font-weight: 500;
   cursor: pointer;
-  background-color: #e0e0e0;
   color: #333;
 }
 
-.action-buttons button:hover {
-  background-color: #d4d4d4;
+.btn-blue {
+  background-color: #0059ff;
+  
+}
+
+.btn-blue:hover {
+  background-color: #024dd7;
 }
 
 .btn-orange {
   background-color: #ff9800;
-  color: #fff;
 }
 
 .btn-orange:hover {
@@ -246,3 +249,4 @@ body {
 .menu a i {
   margin-right: 8px;
 }
+
