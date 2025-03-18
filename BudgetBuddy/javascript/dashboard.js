@@ -45,7 +45,7 @@ async function loadTransactionData(userId) {
       const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
 
       // Calculate remaining (optional)
-      const remaining = income - expense;
+      const remaining = income - expense - savings - debt;
 
       // Pass data to the chart
       updateChart([income, expense, savings, debt, remaining]);
