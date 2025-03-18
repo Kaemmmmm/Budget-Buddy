@@ -46,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 try {
                     await setDoc(doc(db, "goal", userId), {
-                        investmentType: "DCA & Installment",
                         dca: {
                             monthlyInvestment: parseFloat(monthlyInvestment),
                             investmentDate: investmentDate,
