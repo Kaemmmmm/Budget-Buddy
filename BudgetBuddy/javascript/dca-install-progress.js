@@ -196,7 +196,7 @@ function updateInstallmentChart(paid, remain) {
         legend: { display: false }
       }
     },
-    plugins: [centerTextPlugin(pct)]
+    plugins: [centerTextPlugin(pct, "#ff4d94")]
   });
 }
 
@@ -230,14 +230,14 @@ function updateDcaChart(invested, goal) {
         legend: { display: false }
       }
     },
-    plugins: [centerTextPlugin(pct)]
+    plugins: [centerTextPlugin(pct, "#007bff")]
   });
 }
 
 // ---------------------
 // Center Text Plugin
 // ---------------------
-function centerTextPlugin(percentage) {
+function centerTextPlugin(percentage, textColor) {
   return {
     id: "center-text",
     beforeDraw(chart) {
@@ -246,7 +246,8 @@ function centerTextPlugin(percentage) {
 
       const fontSize = Math.min(width, height) / 6;
       ctx.font = `bold ${fontSize}px 'Prompt', sans-serif`;
-      ctx.fillStyle = "#000";
+      ctx.fillStyle = textColor;
+    
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
 
