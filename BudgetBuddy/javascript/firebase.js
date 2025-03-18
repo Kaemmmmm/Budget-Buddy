@@ -64,7 +64,7 @@ function resetUserPassword(oobCode, newPassword) {
 }
 
 // Export Firebase functions
-export { app, db, auth, loginUser, createUserWithEmailAndPassword, sendResetEmail, resetUserPassword, doc, setDoc };
+export { app, db, auth, loginUser, createUserWithEmailAndPassword, sendResetEmail, resetUserPassword, doc, setDoc, getDoc };
 
 export async function fetchFinancialData(userId) {
     const docRef = doc(db, "users", userId, "financialData", "summary");

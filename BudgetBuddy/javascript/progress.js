@@ -29,6 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.location.href = "dca-install-progress.html";
                 } else if (goal === "Saving") {
                     window.location.href = "saving-progress.html";
+                } else if (goal === "No Goal") {
+                    console.warn("คุณยังไม่ได้ตั้งเป้าหมาย", goal);
+                    alert("คุณยังไม่ได้ตั้งเป้าหมาย");
+                    window.location.href = "dashboardsav(before).html";
                 } else {
                     console.warn("Unknown goal:", goal);
                     document.body.innerHTML = "<h2>ไม่พบข้อมูลเป้าหมาย</h2>";
