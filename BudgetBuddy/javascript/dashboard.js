@@ -46,42 +46,47 @@ async function loadTransactionData(userId) {
       const income  = parseFloat(data.income)  || 0;
       const expense = parseFloat(data.expense) || 0;
       const debt    = parseFloat(data.debt)    || 0;
-
+      
       const dcaInvested = parseFloat(data.dca?.invested) || 0;
       const assetPrice  = parseFloat(data.installment?.assetPrice) || 0;
       const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
       const paidMonths  = parseFloat(data.installment?.paidMonths) || 0;
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
+      const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0; // ✅ Include emergency fund
 
       const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount;
+      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund; // ✅ Add emergency fund
 
-      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + debt);
+      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + emergencyFund + debt);
 
       updateChart(
-        [income, expense, totalInstallmentPaid + dcaInvested + savingsAmount, debt, remaining],
+        [income, expense, totalSavings, debt, remaining], // ✅ Updated เงินออม
         {
           dca: dcaInvested,
           savings: savingsAmount,
+          emergencyFund: emergencyFund, // ✅ Add emergency fund
           installment: totalInstallmentPaid
         }
       );
 
     } else {
       console.error("No data found for user.");
-      updateChart([0, 0, 0, 0, 0], {dca: 0, savings: 0, installment: 0});
+      updateChart([0, 0, 0, 0, 0], {dca: 0, savings: 0, emergencyFund: 0, installment: 0});
     }
   } catch (error) {
     console.error("Error fetching financial data:", error);
   }
 }
 
-let transactionChart;
+let transactionChart = null; // ✅ Ensure this is properly initialized
 
 function updateChart(financialData, detailedData) {
   const ctx = document.getElementById("transactionChart").getContext("2d");
 
-  if (transactionChart) transactionChart.destroy();
+  // ✅ Ensure `transactionChart` is a Chart instance before destroying
+  if (transactionChart instanceof Chart) {
+    transactionChart.destroy();
+  }
 
   transactionChart = new Chart(ctx, {
     type: 'bar',
@@ -113,9 +118,10 @@ function updateChart(financialData, detailedData) {
               if (labelIndex === 2) {
                 return [
                   `เงินออมรวม: ${value}`,
-                  ` - DCA: ${detailedData.dca.toLocaleString()} บาท`,
-                  ` - เงินออมปกติ: ${detailedData.savings.toLocaleString()} บาท`,
-                  ` - เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                  ` • DCA: ${detailedData.dca.toLocaleString()} บาท`,
+                  ` • เงินออม: ${detailedData.savings.toLocaleString()} บาท`,
+                  ` • เงินสำรองฉุกเฉิน: ${detailedData.emergencyFund.toLocaleString()} บาท`, // ✅ Emergency fund added
+                  ` • เงินซ้อมผ่อน: ${detailedData.installment.toLocaleString()} บาท`
                 ];
               } else {
                 return `${context.label}: ${value}`;
@@ -147,4 +153,5 @@ function updateChart(financialData, detailedData) {
     }
   });
 }
+
 
