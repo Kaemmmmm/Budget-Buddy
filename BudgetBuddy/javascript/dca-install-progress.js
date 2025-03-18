@@ -247,7 +247,6 @@ function centerTextPlugin(percentage, textColor) {
       const fontSize = Math.min(width, height) / 6;
       ctx.font = `bold ${fontSize}px 'Prompt', sans-serif`;
       ctx.fillStyle = textColor;
-    
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
 
