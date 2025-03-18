@@ -168,6 +168,17 @@ button {
   background-color: #035ac4;
   transform: translateY(-2px);
 }
+
+.button-emergencyfunds {
+  background-color: #1e9e78;
+  color: #fff;
+}
+
+.button-emergencyfunds:hover {
+  background-color: #20C997;
+  transform: translateY(-2px);
+}
+
 .menu a i {
   margin-right: 8px;
 }
