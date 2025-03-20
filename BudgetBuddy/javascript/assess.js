@@ -22,16 +22,20 @@ async function loadAssessmentData() {
   const installmentDuration  = parseFloat(data.installment?.installmentDuration) || 1; // ป้องกันหารด้วย 0
   const paidMonths           = parseFloat(data.installment?.paidMonths) || 0;
   const savingsAmount        = parseFloat(data.savings?.amount) || 0;
+  const emergencyFund        = parseFloat(data.emergencyFund?.amount) || 0;
 
   // ถ้ามีข้อมูลเงินฉุกเฉินเป็นจำนวนเดือน ให้ใช้ แต่ถ้าไม่มีให้เป็น 0
   const emergencyMonth       = parseFloat(data.emergencyMonth) || 0;
 
   const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-  const savings              = dcaInvested + totalInstallmentPaid + savingsAmount;
+  const savings              = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
   const netAssets            = income - expense - debt;
-  const debtStatus           = data.debtStatus; // เช่น "managed", "no-debt", "outstanding"
+  const paidStatus           = parseFloat(data.xxx);
+  const monthsCovered        = expense > 0 ? (emergencyFund / expense) : 0;
+  
 
   // ประเมิน "สัดส่วนการออม (Good Liquidity)"
+  //done
   if (savings >= 0.10 * income) {
     updateStatus(
       "saving-circle", "saving-text", "saving-detail",
@@ -56,6 +60,7 @@ async function loadAssessmentData() {
   }
 
   // ประเมิน "ความมั่งคั่ง (Wealth Assessment)"
+  //done
   if (netAssets >= 0.50 * income) {
     updateStatus(
       "wealth-circle", "wealth-text", "wealth-detail",
@@ -78,23 +83,25 @@ async function loadAssessmentData() {
       "สินทรัพย์สุทธิ < 20% ของรายได้ต่อเดือน เสี่ยงต่อปัญหาการเงินในอนาคต"
     );
   }
-
+/*
    // ประเมิน "สถานะหนี้ (Debt-Free Status)"
-   if (debtStatus === "no-debt") {
+   //not yet
+   if (debt = 0) {
     updateStatus(
       "debt-circle", "debt-text", "debt-detail",
       "circle-green",
       "ไม่มีหนี้",
       "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี"
     );
-  } else if (debtStatus === "managed") {
-    updateStatus(
-      "debt-circle", "debt-text", "debt-detail",
-      "circle-yellow",
-      "ผ่อนตรงเวลา",
-      "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้"
-    );
-  } else {
+    } else if (debt > 0) {
+      if (paidStatus == "paid") {
+        updateStatus(
+          "debt-circle", "debt-text", "debt-detail",
+          "circle-yellow",
+          "ผ่อนตรงเวลา",
+          "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้"
+        );
+      } else {
     updateStatus(
       "debt-circle", "debt-text", "debt-detail",
       "circle-red",
@@ -102,25 +109,33 @@ async function loadAssessmentData() {
       "มีหนี้ที่ผิดนัดหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้"
     );
   }
-
+}
+*/
   // ประเมิน "เงินฉุกเฉิน (Emergency Funds)"
-  if (emergencyMonth > 6) {
+  //done
+  if (monthsCovered > 6) {
     updateStatus(
-      "emergency-circle", "emergency-text", "emergency-detail",
+      "emergency-circle", 
+      "emergency-text", 
+      "emergency-detail",
       "circle-green",
       "ดีมาก",
-      "เงินฉุกเฉินครอบคลุม > 6 เดือน มีความปลอดภัยทางการเงินสูง"
+      "เงินฉุกเฉินครอบคลุมมากกว่า 6 เดือน แสดงถึงความมั่นคงทางการเงินสูง"
     );
-  } else if (emergencyMonth >= 3) {
+  } else if (monthsCovered >= 3) {
     updateStatus(
-      "emergency-circle", "emergency-text", "emergency-detail",
+      "emergency-circle", 
+      "emergency-text", 
+      "emergency-detail",
       "circle-yellow",
       "พอใช้",
-      "เงินฉุกเฉินครอบคลุม 3-6 เดือน ยังอยู่ในเกณฑ์พื้นฐาน"
+      "เงินฉุกเฉินครอบคลุม 3-6 เดือน ยังอยู่ในเกณฑ์ที่พอใช้ได้"
     );
   } else {
     updateStatus(
-      "emergency-circle", "emergency-text", "emergency-detail",
+      "emergency-circle", 
+      "emergency-text", 
+      "emergency-detail",
       "circle-red",
       "ต้องปรับปรุง",
       "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน ไม่เพียงพอต่อเหตุฉุกเฉิน"
@@ -159,7 +174,7 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   } else if (colorClass === "circle-red") {
     circleEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
   }
-  
+
   textEl.textContent   = titleText;
   detailEl.textContent = detailText;
 }
