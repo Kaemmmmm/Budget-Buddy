@@ -1,216 +1,355 @@
+/* รีเซ็ตและตั้งค่าเบื้องต้น */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Prompt', sans-serif;
 }
 
 body {
-    font-family: 'prompt';
-    background-color: #f4f4f4;
-    padding: 20px 20px 20px 320px;
-    margin: 0;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  min-height: 100vh;
+  padding: 50px 20px 20px 320px; /* ให้มีพื้นที่สำหรับ sidebar */
 }
 
+/* Container หลัก */
 .container {
-    width: 90%;
-    margin: auto;
-    background: #fff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    overflow: hidden;
+  width: 90%;
+  margin: auto;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
+/* Header */
 .header {
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    color: #fff;
-    padding: 20px;
-    text-align: center;
+  background: linear-gradient(45deg, #007bffc4, #66c2ff);
+  color: #fff;
+  padding: 30px 20px;
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 .header h1 {
-    font-size: 24px;
-    color: #333;
+  font-size: 28px;
+  margin: 0;
 }
 
+/* ส่วนแสดงผลสุขภาพทางการเงิน */
+.financial-status {
+  padding: 30px;
+  background: #fafafa;
+}
+
+.financial-status h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+}
+
+.status-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.status-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-box .circle {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.circle-green {
+  background-color: #4CAF50;
+}
+
+.circle-yellow {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.circle-red {
+  background-color: #f44336;
+}
+
+.status-text {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.status-detail {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* ส่วนสรุปแผนการเงินและคำแนะนำ */
+.plan-summary-section {
+  padding: 30px;
+  background: #eef7fa;
+}
+
+.plan-summary-section h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+#plan-summary {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  border-left: 5px solid #007bff;
+  border-radius: 5px;
+  color: #555;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ส่วนการ์ดข้อมูลเพิ่มเติม */
 .info {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
+  padding: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 .card {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 8px;
-    width: 45%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: #f9f9f9;
+  padding: 25px 20px;
+  border-radius: 8px;
+  width: 350px;
+  min-height: 160px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
 .card h2 {
-    color: #333;
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 20px;
 }
 
 .card p {
-    color: #666;
-    font-size: 14px;
+  color: #666;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
+/* Footer */
 .footer {
-    background: #eee;
-    padding: 20px;
-    text-align: center;
+  background: #f0f0f0;
+  padding: 20px;
+  text-align: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
-/* button */
+/* ปุ่ม */
 .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        margin: 0 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.2s, opacity 0.2s;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  margin: 0 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  color: #000000;
 }
 
 .btn:hover {
-    opacity: 0.8;
-}
-
-.green {
-    background-color: #4CAF50;
+  opacity: 0.9;
 }
 
 .orange {
-    background-color: #FFA500;
+  background-color: #FFA500;
 }
 
+.blue {
+  background-color: #0059ff;
+}
+
+/* Modal */
 .modal {
-    position : fixed;
-    display: none;           
-    position: fixed;          
-    z-index: 9999;           
-    left: 0;
-    top: 0;
-    width: 100%;              
-    height: 100%;             
-    background-color: rgba(0, 0, 0, 0.5); 
-    align-items: center;
+  position: fixed;
+  display: none;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0,0,0,0.5);
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-content {
-    background-color: #fff;
-    margin: 15% auto;         /* 15% from the top and centered */
-    padding: 40px;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 10px;
-    position: relative;
-    text-align: center;
-  }
-  
-.modal-content h2 {
-    margin-bottom: 15px;
-    font-size: 20px;
-    color: #333;
+  background-color: #fff;
+  padding: 40px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+  text-align: center;
+  margin: auto;
+  margin-top: 10%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .modal-content p {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 20px;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
 }
 
 .checkmark {
-    margin: 0 auto 20px auto;
-    width: 80px;
-    height: 80px;
-}
-.checkmark svg {
-    width: 80px;
-    height: 80px;
+  margin: 0 auto 20px;
+  width: 80px;
+  height: 80px;
 }
 
-  /* Close Button */
-.close {
-    color: #aaa;
-    font-size: 24px;
-    font-weight: bold;
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    cursor: pointer;
-  }
-  
-.close:hover {
-    color: #000;
+.checkmark svg {
+  width: 80px;
+  height: 80px;
 }
-  
-/* Sidebar Styles */
+
+/* ปุ่มปิด Modal */
+.close {
+  color: #aaa;
+  font-size: 24px;
+  font-weight: bold;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}
+
+/* Sidebar */
 .sidebar {
-    width: 280px;
-    background: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    padding: 15px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    overflow-y: auto;
-  }
-  
-  .menu {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .menu li {
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .menu a {
-    text-decoration: none;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center text horizontally */
-    padding: 12px;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s;
-    font-size: 16px;
-    font-weight: 600;
-    position: relative;
-  }
-  
-  .menu a:hover {
-    background: #e6f0ff;
-    color: #007bff;
-  }
-  
-  /* Dropdown Arrow */
-  .has-submenu > a::after {
-    content: "\25BC"; /* Down arrow */
-    position: absolute;
-    right: 10px;
-    font-size: 12px;
-    transition: transform 0.3s;
-  }
-  
-  .has-submenu > a.rotate::after {
-    transform: rotate(180deg);
-  }
-  
-  /* Submenu */
-  .submenu {
-    display: none;
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  .submenu.active {
-    display: block;
-  }
-  
-  .menu a i {
-    margin-right: 8px;
-  }
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+}
+
+.menu li {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+.has-submenu > a::after {
+  content: "\25BC";
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}
+
+.menu a i {
+  margin-right: 8px;
+}
+
+.plan-summary-section {
+  padding: 30px;
+  background: #eef7fa;
+}
+
+.plan-summary-section h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* ปรับปรุงสไตล์สำหรับสรุปแผนการเงิน */
+#plan-summary {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-left: 6px solid #007bff;
+  border-radius: 5px;
+  color: #333;
+  font-size: 18px;
+  line-height: 1.8;
+  white-space: pre-wrap;  /* เพื่อคงรูปแบบการเว้นบรรทัด */
+}
+

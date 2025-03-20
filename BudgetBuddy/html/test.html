@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>แผนการเงิน</title>
+    <link rel="stylesheet" href="../css/test.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+</head>
+<body>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <ul class="menu">
+        <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+        <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+        
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
+            <ul class="submenu">
+                <li><a href="calculator.html">คำนวณDCA</a></li>
+                <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+            </ul>
+        </li>
+   
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
+            <ul class="submenu">
+                <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+            </ul>
+        </li>
+   
+        <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
+            <ul class="submenu">
+                <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+            </ul>
+        </li>
+       
+        <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
+   
+        <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
+    </ul>
+   </div>
+</div>
+    <div class="container">
+        <header class="header">
+            <h1>แผนการเงินปัจจุบัน</h1>
+        </header>
+
+        <section class="info">
+            <div class="card">
+                <h2>เงินออม</h2>
+                <p>คงสะสมเป็นเงินออมทั้งหมดที่จำเป็น 2,500 บาท หรือสัดส่วนเงินทุนที่ 10 % ของรายได้</p>
+            </div>
+            <div class="card">
+                <h2>เงินลงทุน</h2>
+                <p>ลงทุนอย่างและหัดลงทุนเพิ่มเงินเหลือได้อีกทั้งหมด 12,500 บาทที่ดีเด่น</p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <button class="btn green" onclick="window.location.href='edit-dash.html';">ปรับแผน</button>
+            <button class="btn orange" onclick="openModal()">ยืนยัน</button>
+        </footer>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal" id="myModal" style="display: none;">
+      <div class="modal-content">
+        <!-- Close button (X) -->
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="checkmark">
+            <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="40" cy="40" r="38" fill="#fff" stroke="#4CAF50" stroke-width="4"/>
+              <path d="M28 40l8 8 16-20" stroke="#4CAF50" stroke-width="4" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        <p>แผนการเงินของคุณอัพเดตแล้ว</p>
+        <button class="btn" onclick="window.location.href='dashboard.html'">OK</button>
+      </div>
+    </div>
+
+    <script src="../javascript/plan.js"></script>
+</body>
+<script src="../javascript/nav.js"></script>
+</html>
