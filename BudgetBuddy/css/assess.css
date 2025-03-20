@@ -172,13 +172,16 @@ body {
   font-weight: 600;
 }
 
+.circle i {
+  color: inherit;
+}
+
 .circle-green {
   background-color: #4caf50;
 }
 
 .circle-yellow {
   background-color: #ffc107;
-  color: #333;
 }
 
 .circle-red {

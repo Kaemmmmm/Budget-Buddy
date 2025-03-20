@@ -19,7 +19,7 @@ async function loadAssessmentData() {
 
   const dcaInvested          = parseFloat(data.dca?.invested) || 0;
   const assetPrice           = parseFloat(data.installment?.assetPrice) || 0;
-  const installmentDuration  = parseFloat(data.installment?.installmentDuration) || 1; 
+  const installmentDuration  = parseFloat(data.installment?.installmentDuration) || 1; // ป้องกันหารด้วย 0
   const paidMonths           = parseFloat(data.installment?.paidMonths) || 0;
   const savingsAmount        = parseFloat(data.savings?.amount) || 0;
 
@@ -151,6 +151,15 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   circleEl.classList.remove("circle-green", "circle-yellow", "circle-red");
   circleEl.classList.add(colorClass);
 
+
+  if (colorClass === "circle-green") {
+    circleEl.innerHTML = '<i class="fa-solid fa-shield-heart"></i>';
+  } else if (colorClass === "circle-yellow") {
+    circleEl.innerHTML = '<i class="fa-solid fa-face-meh"></i>';
+  } else if (colorClass === "circle-red") {
+    circleEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+  }
+  
   textEl.textContent   = titleText;
   detailEl.textContent = detailText;
 }
