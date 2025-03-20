@@ -1,24 +1,45 @@
-import { fetchFinancialData, auth } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 // ฟังก์ชันสำหรับดึงข้อมูลจริงและประเมินสถานะ
 async function loadAssessmentData() {
   const userId = auth.currentUser.uid;
-  const data = await fetchFinancialData(userId);
-  const savingPercent = (data.saving / data.income) * 100;
-  const netAssetsPercent = (data.netAssets / data.income) * 100;
-  const debtStatus = data.debtStatus; // เช่น "managed", "no-debt", "outstanding"
-  const emergencyMonth = data.emergencyMonth; // จำนวนเดือนที่เงินฉุกเฉินครอบคลุม
+  const userDocRef = doc(db, "goal", userId);
+  const docSnap = await getDoc(userDocRef);
+  if (!docSnap.exists()) {
+    console.error("ไม่พบข้อมูลของผู้ใช้");
+    return;
+  }
+  const data = docSnap.data();
+  
+  const income   = parseFloat(data.income)   || 0;
+  const expense  = parseFloat(data.expense)  || 0;
+  const debt     = parseFloat(data.debt)     || 0;
+
+  const dcaInvested          = parseFloat(data.dca?.invested) || 0;
+  const assetPrice           = parseFloat(data.installment?.assetPrice) || 0;
+  const installmentDuration  = parseFloat(data.installment?.installmentDuration) || 1; 
+  const paidMonths           = parseFloat(data.installment?.paidMonths) || 0;
+  const savingsAmount        = parseFloat(data.savings?.amount) || 0;
+
+  // ถ้ามีข้อมูลเงินฉุกเฉินเป็นจำนวนเดือน ให้ใช้ แต่ถ้าไม่มีให้เป็น 0
+  const emergencyMonth       = parseFloat(data.emergencyMonth) || 0;
+
+  const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
+  const savings              = dcaInvested + totalInstallmentPaid + savingsAmount;
+  const netAssets            = income - expense - debt;
+  const debtStatus           = data.debtStatus; // เช่น "managed", "no-debt", "outstanding"
 
   // ประเมิน "สัดส่วนการออม (Good Liquidity)"
-  if (savingPercent >= 10) {
+  if (savings >= 0.10 * income) {
     updateStatus(
       "saving-circle", "saving-text", "saving-detail",
       "circle-green",
       "ดีมาก",
       "การออม ≥ 10% ของรายได้ แสดงถึงสภาพคล่องและวินัยการออมที่ดี"
     );
-  } else if (savingPercent >= 5) {
+  } else if (savings >= 0.05 * income && savings <= 0.09 * income) {
     updateStatus(
       "saving-circle", "saving-text", "saving-detail",
       "circle-yellow",
@@ -35,14 +56,14 @@ async function loadAssessmentData() {
   }
 
   // ประเมิน "ความมั่งคั่ง (Wealth Assessment)"
-  if (netAssetsPercent >= 50) {
+  if (netAssets >= 0.50 * income) {
     updateStatus(
       "wealth-circle", "wealth-text", "wealth-detail",
       "circle-green",
       "ดีมาก",
       "สินทรัพย์สุทธิ ≥ 50% ของรายได้ต่อเดือน สะท้อนความมั่งคั่งสูง"
     );
-  } else if (netAssetsPercent >= 20) {
+  } else if (netAssets >= 0.20 * income && netAssets <= 0.49 * income) {
     updateStatus(
       "wealth-circle", "wealth-text", "wealth-detail",
       "circle-yellow",
@@ -58,8 +79,8 @@ async function loadAssessmentData() {
     );
   }
 
-  // ประเมิน "สถานะหนี้ (Debt-Free Status)"
-  if (debtStatus === "no-debt") {
+   // ประเมิน "สถานะหนี้ (Debt-Free Status)"
+   if (debtStatus === "no-debt") {
     updateStatus(
       "debt-circle", "debt-text", "debt-detail",
       "circle-green",
@@ -111,7 +132,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("User is logged in in assess.js:", user.uid);
     // เมื่อยืนยันว่าผู้ใช้ล็อกอินแล้ว ให้เรียก loadAssessmentData
-    loadAssessmentData(user.uid);
+    loadAssessmentData();
   } else {
     console.log("No user logged in in assess.js");
   }
@@ -122,15 +143,14 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   const textEl   = document.getElementById(textId);
   const detailEl = document.getElementById(detailId);
 
+  if (!circleEl || !textEl || !detailEl) {
+    console.error("ไม่พบ element ใน UI:", circleId, textId, detailId);
+    return;
+  }
+
   circleEl.classList.remove("circle-green", "circle-yellow", "circle-red");
   circleEl.classList.add(colorClass);
 
   textEl.textContent   = titleText;
   detailEl.textContent = detailText;
 }
-
-
-  
-
-
-

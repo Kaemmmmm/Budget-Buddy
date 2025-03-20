@@ -6,7 +6,7 @@
 }
 
 body {
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
   min-height: 100vh;
   padding: 50px 20px 20px 320px; /* top-right-bottom-left */
 }
