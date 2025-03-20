@@ -1,9 +1,8 @@
-/* รีเซ็ตและตั้งค่าเบื้องต้น */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Prompt', sans-serif;
+  font-family: 'Prompt';
 }
 
 body {

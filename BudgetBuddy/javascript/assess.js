@@ -113,7 +113,7 @@ async function loadAssessmentData() {
 */
   // ประเมิน "เงินฉุกเฉิน (Emergency Funds)"
   //done
-  if (monthsCovered > 6) {
+  if (monthsCovered >= 6) {
     updateStatus(
       "emergency-circle", 
       "emergency-text", 
