@@ -77,14 +77,74 @@
       </form>
 
       <div class="btn-group">
-        <button class="submit" onclick="window.location.href='calendar-up.html'">
-          บันทึก
-      </button>
-        <button type="reset" class="cancel-btn" onclick="window.location.href='calendar.html'">ยกเลิก</button>
+        <!-- ปุ่ม "บันทึก" จะเรียกฟังก์ชัน saveTransaction() -->
+        <button type="button" class="submit" onclick="saveTransaction()">บันทึก</button>
+        <button type="reset" class="cancel-btn">ยกเลิก</button>
       </div>
 
     </div>
   </div>
   <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <!-- ส่วนอื่นๆ ของ HTML -->
+    <script type="module">
+      // นำเข้า Firebase Modular SDK
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  
+      // กำหนดค่า firebaseConfig ของคุณเอง (แทนที่ YOUR_... ด้วยข้อมูลจริง)
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID",
+      };
+  
+      // เริ่มต้น Firebase และ Firestore
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+  
+      // ฟังก์ชันสำหรับบันทึกข้อมูลและเปลี่ยนหน้า
+      async function saveTransaction() {
+        // ดึงค่าจากฟอร์ม
+        const dateValue = document.getElementById("date").value;
+        const amountValue = document.getElementById("amount").value;
+        const transactionTypeValue = document.getElementById("transaction-type").value;
+        const detailValue = document.getElementById("detail").value;
+        const notifyValue = document.getElementById("notify").checked;
+  
+        // ตรวจสอบว่ากรอกข้อมูลครบถ้วนหรือไม่
+        if (!dateValue || !amountValue || !transactionTypeValue) {
+          alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+          return;
+        }
+  
+        try {
+          // บันทึกข้อมูลลงใน collection "transactions"
+          await addDoc(collection(db, "transactions"), {
+            date: dateValue,
+            amount: parseFloat(amountValue),
+            transactionType: transactionTypeValue,
+            detail: detailValue,
+            notify: notifyValue,
+            createdAt: serverTimestamp(),
+          });
+  
+          console.log("บันทึกข้อมูลสำเร็จ");
+          // เมื่อบันทึกเสร็จ ให้เปลี่ยนหน้าไปยัง calendar.html
+          window.location.href = "calendar.html";
+        } catch (error) {
+          console.error("เกิดข้อผิดพลาดในการบันทึกข้อมูล:", error);
+          alert("ไม่สามารถบันทึกข้อมูลได้ โปรดลองอีกครั้ง");
+        }
+      }
+  
+      // ผูกฟังก์ชัน saveTransaction ให้เป็น global เพื่อให้เรียกใช้งานจาก HTML ได้
+      window.saveTransaction = saveTransaction;
+    </script>
+  </body>
+  </html>
+  
 </body>
 </html>
