@@ -110,72 +110,138 @@ body {
     background-color: #ff4d94;
 }
 
-/* Sidebar Styles */
+/* Sidebar */
 .sidebar {
-    width: 280px;
-    background: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    padding: 15px;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    overflow-y: auto;
-  }
-  
-  .menu {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .menu li {
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  
-  .menu a {
-    text-decoration: none;
-    color: #666;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center text horizontally */
-    padding: 12px;
-    border-radius: 5px;
-    transition: background 0.3s, color 0.3s;
-    font-size: 16px;
-    font-weight: 600;
-    position: relative;
-  }
-  
-  
-  .menu a:hover {
-    background: #e6f0ff;
-    color: #007bff;
-  }
-  
-  /* Dropdown Arrow */
-  .has-submenu > a::after {
-    content: "\25BC"; /* Down arrow */
-    position: absolute;
-    right: 10px;
-    font-size: 12px;
-    transition: transform 0.3s;
-  }
-  
-  .has-submenu > a.rotate::after {
-    transform: rotate(180deg);
-  }
-  
-  /* Submenu */
-  .submenu {
-    display: none;
-    list-style: none;
-    padding-left: 0;
-  }
-  
-  .submenu.active {
-    display: block;
-  }
-  .menu a i {
-    margin-right: 8px;
-  }
+  width: 280px;
+  background: #fff;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  padding: 15px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensure sidebar takes full height */
+  z-index: 1000;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  flex-grow: 1; /* Makes the menu take up available space */
+}
+
+.menu li {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center text horizontally */
+  padding: 12px;
+  border-radius: 5px;
+  transition: background 0.3s, color 0.3s;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+}
+
+.menu a:hover {
+  background: #e6f0ff;
+  color: #007bff;
+}
+
+/* Dropdown Arrow */
+.has-submenu > a::after {
+  content: "\25BC"; 
+  position: absolute;
+  right: 10px;
+  font-size: 12px;
+  transition: transform 0.3s;
+}
+
+.has-submenu > a.rotate::after {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 0;
+}
+
+.submenu.active {
+  display: block;
+}
+.user-info {
+  position: relative;
+  padding: 16px;
+  font-family: 'Prompt', sans-serif;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  bottom: 100%; /* ⬆️ Drop UP instead of down */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #666;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 8px 0;
+  width: 150px;
+  text-align: center;
+  z-index: 1000;
+}
+
+
+.user-dropdown .dropdown-menu li {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: white;
+}
+
+.user-dropdown .dropdown-menu li:hover {
+  background-color: #666;
+}
+
+/* Show dropdown when active */
+.user-dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.user-name{
+  color: #666;
+}
+
+.dropdown-icon {
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.user-dropdown.active .dropdown-icon {
+  transform: rotate(180deg); /* ⬇️ When open, point downward */
+}
+
+.menu a i {
+  margin-right: 8px;
+}

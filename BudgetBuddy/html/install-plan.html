@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="../css/install-plan.css">
 
 <body>
-<!-- SIDEBAR -->
-<div class="sidebar">
+ <!-- SIDEBAR -->
+ <div class="sidebar">
     <ul class="menu">
         <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
         <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
@@ -45,7 +45,16 @@
    
         <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
     </ul>
-   </div>
+    <div class="user-info">
+      <div class="user-dropdown">
+        👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+        <i class="fas fa-caret-up dropdown-icon"></i>
+        <ul class="dropdown-menu">
+          <li id="sign-out-btn">ออกจากระบบ</li>
+        </ul>
+      </div>
+    </div>
+</div>  
     
     <div class="container">
         <div class="title">แผนการชำระผ่อน</div>
@@ -72,6 +81,6 @@
             สรุปรายการธุรกรรม
         </button>
     </div>
-    <script src="/BudgetBuddy/javascript/nav.js"></script>
+    <script type="module" src="../javascript/nav.js"></script>
 </body>
 </html>

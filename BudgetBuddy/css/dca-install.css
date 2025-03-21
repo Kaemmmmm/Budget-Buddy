@@ -121,6 +121,7 @@ body {
   transform: translateY(-3px);
 }
 
+/* Sidebar */
 .sidebar {
   width: 280px;
   background: #fff;
@@ -131,11 +132,16 @@ body {
   left: 0;
   top: 0;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensure sidebar takes full height */
+  z-index: 1000;
 }
 
 .menu {
   list-style: none;
   padding: 0;
+  flex-grow: 1; /* Makes the menu take up available space */
 }
 
 .menu li {
@@ -164,7 +170,7 @@ body {
 
 /* Dropdown Arrow */
 .has-submenu > a::after {
-  content: "\25BC"; /* Down arrow */
+  content: "\25BC"; 
   position: absolute;
   right: 10px;
   font-size: 12px;
@@ -184,6 +190,67 @@ body {
 
 .submenu.active {
   display: block;
+}
+.user-info {
+  position: relative;
+  padding: 16px;
+  font-family: 'Prompt', sans-serif;
+  color: #666;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown .dropdown-menu {
+  display: none;
+  position: absolute;
+  bottom: 100%; /* ⬆️ Drop UP instead of down */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #666;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 8px 0;
+  width: 150px;
+  text-align: center;
+  z-index: 1000;
+}
+
+
+.user-dropdown .dropdown-menu li {
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: white;
+}
+
+.user-dropdown .dropdown-menu li:hover {
+  background-color: #666;
+}
+
+/* Show dropdown when active */
+.user-dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.user-name{
+  color: #666;
+}
+
+.dropdown-icon {
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.user-dropdown.active .dropdown-icon {
+  transform: rotate(180deg); /* ⬇️ When open, point downward */
 }
 
 .menu a i {
