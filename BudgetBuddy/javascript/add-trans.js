@@ -1,15 +1,15 @@
 // add-trans.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.jss";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-// กำหนดค่า Firebase ของคุณ (แก้ค่าให้ตรงกับโปรเจกต์)
+
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+    apiKey: "AIzaSyCzweQFQb-y7vXMzHfHEhCfcYz2t05frQM",
+    authDomain: "budgetbuddy-cac4f.firebaseapp.com",
+    projectId: "budgetbuddy-cac4f",
+    storageBucket: "budgetbuddy-cac4f.firebasestorage.app",
+    messagingSenderId: "785181671270",
+    appId: "1:785181671270:web:f7a9cac1029431dd3752a7"
 };
 
 const app = initializeApp(firebaseConfig);
