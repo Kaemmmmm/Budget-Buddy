@@ -80,7 +80,7 @@ async function loadAssessmentData() {
   }
   
   // เรียกใช้ฟังก์ชันแสดงสรุปแผนการเงินและคำแนะนำ
-  displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, savings, netAssets, monthsCovered });
+  displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund,  savings, netAssets, monthsCovered });
 }
 
 // ฟังก์ชันอัปเดตสถานะใน UI
@@ -108,7 +108,7 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
 }
 
 // ฟังก์ชันแสดงสรุปแผนการเงินและคำแนะนำ
-function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, savings, netAssets, monthsCovered }) {
+function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund, savings, netAssets, monthsCovered }) {
   const planSummaryEl = document.getElementById("plan-summary");
   if (!planSummaryEl) return;
   
@@ -151,10 +151,10 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   `;
   
   planSummaryEl.textContent = summaryText;
-  saveUserPlan(summaryText);
+  saveUserPlan(summaryText, { income, expense, debt, dcaInvested, savingsAmount, emergencyFund });
 }
 
-function saveUserPlan(planSummaryHTML) {
+function saveUserPlan(planSummaryHTML, financialData) {
   const user = auth.currentUser;
   if (!user) {
     console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
@@ -166,7 +166,13 @@ function saveUserPlan(planSummaryHTML) {
   // ใช้ setDoc พร้อม merge: true เพื่ออัปเดต field plan และ planUpdatedAt
   setDoc(planDocRef, {
     plan: planSummaryHTML,
-    planUpdatedAt: new Date()
+    planUpdatedAt: new Date(),
+    income: financialData.income,
+    expense: financialData.expense,
+    debt: financialData.debt,
+    dcaInvested: financialData.dcaInvested,
+    savingsAmount: financialData.savingsAmount,
+    emergencyFund: financialData.emergencyFund
   }, { merge: true })
     .then(() => {
       console.log("บันทึกแผนการเงินลง Firebase (collection 'plan') เรียบร้อยแล้ว");
