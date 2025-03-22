@@ -327,6 +327,39 @@ body {
 .submenu.active {
   display: block;
 }
+
+#plan-selector {
+  width: 220px;               
+  height: auto;              
+  border: 1px solid #ffffff;    
+  padding: 8px;                           
+  font-size: 15px;         
+  line-height: 1.5;         
+  cursor: pointer;            /* ให้เป็นรูปมือเมื่อ hover */
+}
+
+/* เมื่อ hover หรือ focus บน select */
+#plan-selector:focus {
+  border-color: #007bff;      /* เปลี่ยนสีขอบเป็นฟ้า */
+}
+
+/* สไตล์ scrollbar (เฉพาะ WebKit: Chrome/Edge/Safari) */
+#plan-selector::-webkit-scrollbar {
+  width: 8px;                 /* ความกว้าง scrollbar */
+}
+#plan-selector::-webkit-scrollbar-track {
+  background: #f1f1f1;        /* สีพื้นหลังของ track */
+  border-radius: 4px;
+}
+#plan-selector::-webkit-scrollbar-thumb {
+  background: #888;           /* สีแท่ง scrollbar */
+  border-radius: 4px;
+}
+#plan-selector::-webkit-scrollbar-thumb:hover {
+  background: #555;           /* hover ให้เข้มขึ้น */
+}
+
+
 .user-info {
   position: relative;
   padding: 16px;

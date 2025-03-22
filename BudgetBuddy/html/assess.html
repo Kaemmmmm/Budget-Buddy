@@ -49,7 +49,15 @@
      
       <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
  
-      <li><a href="plan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
+      <li class="has-submenu">
+        <a href="#" class="toggle-submenu">
+          <i class="fas fa-cogs"></i> ดูแผนการเงิน 
+        </a>
+        <ul class="submenu">
+          <select id="plan-selector" size="10" style="width: 400px;">
+          </select>
+        </ul>
+      </li>
   </ul>
   <div class="user-info">
     <div class="user-dropdown">
@@ -120,5 +128,6 @@
 
   <script type="module" src="../javascript/nav.js"></script>
   <script type="module" src="../javascript/assess.js"></script>
+  <script type="module" src="../javascript/currentPlan.js"></script>
 </body>
 </html>
