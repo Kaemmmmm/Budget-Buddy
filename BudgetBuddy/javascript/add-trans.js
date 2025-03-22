@@ -1,19 +1,6 @@
 // add-trans.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.jss";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCzweQFQb-y7vXMzHfHEhCfcYz2t05frQM",
-    authDomain: "budgetbuddy-cac4f.firebaseapp.com",
-    projectId: "budgetbuddy-cac4f",
-    storageBucket: "budgetbuddy-cac4f.firebasestorage.app",
-    messagingSenderId: "785181671270",
-    appId: "1:785181671270:web:f7a9cac1029431dd3752a7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { db } from "../javascript/firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 async function saveTransaction() {
   const dateValue = document.getElementById("date").value;
@@ -44,5 +31,4 @@ async function saveTransaction() {
   }
 }
 
-// ผูกฟังก์ชันให้เป็น global เพื่อให้ HTML เรียกใช้ได้
 window.saveTransaction = saveTransaction;
