@@ -1,4 +1,3 @@
-// plan.js
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -152,6 +151,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   `;
   
   planSummaryEl.textContent = summaryText;
+  saveUserPlan(summaryText);
 }
 
 function saveUserPlan(planSummaryHTML) {
