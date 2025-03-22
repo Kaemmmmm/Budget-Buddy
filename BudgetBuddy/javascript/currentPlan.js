@@ -1,7 +1,8 @@
 // plan.js
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
 
 // ฟังก์ชันดึงข้อมูลและประเมินสุขภาพทางการเงิน
 async function loadAssessmentData() {
@@ -63,7 +64,7 @@ async function loadAssessmentData() {
       "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้");
     wealthStatus = "ต้องปรับปรุง";
   }
-  
+
   // ประเมินเงินฉุกเฉิน
   if (monthsCovered > 6) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail",
@@ -151,6 +152,28 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   `;
   
   planSummaryEl.textContent = summaryText;
+}
+
+function saveUserPlan(planSummaryHTML) {
+  const user = auth.currentUser;
+  if (!user) {
+    console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
+    return;
+  }
+  
+  const planDocRef = doc(db, "plan", user.uid);
+
+  // ใช้ setDoc พร้อม merge: true เพื่ออัปเดต field plan และ planUpdatedAt
+  setDoc(planDocRef, {
+    plan: planSummaryHTML,
+    planUpdatedAt: new Date()
+  }, { merge: true })
+    .then(() => {
+      console.log("บันทึกแผนการเงินลง Firebase (collection 'plan') เรียบร้อยแล้ว");
+    })
+    .catch((error) => {
+      console.error("เกิดข้อผิดพลาดในการบันทึกแผนการเงิน:", error);
+    });
 }
 
 // ตรวจสอบผู้ใช้และเรียกใช้ฟังก์ชัน loadAssessmentData
