@@ -8,8 +8,7 @@
 
 </head>
 <body>
-  
-  <!-- SIDEBAR -->
+
  <!-- SIDEBAR -->
  <div class="sidebar">
     <ul class="menu">
@@ -42,7 +41,7 @@
       
         <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
         
-        <li><a href="xxx.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
+        <li><a href="adjust.html"><i class="fas fa-cogs"></i> ปรับแผนการเงิน</a></li>
     </ul>
     <div class="user-info">
       <div class="user-dropdown">
@@ -83,9 +82,12 @@
           <textarea id="detail" name="detail" rows="4" placeholder="ระบุรายละเอียดเพิ่มเติม"></textarea>
         </div>
         <div class="form-group checkbox-inline">
-          <input type="checkbox" id="notify" name="notify" />
-          <label for="notify">ต้องการแจ้งเตือนเมื่อถึงกำหนดการออม</label>
+          <label for="notify">
+            ต้องการแจ้งเตือนเมื่อถึงกำหนดการออม
+            <input type="checkbox" id="notify" name="notify" />
+          </label>
         </div>
+        
       </form>
       <div class="btn-group">
         <!-- ปุ่ม "บันทึก" จะเรียกฟังก์ชัน saveTransaction() -->
