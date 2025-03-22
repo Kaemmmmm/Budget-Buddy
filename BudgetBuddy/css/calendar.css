@@ -81,129 +81,6 @@ body {
 .submenu.active {
   display: block;
 }
-
-/* Main Container */
-.container {
-  background: #fff;
-  width: 800px;
-  max-width: 90%;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  margin: 50px auto;
-}
-
-/* calendar-wrapper ใช้ Flexbox */
-.calendar-wrapper {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-/* คอลัมน์ซ้าย: ปฏิทิน */
-.calendar-content {
-  flex: 1;
-}
-
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin-top: 15px;
-}
-
-.days {
-  font-weight: bold;
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.date {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-  text-align: center;
-}
-
-.date:hover {
-  background-color: #dfe6e9;
-}
-
-.footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-}
-
-.edit-btn, .add-btn {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.edit-btn {
-  background-color: #ffca28;
-  color: #333;
-}
-
-.add-btn {
-  background-color: #28a745;
-  color: #fff;
-}
-
-/* คอลัมน์ขวา: การแจ้งเตือน */
-.alert-row {
-  flex: 0 0 250px;  /* กำหนดขนาดให้แจ้งเตือนไม่ล้น */
-}
-
-/* สไตล์กล่องแจ้งเตือน */
-.alert {
-  background-color: #fff3cd;
-  padding: 10px;
-  border-radius: 5px;
-  color: #856404;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 45px;
-}
-
-.non-alert {
-  display: block;
-  margin-top: 10px; /* ✅ เขยิบขึ้น */
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 14px;
-  text-align: left;  /* ✅ ปรับให้อ่านง่าย */
-}
-
-
-
-.month-year {
-  display: flex;            /* จัดให้อยู่ในบรรทัดเดียวกัน */
-  align-items: center;      /* จัดแนวให้อยู่กลางแนวตั้ง */
-  gap: 10px;                /* ระยะห่างระหว่างปุ่มกับข้อความ */
-}
-
-/* ถ้าต้องการให้ปุ่มชิดซ้ายและขวาของเดือน ก็ปรับเพิ่มเติมได้ */
-.nav-button {
-  border: none;
-  background: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: #007bff;
-}
-.menu a i {
-  margin-right: 8px;
-}
-
 .user-info {
   position: relative;
   padding: 16px;
@@ -264,4 +141,120 @@ body {
 
 .user-dropdown.active .dropdown-icon {
   transform: rotate(180deg); /* ⬇️ When open, point downward */
+}
+
+.menu a i {
+  margin-right: 8px;
+}
+
+.container {
+  background: #fff;
+  width: 800px;
+  max-width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  margin: 50px auto;
+}
+
+.calendar-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.calendar-content {
+  flex: 1;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  margin-top: 15px;
+}
+
+.days {
+  font-weight: bold;
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.date {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  text-align: center;
+}
+
+.date:hover {
+  background-color: #dfe6e9;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.edit-btn,
+.add-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background-color: #ffca28;
+  color: #333;
+}
+
+.add-btn {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.alert-row {
+  flex: 0 0 250px;
+}
+
+.alert {
+  background-color: #fff3cd;
+  padding: 10px;
+  border-radius: 5px;
+  color: #856404;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 45px;
+}
+
+.non-alert {
+  display: block;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.month-year {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-button {
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #007bff;
 }
