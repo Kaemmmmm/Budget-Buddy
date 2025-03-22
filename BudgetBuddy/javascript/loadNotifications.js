@@ -14,7 +14,7 @@ async function loadNotifications() {
       if (data.notify) {
         found = true;
         const li = document.createElement("li");
-        li.textContent = `${data.date} - ${data.transactionType} - ${data.amount} บาท`;
+        li.textContent = `${data.date} : ${data.transactionType} - ${data.amount} บาท`;
         list.appendChild(li);
       }
     });
