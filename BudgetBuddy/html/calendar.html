@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="../css/calendar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
     <script src="../javascript/changemonth.js"></script>
+    <script type="module" src="../javascript/loadNotifications.js"></script>
+
+
 
 <body>
  <!-- SIDEBAR -->
@@ -100,9 +103,12 @@
                     <p>การแจ้งเตือนค่าใช้จ่าย</p>
                 </div>
             
-            <div class="non-alert">
-                <span>ยังไม่มียอดค้างชำระขณะนี้</span>
-            </div>
+                <div class="non-alert">
+                    <ul id="notification-list">
+                      <li>ยังไม่มียอดค้างชำระในขณะนี้</li>
+                    </ul>
+                  </div>
+                  
 
         </div>
     </div>

@@ -242,12 +242,13 @@ body {
 
 .non-alert {
   display: block;
-  margin-top: 150px; /* หรือปรับตามต้องการ */
+  margin-top: 10px; /* ✅ เขยิบขึ้น */
   padding: 5px;
   border-radius: 5px;
   font-size: 14px;
-  text-align: center;
+  text-align: left;  /* ✅ ปรับให้อ่านง่าย */
 }
+
 
 
 .month-year {
