@@ -1,6 +1,6 @@
 import { db } from "../javascript/firebase.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
 
@@ -13,11 +13,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ✅ Dynamically update the month and year in the subtitle
   updateSubtitleDate();
 });
 
-// Function to update the subtitle date
 function updateSubtitleDate() {
   const subtitleElement = document.querySelector(".subtitle");
 
@@ -26,13 +24,45 @@ function updateSubtitleDate() {
       "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
       "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
     ];
-    
+
     const currentDate = new Date();
     const month = monthsThai[currentDate.getMonth()];
-    const year = currentDate.getFullYear() + 543; // Convert to Buddhist Era
+    const year = currentDate.getFullYear() + 543;
 
     subtitleElement.innerHTML = `${month} <strong>${year}</strong>`;
   }
+}
+
+function convertThaiDateToDateObject(thaiDateStr) {
+  const [date, time] = thaiDateStr.split(" ");
+  const [day, month, year] = date.split("/").map(Number);
+  const [hours, minutes, seconds] = time.split(":").map(Number);
+  const gregorianYear = year - 543;
+
+  return new Date(gregorianYear, month - 1, day, hours, minutes, seconds);
+}
+
+async function getMonthlyTotal(userId, subcollectionName, amountField, dateField) {
+  const ref = collection(db, "goal", userId, subcollectionName);
+  const snapshot = await getDocs(ref);
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  let total = 0;
+
+  snapshot.forEach(doc => {
+    const data = doc.data();
+    if (data[dateField]) {
+      const dateObj = convertThaiDateToDateObject(data[dateField]);
+      if (dateObj.getMonth() === currentMonth && dateObj.getFullYear() === currentYear) {
+        total += parseFloat(data[amountField]) || 0;
+      }
+    }
+  });
+
+  return total;
 }
 
 async function loadTransactionData(userId) {
@@ -43,46 +73,41 @@ async function loadTransactionData(userId) {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      const income  = parseFloat(data.income)  || 0;
+      const income = parseFloat(data.income) || 0;
       const expense = parseFloat(data.expense) || 0;
-      const debt    = parseFloat(data.debt)    || 0;
-      
-      const dcaInvested = parseFloat(data.dca?.invested) || 0;
-      const assetPrice  = parseFloat(data.installment?.assetPrice) || 0;
-      const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
-      const paidMonths  = parseFloat(data.installment?.paidMonths) || 0;
-      const savingsAmount = parseFloat(data.savings?.amount) || 0;
-      
+      const debt = parseFloat(data.debt) || 0;
 
-      const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount; // ✅ Add emergency fund
+      // ✅ Monthly totals
+      const dcaInvested = await getMonthlyTotal(userId, "dca_history", "monthlyInvestment", "investmentDate");
+      const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
+      const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
 
-      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + debt);
+      const totalSavings = dcaInvested + savingsAmount + installmentPaid;
+      const remaining = income - (expense + totalSavings + debt);
 
       updateChart(
-        [income, expense, totalSavings, debt, remaining], // ✅ Updated เงินออม
+        [income, expense, totalSavings, debt, remaining],
         {
           dca: dcaInvested,
           savings: savingsAmount,
-          installment: totalInstallmentPaid
+          installment: installmentPaid
         }
       );
 
     } else {
       console.error("No data found for user.");
-      updateChart([0, 0, 0, 0, 0], {dca: 0, savings: 0, emergencyFund: 0, installment: 0});
+      updateChart([0, 0, 0, 0, 0], { dca: 0, savings: 0, installment: 0 });
     }
   } catch (error) {
     console.error("Error fetching financial data:", error);
   }
 }
 
-let transactionChart = null; // ✅ Ensure this is properly initialized
+let transactionChart = null;
 
 function updateChart(financialData, detailedData) {
   const ctx = document.getElementById("transactionChart").getContext("2d");
 
-  // ✅ Ensure `transactionChart` is a Chart instance before destroying
   if (transactionChart instanceof Chart) {
     transactionChart.destroy();
   }
@@ -98,20 +123,12 @@ function updateChart(financialData, detailedData) {
     },
     options: {
       plugins: {
-        legend: { 
-          display: false 
-        },
+        legend: { display: false },
         tooltip: {
-          titleFont: { 
-            family: 'Prompt', 
-            size: 14 
-          }, 
-          bodyFont: { 
-            family: 'Prompt', 
-            size: 14 
-          },
+          titleFont: { family: 'Prompt', size: 14 },
+          bodyFont: { family: 'Prompt', size: 14 },
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               const labelIndex = context.dataIndex;
               const value = context.raw.toLocaleString() + " บาท";
               if (labelIndex === 2) {
@@ -119,7 +136,7 @@ function updateChart(financialData, detailedData) {
                   `เงินออมรวม: ${value}`,
                   ` • DCA: ${detailedData.dca.toLocaleString()} บาท`,
                   ` • เงินออม: ${detailedData.savings.toLocaleString()} บาท`,
-                  ` • เงินซ้อมผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                  ` • เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
                 ];
               } else {
                 return `${context.label}: ${value}`;
@@ -131,25 +148,17 @@ function updateChart(financialData, detailedData) {
       scales: {
         x: {
           ticks: {
-            font: {
-              family: 'Prompt',
-              size: 14
-            }
+            font: { family: 'Prompt', size: 14 }
           }
         },
         y: {
           beginAtZero: true,
           ticks: {
             callback: value => value.toLocaleString() + " บาท",
-            font: {
-              family: 'Prompt',
-              size: 14
-            }
+            font: { family: 'Prompt', size: 14 }
           }
         }
       }
     }
   });
 }
-
-
