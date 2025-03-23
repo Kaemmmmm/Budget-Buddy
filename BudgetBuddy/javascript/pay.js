@@ -2,7 +2,9 @@ import {
     doc,
     getDoc,
     updateDoc,
-    serverTimestamp
+    serverTimestamp,
+    addDoc,
+    collection
   } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
   import { auth, db } from "./firebase.js";
   import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -62,22 +64,76 @@ import {
         payBtn.addEventListener("click", async () => {
           const now = new Date();
           const onTime = now <= dueDate;
-  
+        
           try {
+            // ✅ Update transaction status
             await updateDoc(docRef, {
               paid: true,
               paidAt: serverTimestamp(),
               onTime: onTime
             });
-  
+        
+            // ✅ Define correct collection path based on type
+            let collectionName = "";
+            const type = data.type.toLowerCase();
+        
+            if (type === "dca") {
+              await addDoc(collection(db, "goal", user.uid, "dca_history"), {
+                amount: data.amount,
+                date: now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })
+              });
+            
+              const goalRef = doc(db, "goal", user.uid);
+              const goalSnap = await getDoc(goalRef);
+              let currentInvested = goalSnap.data()?.dca?.invested || 0;
+            
+              await updateDoc(goalRef, {
+                "dca.invested": currentInvested + data.amount
+              });
+            
+            } else if (type === "saving") {
+              await addDoc(collection(db, "goal", user.uid, "saving_history"), {
+                amount: data.amount,
+                date: now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })
+              });
+            
+              const goalRef = doc(db, "goal", user.uid);
+              const goalSnap = await getDoc(goalRef);
+              let currentSaving = goalSnap.data()?.savings?.amount || 0;
+            
+              await updateDoc(goalRef, {
+                "savings.amount": currentSaving + data.amount
+              });
+            
+            } else if (type === "installment") {
+              await addDoc(collection(db, "goal", user.uid, "installment_history"), {
+                amount: data.amount,
+                date: now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })
+              });
+            
+              const goalRef = doc(db, "goal", user.uid);
+              const goalSnap = await getDoc(goalRef);
+              const dataGoal = goalSnap.data();
+            
+              const assetPrice = dataGoal.installment?.assetPrice || 0;
+              const installmentDuration = dataGoal.installment?.installmentDuration || 1;
+              const paidMonths = dataGoal.installment?.paidMonths || 0;
+            
+              const monthlyInstallment = assetPrice / (installmentDuration * 12);
+              const paidMonthsToAdd = data.amount / monthlyInstallment;
+            
+              await updateDoc(goalRef, {
+                "installment.paidMonths": paidMonths + paidMonthsToAdd
+              });
+            }            
+        
             alert("✅ ทำรายการสำเร็จ กำลังกลับไปหน้าปฏิทิน...");
-            location.href = "calendar.html"; // ✅ กลับไปหน้า calendar
+            location.href = "calendar.html";
           } catch (err) {
             console.error("❌ Error:", err);
             alert("เกิดข้อผิดพลาดในการชำระเงิน");
           }
-        });
-  
+        });               
         actionArea.appendChild(payBtn);
       }
   
