@@ -1,4 +1,7 @@
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { auth, db } from "../javascript/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
@@ -20,11 +23,18 @@ async function loadNotifications() {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-
-        // ไม่กรอง notify ก็แสดงได้ หรือจะใส่ if (data.notify) ก็ได้
         found = true;
+
         const li = document.createElement("li");
-        li.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
+
+        // ✅ สร้างลิงก์ไป pay.html พร้อมส่ง id
+        const link = document.createElement("a");
+        link.href = `pay.html?id=${doc.id}`;
+        link.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
+        link.style.textDecoration = "none";
+        link.style.color = "#000";
+
+        li.appendChild(link);
         list.appendChild(li);
       });
 

@@ -1,64 +1,52 @@
-import { auth, db, doc, setDoc } from './firebase.js'; 
+import {
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { auth, db } from "../javascript/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-let currentUser = null;
+function setupSaveButton() {
+  const saveBtn = document.getElementById("save-btn");
 
-// Listen for authentication state changes
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("User is authenticated:", user.uid);
-        currentUser = user.uid;
-    } else {
-        console.log("No user is signed in.");
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      alert("กรุณาเข้าสู่ระบบก่อนบันทึกข้อมูล");
+      return;
     }
-});
 
-const getCurrentUserId = () => {
-    return currentUser;
-};
+    saveBtn.addEventListener("click", async () => {
+      const userId = user.uid;
 
-export async function saveTransaction() {
-  const userId = getCurrentUserId();
-  if (!userId) {
-    alert("ไม่สามารถระบุผู้ใช้ กรุณาเข้าสู่ระบบใหม่");
-    return;
-  }
+      const date = document.getElementById("date").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      const type = document.getElementById("transaction-type").value;
+      const detail = document.getElementById("detail").value;
+      const notify = document.getElementById("notify").checked;
 
-  const date = document.getElementById('date').value;
-  const amount = parseFloat(document.getElementById('amount').value);
-  const type = document.getElementById('transaction-type').value;
-  const detail = document.getElementById('detail').value;
-  const notify = document.getElementById('notify').checked;
+      if (!date || isNaN(amount) || !type) {
+        alert("กรุณากรอกข้อมูลให้ครบ");
+        return;
+      }
 
-  if (!date || isNaN(amount) || !type) {
-    alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-    return;
-  }
+      try {
+        await addDoc(collection(db, "budget", userId, "transaction"), {
+          date,
+          amount,
+          type,
+          detail,
+          notify,
+          createdAt: serverTimestamp()
+        });
 
-  const transactionId = `${Date.now()}`;
-
-  try {
-    await setDoc(doc(db, "budget", userId, "transaction", transactionId), {
-      date,
-      amount,
-      type,
-      detail,
-      notify,
-      createdAt: serverTimestamp()
+        alert("✅ บันทึกสำเร็จ");
+        window.location.href = "calendar.html";
+      } catch (err) {
+        console.error("เกิดข้อผิดพลาด:", err);
+        alert("บันทึกไม่สำเร็จ");
+      }
     });
-
-    alert("บันทึกธุรกรรมสำเร็จ!");
-    location.href = "calendar.html"; // ✅ redirect ไปหน้า calendar
-  } catch (error) {
-    console.error("เกิดข้อผิดพลาดในการบันทึก:", error);
-    alert("ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง");
-  }
+  });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const saveBtn = document.getElementById("save-btn");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", saveTransaction);
-  }
-});
+document.addEventListener("DOMContentLoaded", setupSaveButton);
