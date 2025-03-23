@@ -35,10 +35,9 @@ async function loadTransactionData(userId) {
       const paidMonths = parseFloat(data.installment?.paidMonths) || 0;
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
       
-      let emergencyFund = parseFloat(data.emergencyFund?.amount) || 0; // ✅ Declare emergencyFund
 
       const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
+      const savings = dcaInvested + totalInstallmentPaid + savingsAmount ;
 
       const remaining = income - expense - savings - debt;
 
@@ -51,7 +50,6 @@ async function loadTransactionData(userId) {
         {
           dca: dcaInvested,
           savings: savingsAmount,
-          emergencyFund: emergencyFund, // ✅ Now correctly defined
           installment: totalInstallmentPaid
         }
       );
@@ -85,7 +83,7 @@ async function updateTransactionData() {
     const docSnap = await getDoc(docRef);
 
     let dcaInvested = 0, assetPrice = 0, installmentDuration = 1, paidMonths = 0, savingsAmount = 0;
-    let emergencyFund = 0; // ✅ Declare emergencyFund before using it
+
 
     if (docSnap.exists()) {
       const data = docSnap.data();
@@ -94,7 +92,6 @@ async function updateTransactionData() {
       installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
       paidMonths = parseFloat(data.installment?.paidMonths) || 0;
       savingsAmount = parseFloat(data.savings?.amount) || 0;
-      emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
     } else {
       console.error("No existing data found. Defaulting to zeroes.");
     }
@@ -120,7 +117,6 @@ async function updateTransactionData() {
       {
         dca: dcaInvested,
         savings: savingsAmount,
-        emergencyFund: emergencyFund, // ✅ Now correctly defined
         installment: totalInstallmentPaid
       }
     );
@@ -171,7 +167,6 @@ async function updateTransactionData() {
                     `เงินออมรวม: ${value}`,
                     ` • DCA: ${(detailedData.dca || 0).toLocaleString()} บาท`,
                     ` • เงินออม: ${(detailedData.savings || 0).toLocaleString()} บาท`,
-                    ` • เงินสำรองฉุกเฉิน: ${(detailedData.emergencyFund || 0).toLocaleString()} บาท`, // ✅ Handle undefined emergencyFund
                     ` • เงินซ้อมผ่อน: ${(detailedData.installment || 0).toLocaleString()} บาท`
                   ];
                 } else {

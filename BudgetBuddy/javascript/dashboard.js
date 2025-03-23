@@ -52,19 +52,18 @@ async function loadTransactionData(userId) {
       const installmentDuration = parseFloat(data.installment?.installmentDuration) || 1;
       const paidMonths  = parseFloat(data.installment?.paidMonths) || 0;
       const savingsAmount = parseFloat(data.savings?.amount) || 0;
-      const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0; // ✅ Include emergency fund
+      
 
       const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund; // ✅ Add emergency fund
+      const totalSavings = dcaInvested + totalInstallmentPaid + savingsAmount; // ✅ Add emergency fund
 
-      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + emergencyFund + debt);
+      const remaining = income - (expense + totalInstallmentPaid + dcaInvested + savingsAmount + debt);
 
       updateChart(
         [income, expense, totalSavings, debt, remaining], // ✅ Updated เงินออม
         {
           dca: dcaInvested,
           savings: savingsAmount,
-          emergencyFund: emergencyFund, // ✅ Add emergency fund
           installment: totalInstallmentPaid
         }
       );
@@ -120,7 +119,6 @@ function updateChart(financialData, detailedData) {
                   `เงินออมรวม: ${value}`,
                   ` • DCA: ${detailedData.dca.toLocaleString()} บาท`,
                   ` • เงินออม: ${detailedData.savings.toLocaleString()} บาท`,
-                  ` • เงินสำรองฉุกเฉิน: ${detailedData.emergencyFund.toLocaleString()} บาท`, // ✅ Emergency fund added
                   ` • เงินซ้อมผ่อน: ${detailedData.installment.toLocaleString()} บาท`
                 ];
               } else {
