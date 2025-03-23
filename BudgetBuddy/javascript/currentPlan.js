@@ -1,27 +1,22 @@
+
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, getDoc, setDoc, collection, addDoc, getDocs
+import { doc, getDoc, setDoc, collection, addDoc
  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 
 // ฟังก์ชันดึงข้อมูลและประเมินสุขภาพทางการเงิน
 async function loadAssessmentData() {
   const userId = auth.currentUser.uid;
-  const goalDocRef = doc(db, "goal", userId);
-  const goalSnap = await getDoc(goalDocRef);
-  if(!goalSnap.exists()) {
+  const DocRef = doc(db, "goal", userId);
+  const docSnap = await getDoc(DocRef);
+
+  if(!docSnap.exists()) {
     console.error("ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อน")
     return;
   }
 
-  const userDocRef = doc(db, "goal", userId);
-  const docSnap = await getDoc(userDocRef);
-  if (!docSnap.exists()) {
-    console.error("ไม่พบข้อมูลของผู้ใช้");
-    return;
-  }
   const data = docSnap.data();
-  const data1 = goalSnap.data();
 
   // ดึงข้อมูลจากฐานข้อมูล
   const income = parseFloat(data.income) || 0;
@@ -48,7 +43,7 @@ async function loadAssessmentData() {
     updateStatus("saving-circle", "saving-text", "saving-detail",
       "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
     savingsStatus = "ดีมาก";
-  } else if (savings >= 0.05 * income) {
+  } else if (savings >= 0.05 * income && savings < 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail",
       "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้");
     savingsStatus = "พอใช้";
@@ -63,7 +58,7 @@ async function loadAssessmentData() {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail",
       "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
     wealthStatus = "ดีมาก";
-  } else if (netAssets >= 0.20 * income) {
+  } else if (netAssets >= 0.20 * income && netAssets < 0.5 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail",
       "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้");
     wealthStatus = "พอใช้";
@@ -183,6 +178,9 @@ async function saveUserPlan(planSummaryHTML, financialData) {
     // 1) ดึงข้อมูลแผนปัจจุบัน (ถ้ามี) เพื่อนำไปเก็บเป็นประวัติ
     const currentPlanSnap = await getDoc(planDocRef);
     if (currentPlanSnap.exists()) {
+      const oldPlandata = currentPlanSnap.data();
+
+      if(oldPlandata.plan !== planSummaryHTML) {
       // เก็บข้อมูลปัจจุบันลงใน sub-collection "planHistory"
       const historyCollectionRef = collection(planDocRef, "planHistory");
       await addDoc(historyCollectionRef, {
@@ -190,7 +188,8 @@ async function saveUserPlan(planSummaryHTML, financialData) {
         archivedAt: new Date()
       });
     }
-
+  
+  }
   // ใช้ setDoc พร้อม merge: true เพื่ออัปเดต field plan และ planUpdatedAt
 await setDoc(planDocRef, {
     plan: planSummaryHTML,
@@ -219,108 +218,3 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-async function loadAllPlansForUser() {
-  const user = auth.currentUser;
-  if (!user) {
-    console.error("ยังไม่มีผู้ใช้ล็อกอิน");
-    return;
-  }
-
-  const planDocRef = doc(db, "plan", user.uid);
-  const planSnap = await getDoc(planDocRef);
-  
-  // เตรียม array สำหรับเก็บทุกแผน (ปัจจุบัน + เก่า)
-  const allPlans = [];
-
-  // 1) ดึงแผนปัจจุบัน (document หลัก)
-  if (planSnap.exists()) {
-    const currentData = planSnap.data();
-    // เก็บไว้ใน array โดยกำหนด id = 'current' ไว้บอกว่าเป็นแผนปัจจุบัน
-    allPlans.push({
-      id: "current", 
-      data: currentData, 
-      isCurrent: true
-    });
-  }
-
-  // 2) ดึงแผนเก่า (sub-collection "planHistory")
-  const historyCollectionRef = collection(planDocRef, "planHistory");
-  const historySnap = await getDocs(historyCollectionRef);
-  historySnap.forEach((docSnap) => {
-    const historyData = docSnap.data();
-    allPlans.push({
-      id: docSnap.id, 
-      data: historyData, 
-      isCurrent: false
-    });
-  });
-
-  // 3) ใส่ข้อมูลลง <select> ให้ผู้ใช้เลือก
-  populatePlanSelector(allPlans);
-}
-
-// ฟังก์ชันใส่ Option ลงใน <select id="plan-selector">
-function populatePlanSelector(plans) {
-  const planSelector = document.getElementById("plan-selector");
-  if (!planSelector) return;
-  
-  // ล้างตัวเลือกเก่า (ถ้ามี)
-  planSelector.innerHTML = "";
-
-  // สร้าง <option> สำหรับแต่ละแผน
-  plans.forEach((planObj, index) => {
-    const option = document.createElement("option");
-    option.value = planObj.id; // ใช้ id ของ plan (ถ้า isCurrent = true ก็จะเป็น 'current')
-    
-    // แสดงข้อความ เช่น "แผนปัจจุบัน (2023-03-01 10:00)" หรือ "แผนเก่า #1 (archivedAt: ...)"
-    const planUpdated = planObj.data.planUpdatedAt;
-    const archived = planObj.data.archivedAt;
-    
-    if (planObj.isCurrent) {
-      // แผนปัจจุบัน
-      option.textContent = planUpdated
-        ? `แผนปัจจุบัน (อัปเดต: ${formatTimestamp(planUpdated)})`
-        : "แผนปัจจุบัน (ไม่พบเวลาที่อัปเดต)";
-    } else {
-      // แผนเก่า
-      option.textContent = archived
-        ? `แผนเก่า #${index} (บันทึกเมื่อ: ${formatTimestamp(archived)})`
-        : `แผนเก่า #${index}`;
-    }
-    
-    planSelector.appendChild(option);
-  });
-
-  // เมื่อผู้ใช้เปลี่ยนตัวเลือก -> แสดง plan นั้น
-  planSelector.addEventListener("change", (e) => {
-    const selectedId = e.target.value; // 'current' หรือ docId ของ planHistory
-    const selectedPlan = plans.find(p => p.id === selectedId);
-    if (selectedPlan) {
-      // แสดงข้อความสรุปใน #plan-summary
-      displaySelectedPlan(selectedPlan);
-    }
-  });
-}
-
-// ฟังก์ชันแสดงผลแผนที่เลือก (ตัวอย่างนี้แสดงเฉพาะ planSummaryHTML)
-function displaySelectedPlan(planObj) {
-  const planSummaryEl = document.getElementById("plan-summary");
-  if (!planSummaryEl) return;
-
-  // ใน planObj.data.plan จะเป็นข้อความสรุปแผน
-  if (planObj.data.plan) {
-    planSummaryEl.textContent = planObj.data.plan;
-  } else {
-    planSummaryEl.textContent = "ไม่พบข้อมูลสรุปแผนในเอกสารนี้";
-  }
-}
-
-// ฟังก์ชันแปลง Timestamp (Firestore) เป็น string ที่อ่านง่าย
-function formatTimestamp(ts) {
-  // ถ้าเป็น Firestore Timestamp จะมี toDate()
-  if (ts && typeof ts.toDate === "function") {
-    return ts.toDate().toLocaleString();
-  }
-  // ถ้าเก็บเป็น Date ปกติ หรือ string
-  return ts ? ts.toString() : "";
-}

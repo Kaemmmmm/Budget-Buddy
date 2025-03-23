@@ -43,7 +43,7 @@ async function loadAssessmentData() {
       "ดีมาก",
       "การออม ≥ 10% ของรายได้ แสดงถึงสภาพคล่องและวินัยการออมที่ดี"
     );
-  } else if (savings >= 0.05 * income && savings <= 0.09 * income) {
+  } else if (savings >= 0.05 * income && savings < 0.10 * income) {
     updateStatus(
       "saving-circle", "saving-text", "saving-detail",
       "circle-yellow",
@@ -83,7 +83,7 @@ async function loadAssessmentData() {
       "สินทรัพย์สุทธิ < 20% ของรายได้ต่อเดือน เสี่ยงต่อปัญหาการเงินในอนาคต"
     );
   }
-/*
+
    // ประเมิน "สถานะหนี้ (Debt-Free Status)"
    //not yet
    if (debt = 0) {
@@ -110,7 +110,7 @@ async function loadAssessmentData() {
     );
   }
 }
-*/
+
   // ประเมิน "เงินฉุกเฉิน (Emergency Funds)"
   //done
   if (monthsCovered >= 6) {
