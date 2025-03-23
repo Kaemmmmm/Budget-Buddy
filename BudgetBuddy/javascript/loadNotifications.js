@@ -23,19 +23,22 @@ async function loadNotifications() {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        found = true;
 
-        const li = document.createElement("li");
+        // ✅ แสดงเฉพาะรายการที่ notify และยังไม่จ่าย
+        if (data.notify && !data.paid) {
+          found = true;
 
-        // ✅ สร้างลิงก์ไป pay.html พร้อมส่ง id
-        const link = document.createElement("a");
-        link.href = `pay.html?id=${doc.id}`;
-        link.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
-        link.style.textDecoration = "none";
-        link.style.color = "#000";
+          const li = document.createElement("li");
+          const link = document.createElement("a");
 
-        li.appendChild(link);
-        list.appendChild(li);
+          link.href = `pay.html?id=${doc.id}`;
+          link.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
+          link.style.textDecoration = "none";
+          link.style.color = "#000";
+
+          li.appendChild(link);
+          list.appendChild(li);
+        }
       });
 
       if (!found) {
