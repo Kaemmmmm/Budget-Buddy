@@ -8,17 +8,15 @@ let currentUser = null;
 onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log("User is authenticated:", user.uid);
-        currentUser = user.uid; // Store the user ID
+        currentUser = user.uid;
     } else {
         console.log("No user is signed in.");
     }
 });
 
 const getCurrentUserId = () => {
-    return currentUser; // Return the stored user ID
+    return currentUser;
 };
-
-
 
 export async function saveTransaction() {
   const userId = getCurrentUserId();
@@ -38,7 +36,7 @@ export async function saveTransaction() {
     return;
   }
 
-  const transactionId = `${Date.now()}`; // Unique ID
+  const transactionId = `${Date.now()}`;
 
   try {
     await setDoc(doc(db, "budget", userId, "transaction", transactionId), {
@@ -47,11 +45,11 @@ export async function saveTransaction() {
       type,
       detail,
       notify,
-      createdAt: serverTimestamp() // ✅ Firestore generates the timestamp on the server
+      createdAt: serverTimestamp()
     });
 
     alert("บันทึกธุรกรรมสำเร็จ!");
-    location.reload(); // Or redirect as needed
+    location.href = "calendar.html"; // ✅ redirect ไปหน้า calendar
   } catch (error) {
     console.error("เกิดข้อผิดพลาดในการบันทึก:", error);
     alert("ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง");

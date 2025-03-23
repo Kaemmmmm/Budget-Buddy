@@ -1,31 +1,41 @@
 import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import { db } from "../javascript/firebase.js"; // ใช้ db จาก firebase.js ที่ initialize แล้ว
+import { auth, db } from "../javascript/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 async function loadNotifications() {
   const list = document.getElementById("notification-list");
-  list.innerHTML = ""; // เคลียร์ข้อมูลเก่า
+  list.innerHTML = "";
 
-  try {
-    const querySnapshot = await getDocs(collection(db, "transactions"));
-    let found = false;
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      list.innerHTML = "<li>ยังไม่มียอดค้างชำระขณะนี้</li>";
+      return;
+    }
 
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      if (data.notify) {
+    const userId = user.uid;
+
+    try {
+      const querySnapshot = await getDocs(collection(db, "budget", userId, "transaction"));
+      let found = false;
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        // ไม่กรอง notify ก็แสดงได้ หรือจะใส่ if (data.notify) ก็ได้
         found = true;
         const li = document.createElement("li");
-        li.textContent = `${data.date} : ${data.transactionType} - ${data.amount} บาท`;
+        li.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
         list.appendChild(li);
-      }
-    });
+      });
 
-    if (!found) {
-      list.innerHTML = "<li>ยังไม่มียอดค้างชำระขณะนี้</li>";
+      if (!found) {
+        list.innerHTML = "<li>ยังไม่มียอดค้างชำระขณะนี้</li>";
+      }
+    } catch (error) {
+      list.innerHTML = "<li>เกิดข้อผิดพลาดในการโหลดข้อมูล</li>";
+      console.error("loadNotifications error:", error);
     }
-  } catch (error) {
-    list.innerHTML = "<li>เกิดข้อผิดพลาดในการโหลดข้อมูล</li>";
-    console.error("loadNotifications error:", error);
-  }
+  });
 }
 
 loadNotifications();
