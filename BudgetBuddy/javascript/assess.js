@@ -61,14 +61,14 @@ async function loadAssessmentData() {
 
   // ประเมิน "ความมั่งคั่ง (Wealth Assessment)"
   //done
-  if (netAssets >= 0.50 * income) {
+  if (netAssets >= 0.5 * income) {
     updateStatus(
       "wealth-circle", "wealth-text", "wealth-detail",
       "circle-green",
       "ดีมาก",
       "สินทรัพย์สุทธิ ≥ 50% ของรายได้ต่อเดือน สะท้อนความมั่งคั่งสูง"
     );
-  } else if (netAssets >= 0.20 * income && netAssets <= 0.49 * income) {
+  } else if (netAssets >= 0.20 * income && netAssets < 0.5 * income) {
     updateStatus(
       "wealth-circle", "wealth-text", "wealth-detail",
       "circle-yellow",
