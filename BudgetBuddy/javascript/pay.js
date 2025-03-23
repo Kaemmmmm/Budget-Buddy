@@ -36,7 +36,6 @@ import {
       const paidAt = data.paidAt?.toDate?.();
       const hasPaid = data.paid === true;
   
-      // ตรวจสอบความตรงเวลา
       let timingText = "-";
       if (hasPaid && paidAt) {
         timingText = paidAt <= dueDate ? "✅ จ่ายตรงเวลา" : "❌ จ่ายล่าช้า";
@@ -54,7 +53,6 @@ import {
         <div id="action-area"></div>
       `;
   
-      // ถ้ายังไม่จ่าย → แสดงปุ่มชำระเงิน
       if (!hasPaid) {
         const actionArea = document.getElementById("action-area");
         const payBtn = document.createElement("button");
@@ -72,8 +70,8 @@ import {
               onTime: onTime
             });
   
-            alert("✅ ทำรายการสำเร็จ");
-            location.reload();
+            alert("✅ ทำรายการสำเร็จ กำลังกลับไปหน้าปฏิทิน...");
+            location.href = "calendar.html"; // ✅ กลับไปหน้า calendar
           } catch (err) {
             console.error("❌ Error:", err);
             alert("เกิดข้อผิดพลาดในการชำระเงิน");

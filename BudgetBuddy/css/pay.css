@@ -1,4 +1,4 @@
-/* โครงสร้าง layout หลัก */
+/* ------------------ Layout & Body ------------------ */
 body {
     margin: 0;
     font-family: 'Prompt', sans-serif;
@@ -146,17 +146,18 @@ body {
     margin-right: 8px;
   }
   
-  /* ✅ Content */
+  
+  /* ------------------ Content ------------------ */
   .content {
     flex: 1;
+    margin-left: 280px; /* ✅ สำคัญเพื่อเว้น sidebar */
     padding: 40px;
-    background-color: #f1f4f9;
     display: flex;
     justify-content: center;
     align-items: flex-start;
   }
   
-  /* ✅ กล่องรายละเอียดธุรกรรม */
+  /* ------------------ Transaction Container ------------------ */
   .container {
     background-color: #ffffff;
     padding: 32px;
@@ -183,24 +184,9 @@ body {
     margin: 12px 0;
   }
   
-  .transaction-box button {
-    margin-top: 24px;
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .transaction-box button:hover {
-    background-color: #218838;
-  }
-
+  /* ------------------ Pay Button ------------------ */
   .pay-button {
-    margin-top: 20px;
+    margin-top: 24px;
     padding: 10px 24px;
     font-size: 16px;
     background-color: #28a745;
@@ -214,5 +200,4 @@ body {
   .pay-button:hover {
     background-color: #218838;
   }
-  
   
