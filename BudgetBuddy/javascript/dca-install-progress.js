@@ -8,8 +8,7 @@ import {
   addDoc,
   getDocs,
   query,
-  orderBy,
-  serverTimestamp,
+  orderBy,  
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
@@ -119,42 +118,67 @@ async function loadHistory(userId) {
   const historyList = document.getElementById("history-list");
   historyList.innerHTML = "";
 
-  // Changed subcollection name to "dca&installment_history"
-  const historyRef = collection(db, "goal", userId, "dca&installment_history");
-  const historyQuery = query(historyRef, orderBy("timestamp", "desc"));
+  const dcaRef = collection(db, "goal", userId, "dca_history");
+  const instRef = collection(db, "goal", userId, "installment_history");
 
-  const historyDocs = await getDocs(historyQuery);
+  const [dcaSnap, instSnap] = await Promise.all([
+    getDocs(dcaRef),
+    getDocs(instRef)
+  ]);
 
-  historyDocs.forEach((docSnap) => {
-    const docId = docSnap.id;
-    const data = docSnap.data();
-    const dateText = data.date || "";
-    const entryType = data.type || "unknown";
-    const amountText = data.amount
-      ? `${data.amount.toLocaleString('th-TH')} บาท`
-      : "";
+  // Convert Thai date string to Date object
+  function parseThaiDate(dateStr) {
+    try {
+      const [datePart, timePart] = dateStr.split(" ");
+      const [day, month, year] = datePart.split("/").map(Number);
+      const [hour = 0, minute = 0, second = 0] = (timePart || "0:0:0").split(":").map(Number);
+      return new Date(year - 543, month - 1, day, hour, minute, second);
+    } catch {
+      return new Date(); // fallback
+    }
+  }
 
-    // Build the <li> element
+  const dcaHistory = dcaSnap.docs.map(doc => ({
+    id: doc.id,
+    type: "investment",
+    amount: doc.data().amount || doc.data().monthlyInvestment || 0,
+    date: doc.data().date || "",
+    timestamp: parseThaiDate(doc.data().date || "")
+  }));
+
+  const instHistory = instSnap.docs.map(doc => ({
+    id: doc.id,
+    type: "installment",
+    amount: doc.data().amount || 0,
+    date: doc.data().date || "",
+    timestamp: parseThaiDate(doc.data().date || "")
+  }));
+
+  const mergedHistory = [...dcaHistory, ...instHistory].sort(
+    (a, b) => b.timestamp - a.timestamp
+  );
+
+  mergedHistory.forEach(entry => {
     const historyItem = document.createElement("li");
     historyItem.classList.add("history-item");
 
     const dateSpan = document.createElement("span");
     dateSpan.classList.add("history-date");
-    dateSpan.textContent = dateText;
+    dateSpan.textContent = entry.date;
 
     const typeSpan = document.createElement("span");
     typeSpan.classList.add("history-type");
-    typeSpan.textContent = entryType;
+    typeSpan.textContent = entry.type;
 
     const amountSpan = document.createElement("span");
     amountSpan.classList.add("history-amount");
-    amountSpan.textContent = amountText;
+    amountSpan.textContent = `${entry.amount.toLocaleString("th-TH")} บาท`;
 
     const deleteBtn = document.createElement("button");
     deleteBtn.classList.add("delete-btn");
     deleteBtn.textContent = "ลบ";
     deleteBtn.addEventListener("click", async () => {
-      await deleteHistoryEntry(userId, docId, entryType, data.amount);
+      await deleteHistoryEntry(userId, entry.id, entry.type, entry.amount);
     });
 
     historyItem.appendChild(dateSpan);
@@ -165,6 +189,7 @@ async function loadHistory(userId) {
     historyList.appendChild(historyItem);
   });
 }
+
 
 // ---------------------
 // Installment Chart
@@ -298,11 +323,9 @@ async function updateInstallmentProgress() {
       });
 
       // 5) Record the payment in **dca&installment_history** subcollection
-      await addDoc(collection(db, "goal", userId, "dca&installment_history"), {
-        type: "installment",
+      await addDoc(collection(db, "goal", userId, "installment_history"), {
         amount: monthlyPayment,
         date: new Date().toLocaleString("th-TH"),
-        timestamp: serverTimestamp()
       });
 
       // 6) Update local UI
@@ -355,11 +378,9 @@ async function updateDcaProgress() {
       });
 
       // Add to **dca&installment_history**
-      await addDoc(collection(db, "goal", userId, "dca&installment_history"), {
-        type: "investment",
-        amount: dcaData.monthlyInvestment, 
+      await addDoc(collection(db, "goal", userId, "dca_history"), {
+        monthlyInvestment: dcaData.monthlyInvestment, 
         date: new Date().toLocaleString("th-TH"),
-        timestamp: serverTimestamp()
       });
 
       // Update local
@@ -419,7 +440,9 @@ async function deleteHistoryEntry(userId, historyId, entryType, deleteAmount = 0
     }
 
     // 2) Delete the doc from **dca&installment_history**
-    await deleteDoc(doc(db, "goal", userId, "dca&installment_history", historyId));
+    const targetSubcollection = entryType === "investment" ? "dca_history" : "installment_history";
+    await deleteDoc(doc(db, "goal", userId, targetSubcollection, historyId));
+    
 
     // 3) Re-fetch to update charts
     const newSnap = await getDoc(userDoc);
