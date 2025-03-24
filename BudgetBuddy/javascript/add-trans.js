@@ -1,52 +1,43 @@
-import {
-  collection,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import { auth, db } from "../javascript/firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-function setupSaveButton() {
-  const saveBtn = document.getElementById("save-btn");
+document.getElementById("save-btn").addEventListener("click", function() {
+  // ดึงค่าจากฟอร์ม
+  const date = document.getElementById("date").value;
+  const amount = document.getElementById("amount").value;
+  const transactionType = document.getElementById("transaction-type").value;
+  const detail = document.getElementById("detail").value;
+  
+  // ตั้งค่า notify เป็น true โดยอัตโนมัติ (ไม่ต้องดึงค่าจาก element ที่ถูกลบไปแล้ว)
+  const notify = true;
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      alert("กรุณาเข้าสู่ระบบก่อนบันทึกข้อมูล");
-      return;
-    }
+  // ตรวจสอบความถูกต้องของข้อมูล (ถ้ามีเงื่อนไขอื่นๆ เพิ่มเติมได้)
+  if (!date || !amount || !transactionType) {
+    alert("กรุณากรอกข้อมูลให้ครบ");
+    return;
+  }
 
-    saveBtn.addEventListener("click", async () => {
-      const userId = user.uid;
-
-      const date = document.getElementById("date").value;
-      const amount = parseFloat(document.getElementById("amount").value);
-      const type = document.getElementById("transaction-type").value;
-      const detail = document.getElementById("detail").value;
-      const notify = document.getElementById("notify").checked;
-
-      if (!date || isNaN(amount) || !type) {
-        alert("กรุณากรอกข้อมูลให้ครบ");
-        return;
-      }
-
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
       try {
-        await addDoc(collection(db, "budget", userId, "transaction"), {
-          date,
-          amount,
-          type,
-          detail,
-          notify,
-          createdAt: serverTimestamp()
+        await addDoc(collection(db, "budget", user.uid, "transaction"), {
+          date: date,
+          amount: parseFloat(amount),
+          type: transactionType,
+          detail: detail,
+          notify: notify,
+          paid: false,
+          createdAt: new Date()
         });
-
-        alert("✅ บันทึกสำเร็จ");
+        alert("เพิ่มธุรกรรมเรียบร้อย");
         window.location.href = "calendar.html";
-      } catch (err) {
-        console.error("เกิดข้อผิดพลาด:", err);
-        alert("บันทึกไม่สำเร็จ");
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        alert("เกิดข้อผิดพลาดในการเพิ่มธุรกรรม");
       }
-    });
+    } else {
+      alert("กรุณาเข้าสู่ระบบ");
+    }
   });
-}
-
-document.addEventListener("DOMContentLoaded", setupSaveButton);
+});

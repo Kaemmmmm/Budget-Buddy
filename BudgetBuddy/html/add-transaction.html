@@ -5,67 +5,69 @@
   <title>เพิ่มธุรกรรม</title>
   <link rel="stylesheet" href="../css/add-transaction.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
- <!-- SIDEBAR -->
+     <!-- SIDEBAR -->
  <div class="sidebar">
-    <ul class="menu">
-        <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
-        <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
-        <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
-        
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
-            <ul class="submenu">
-                <li><a href="calculator.html">คำนวณDCA</a></li>
-                <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
-            </ul>
-        </li>
-        
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
-            <ul class="submenu">
-                <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
-                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
-            </ul>
-        </li>
-        
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
-            <ul class="submenu">
-                <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
-            </ul>
-        </li>
+  <ul class="menu">
+      <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+      <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
       
-        <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
-        
-        <li class="has-submenu">
-          <a href="#" class="toggle-submenu">
-            <i class="fas fa-cogs"></i> ดูแผนการเงิน 
-          </a>
+      <li class="has-submenu">
+          <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
           <ul class="submenu">
-            <select id="plan-selector" size="10" style="width: 400px;">
-            </select>
+              <li><a href="calculator.html">คำนวณDCA</a></li>
+              <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
           </ul>
-        </li>
-    </ul>
-    <div class="user-info">
-      <div class="user-dropdown">
-        👤 <span class="user-name">กำลังโหลดชื่อ...</span>
-        <i class="fas fa-caret-up dropdown-icon"></i>
-        <ul class="dropdown-menu">
-          <li id="sign-out-btn">ออกจากระบบ</li>
+      </li>
+      
+      <li class="has-submenu">
+          <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
+          <ul class="submenu">
+              <li><a href="install-plan.html">แบบจำลองการซ้อมผ่อน</a></li>
+              <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+          </ul>
+      </li>
+      
+      <li class="has-submenu">
+          <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
+          <ul class="submenu">
+              <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+          </ul>
+      </li>
+    
+      <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
+      
+      <li class="has-submenu">
+        <a href="#" class="toggle-submenu">
+          <i class="fas fa-cogs"></i> ดูแผนการเงิน 
+        </a>
+        <ul class="submenu">
+          <select id="plan-selector" size="10" style="width: 400px;">
+          </select>
         </ul>
-      </div>
+      </li>
+  </ul>
+  <div class="user-info">
+    <div class="user-dropdown">
+      👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+      <i class="fas fa-caret-up dropdown-icon"></i>
+      <ul class="dropdown-menu">
+        <li id="sign-out-btn">ออกจากระบบ</li>
+      </ul>
     </div>
- </div>
-      <!-- ส่วนเนื้อหาหลัก -->
+  </div>
+</div>
+  </div>
+  
+  <!-- ส่วนเนื้อหาหลัก -->
   <div class="container">
-    <!-- ส่วนหัว -->
     <div class="header">
-    <!-- ฟอร์มเพิ่มธุรกรรม -->
       <h3>เพิ่มธุรกรรม</h3>
       <form action="#" method="post">
         <div class="form-group">
@@ -89,20 +91,12 @@
           <label for="detail">รายละเอียด</label>
           <textarea id="detail" name="detail" rows="4" placeholder="ระบุรายละเอียดเพิ่มเติม"></textarea>
         </div>
-        <div class="form-group checkbox-inline">
-          <label for="notify">
-            ต้องการแจ้งเตือนเมื่อถึงกำหนดการออม
-            <input type="checkbox" id="notify" name="notify" />
-          </label>
-        </div>
-        
+        <!-- ลบส่วน checkbox แจ้งเตือนออกไปแล้ว -->
       </form>
       <div class="btn-group">
         <button type="button" class="submit" id="save-btn">บันทึก</button>
         <button type="reset" class="cancel-btn" onclick="window.location.href='calendar.html'">ยกเลิก</button>
       </div>
-      
-
     </div>
   </div>
 
@@ -111,4 +105,3 @@
   <script type="module" src="../javascript/planNav.js"></script>
 </body>
 </html>
-
