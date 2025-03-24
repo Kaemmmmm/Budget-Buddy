@@ -99,7 +99,6 @@ async function loadAssessmentData() {
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("User is logged in:", user.uid);
     loadAssessmentData();
   } else {
     console.log("No user logged in");

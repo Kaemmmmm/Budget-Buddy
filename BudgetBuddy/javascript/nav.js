@@ -4,7 +4,6 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    console.log("Logged-in user UID:", user.uid);
     const userRef = doc(db, "users", user.uid);
 
     try {
