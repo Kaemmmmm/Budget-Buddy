@@ -158,15 +158,57 @@ body {
   margin: 50px auto;
 }
 
-.submit {
-  background-color: #0099ff;
+.calendar-wrapper {
+  background: #fff;
+  width: 800px;
+  max-width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* ส่วนหัวข้างใน */
+.calendar-content h2 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* กล่องรายละเอียดธุรกรรม */
+.transaction-box {
+  line-height: 1.8;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+}
+
+/* ตัวอย่างปุ่มชำระเงิน */
+.pay-button {
+  background-color: #28a745; /* สีพื้นหลังเขียว */
   color: #fff;
-  border: none;
-  border-radius: 5px;
+  margin-top: 20px;
   padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  transition: background-color 0.2s, transform 0.2s;
 }
-.submit:hover {
-  background-color: #0056b3;
+
+.pay-button:hover {
+  background-color: #218838; /* เขียวเข้มขึ้นเมื่อ hover */
 }
+
+.pay-button:active {
+  transform: scale(0.98); /* ย่อเล็กลงนิดหน่อยเมื่อกด */
+}
+
+.pay-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+
