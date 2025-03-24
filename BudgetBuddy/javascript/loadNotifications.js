@@ -23,23 +23,29 @@ async function loadNotifications() {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-
-        // ✅ แสดงเฉพาะรายการที่ notify และยังไม่จ่าย
+      
         if (data.notify && !data.paid) {
           found = true;
-
-          const li = document.createElement("li");
-          const link = document.createElement("a");
-
-          link.href = `pay.html?id=${doc.id}`;
-          link.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
-          link.style.textDecoration = "none";
-          link.style.color = "#000";
-
-          li.appendChild(link);
+      
+          const li = document.createElement("div");
+          li.classList.add("notification-item");
+      
+          const text = document.createElement("span");
+          text.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
+      
+          const button = document.createElement("button");
+          button.textContent = "จ่าย";
+          button.classList.add("pay-now-button");
+          button.onclick = () => {
+            window.location.href = `pay.html?id=${doc.id}`;
+          };
+      
+          li.appendChild(text);
+          li.appendChild(button);
           list.appendChild(li);
         }
       });
+      
 
       if (!found) {
         list.innerHTML = "<li>ยังไม่มียอดค้างชำระขณะนี้</li>";

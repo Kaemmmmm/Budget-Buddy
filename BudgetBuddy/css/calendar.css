@@ -258,3 +258,46 @@ body {
   cursor: pointer;
   color: #007bff;
 }
+
+/* กล่องแจ้งเตือน */
+.notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  font-size: 15px;
+  color: #333;
+  white-space: nowrap;     /* 🧠 ไม่ตัดบรรทัด */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ข้อความแจ้งเตือน */
+.notification-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 10px;
+}
+
+.pay-now-button {
+  padding: 2px 8px;
+  font-size: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pay-now-button:hover {
+  background-color: #218838;
+}
+
+
