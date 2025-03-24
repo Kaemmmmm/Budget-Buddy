@@ -1,10 +1,24 @@
+import { saveUserPlan, cachedSummaryText, cachedFinancialData } from './currentPlan.js';
+
+
 function openModal() {
-    const modal = document.getElementById('myModal');
-    modal.style.display = 'flex'; 
+  if (cachedSummaryText && cachedFinancialData) {
+    saveUserPlan(cachedSummaryText, cachedFinancialData)
+      .then(() => {
+        document.getElementById('myModal').style.display = 'flex';
+      })
+      .catch((error) => {
+        alert("เกิดข้อผิดพลาดในการบันทึกแผน: " + error.message);
+      });
+  } else {
+    alert("กรุณารอให้ระบบประเมินแผนก่อนกดบันทึก");
   }
-  
-  function closeModal() {
-    const modal = document.getElementById('myModal');
-    modal.style.display = 'none';
-  }
-  
+}
+
+
+function closeModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
+window.openModal = openModal;
+window.closeModal = closeModal;

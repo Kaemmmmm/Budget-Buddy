@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>แผนการเงินปัจจุบัน</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap"
+    rel="stylesheet"
+  >
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+  <!-- ไฟล์ CSS -->
+  <link rel="stylesheet" href="../css/plan.css">
+</head>
+<body>
+ <!-- SIDEBAR -->
+ <div class="sidebar">
+  <ul class="menu">
+      <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+      <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+      <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+      
+      <li class="has-submenu">
+          <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
+          <ul class="submenu">
+              <li><a href="calculator.html">คำนวณDCA</a></li>
+              <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+          </ul>
+      </li>
+ 
+      <li class="has-submenu">
+        <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
+        <ul class="submenu">
+            <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+        </ul>
+    </li>
+ 
+      <li class="has-submenu">
+          <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
+          <ul class="submenu">
+              <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+          </ul>
+      </li>
+     
+      <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
+ 
+
+      <li><a href="showPlan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
+      
+  </ul>
+  <div class="user-info">
+    <div class="user-dropdown">
+      👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+      <i class="fas fa-caret-up dropdown-icon"></i>
+      <ul class="dropdown-menu">
+        <li id="sign-out-btn">ออกจากระบบ</li>
+      </ul>
+    </div>
+  </div>
+</div>  
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <header class="header">
+      <h1>แผนการเงินปัจจุบัน</h1>
+    </header>
+
+    <!-- ส่วนแสดงผลสุขภาพทางการเงิน -->
+    <section class="financial-status">
+      <h2>ผลสุขภาพทางการเงิน</h2>
+      <div class="status-wrapper">
+        <!-- การออม -->
+        <div class="status-box">
+          <div id="saving-circle" class="circle"></div>
+          <div id="saving-text" class="status-text"></div>
+          <div id="saving-detail" class="status-detail"></div>
+        </div>
+        <!-- ความมั่งคั่ง -->
+        <div class="status-box">
+          <div id="wealth-circle" class="circle"></div>
+          <div id="wealth-text" class="status-text"></div>
+          <div id="wealth-detail" class="status-detail"></div>
+        </div>
+        <!-- เงินฉุกเฉิน -->
+        <div class="status-box">
+          <div id="emergency-circle" class="circle"></div>
+          <div id="emergency-text" class="status-text"></div>
+          <div id="emergency-detail" class="status-detail"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- สรุปแผนการเงินและคำแนะนำ -->
+    <section class="plan-summary-section">
+      <h2>สรุปแผนการเงินและคำแนะนำ</h2>
+      <div id="plan-summary"></div>
+    </section>
+
+    <footer class="footer">
+        <button class="btn orange" onclick="window.location.href='edit-dash.html';">ปรับแผน</button>
+        <button onclick="openModal()">ยืนยัน</button>
+        <span class="close" onclick="closeModal()">&times;</span>
+    </footer>
+    
+  <!-- Modal Overlay -->
+  <div class="modal" id="myModal" style="display: none;">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="checkmark">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="38" fill="#fff" stroke="#4CAF50" stroke-width="4"/>
+          <path d="M28 40l8 8 16-20" stroke="#4CAF50" stroke-width="4" fill="none"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <p>แผนการเงินของคุณอัพเดตแล้ว</p>
+      <button class="btn" onclick="window.location.href='dashboard.html'">OK</button>
+    </div>
+  </div>
+
+ 
+  <script type="module" src="../javascript/plan.js"></script>
+  
+  <script type="module" src="../javascript/nav.js"></script>
+  <script type="module" src="../javascript/currentPlan.js"></script>
+  
+</body>
+</html>

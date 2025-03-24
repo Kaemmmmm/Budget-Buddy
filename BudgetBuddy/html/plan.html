@@ -2,88 +2,80 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>แผนการเงินปัจจุบัน</title>
+  <title>ดูแผนการเงิน</title>
+  <link rel="stylesheet" href="../css/plan.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;900&display=swap"
-    rel="stylesheet"
-  >
-  <!-- Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-  <!-- ไฟล์ CSS -->
-  <link rel="stylesheet" href="../css/plan.css">
 </head>
 <body>
- <!-- SIDEBAR -->
- <div class="sidebar">
-  <ul class="menu">
-      <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
-      <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
-      <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
-      
-      <li class="has-submenu">
-          <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
-          <ul class="submenu">
+  <div class="sidebar">
+    <div class="sidebar">
+        <ul class="menu">
+          <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
+          <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
+          <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
+          
+          <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
+            <ul class="submenu">
               <li><a href="calculator.html">คำนวณDCA</a></li>
-              <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
-          </ul>
-      </li>
- 
-      <li class="has-submenu">
-        <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
-        <ul class="submenu">
-            <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+              <li><a href="dca-progress.html">ความคืบหน้าDCA</a></li>
+            </ul>
+          </li>
+    
+          <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
+            <ul class="submenu">
+                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+            </ul>
+        </li>
+    
+          <li class="has-submenu">
+            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
+            <ul class="submenu">
+              <li><a href="saving-progress.html">ความคืบหน้าของการออม</a></li>
+            </ul>
+          </li>
+    
+          <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
+    
+          <li><a href="showPlan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
         </ul>
-    </li>
- 
-      <li class="has-submenu">
-          <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
-          <ul class="submenu">
-              <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
-          </ul>
-      </li>
-     
-      <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
- 
-
-      <li><a href="showPlan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
-      
-  </ul>
-  <div class="user-info">
-    <div class="user-dropdown">
-      👤 <span class="user-name">กำลังโหลดชื่อ...</span>
-      <i class="fas fa-caret-up dropdown-icon"></i>
-      <ul class="dropdown-menu">
-        <li id="sign-out-btn">ออกจากระบบ</li>
-      </ul>
-    </div>
+    
+        <div class="user-info">
+          <div class="user-dropdown">
+            👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+            <i class="fas fa-caret-up dropdown-icon"></i>
+            <ul class="dropdown-menu">
+              <li id="sign-out-btn">ออกจากระบบ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+        </div>
   </div>
-</div>  
 
-  <!-- MAIN CONTENT -->
   <div class="container">
     <header class="header">
-      <h1>แผนการเงินปัจจุบัน</h1>
+      <h1 id="plan-title">แผนการเงิน</h1>
     </header>
 
-    <!-- ส่วนแสดงผลสุขภาพทางการเงิน -->
+    <!-- สุขภาพทางการเงิน -->
     <section class="financial-status">
       <h2>ผลสุขภาพทางการเงิน</h2>
       <div class="status-wrapper">
-        <!-- การออม -->
         <div class="status-box">
           <div id="saving-circle" class="circle"></div>
           <div id="saving-text" class="status-text"></div>
           <div id="saving-detail" class="status-detail"></div>
         </div>
-        <!-- ความมั่งคั่ง -->
         <div class="status-box">
           <div id="wealth-circle" class="circle"></div>
           <div id="wealth-text" class="status-text"></div>
           <div id="wealth-detail" class="status-detail"></div>
         </div>
-        <!-- เงินฉุกเฉิน -->
         <div class="status-box">
           <div id="emergency-circle" class="circle"></div>
           <div id="emergency-text" class="status-text"></div>
@@ -92,38 +84,94 @@
       </div>
     </section>
 
-    <!-- สรุปแผนการเงินและคำแนะนำ -->
+    <!-- สรุปคำแนะนำ -->
     <section class="plan-summary-section">
       <h2>สรุปแผนการเงินและคำแนะนำ</h2>
       <div id="plan-summary"></div>
     </section>
-
-    <footer class="footer">
-        <button class="btn orange" onclick="window.location.href='edit-dash.html';">ปรับแผน</button>
-        <button class="btn blue" onclick="openModal()">ยืนยัน</button>
-    </footer>
-    
-  <!-- Modal Overlay -->
-  <div class="modal" id="myModal" style="display: none;">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal()">&times;</span>
-      <div class="checkmark">
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="40" cy="40" r="38" fill="#fff" stroke="#4CAF50" stroke-width="4"/>
-          <path d="M28 40l8 8 16-20" stroke="#4CAF50" stroke-width="4" fill="none"
-                stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <p>แผนการเงินของคุณอัพเดตแล้ว</p>
-      <button class="btn" onclick="window.location.href='dashboard.html'">OK</button>
-    </div>
   </div>
 
- 
-  <script src="../javascript/plan.js"></script>
-  
-  <script type="module" src="../javascript/nav.js"></script>
-  <script type="module" src="../javascript/currentPlan.js"></script>
-  <script type="module" src="../javascript/planNav.js"></script>
+  <script type="module">
+    import { db, auth } from "../javascript/firebase.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const type = urlParams.get("type");
+    const id = urlParams.get("id");
+
+    const statusMap = {
+      "ดีมาก": { color: "circle-green", icon: "fa-shield-heart" },
+      "พอใช้": { color: "circle-yellow", icon: "fa-face-meh" },
+      "ต้องปรับปรุง": { color: "circle-red", icon: "fa-triangle-exclamation" }
+    };
+
+    function updateStatus(circleId, textId, detailId, status, detailText) {
+      const circleEl = document.getElementById(circleId);
+      const textEl = document.getElementById(textId);
+      const detailEl = document.getElementById(detailId);
+      const conf = statusMap[status];
+      if (!circleEl || !textEl || !detailEl || !conf) return;
+      circleEl.className = `circle ${conf.color}`;
+      circleEl.innerHTML = `<i class="fa-solid ${conf.icon}"></i>`;
+      textEl.textContent = status;
+      detailEl.textContent = detailText;
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return;
+      try {
+        let planRef;
+        if (type === "current") {
+          planRef = doc(db, "plan", user.uid);
+        } else if (type === "history" && id) {
+          planRef = doc(db, "plan", user.uid, "planHistory", id);
+        } else {
+          document.getElementById("plan-title").textContent = "❌ URL ไม่ถูกต้อง";
+          return;
+        }
+
+        const snap = await getDoc(planRef);
+        if (!snap.exists()) {
+          document.getElementById("plan-title").textContent = "❌ ไม่พบแผน";
+          return;
+        }
+
+        const data = snap.data();
+        document.getElementById("plan-title").textContent = type === "current" ? "แผนการเงินปัจจุบัน" : "แผนการเงินย้อนหลัง";
+
+        // Read fields
+        const { income, expense, debt, dcaInvested, savingsAmount, emergencyFund } = data;
+        const totalInstallmentPaid = 0; // if needed, calculate if data includes it
+        const savings = (dcaInvested || 0) + (savingsAmount || 0) + (emergencyFund || 0);
+        const netAssets = income - expense - debt;
+        const monthsCovered = expense > 0 ? emergencyFund / expense : 0;
+
+        let savingsStatus = "ต้องปรับปรุง";
+        let wealthStatus = "ต้องปรับปรุง";
+        let emergencyStatus = "ต้องปรับปรุง";
+
+        if (savings >= 0.10 * income) savingsStatus = "ดีมาก";
+        else if (savings >= 0.05 * income) savingsStatus = "พอใช้";
+
+        if (netAssets >= 0.50 * income) wealthStatus = "ดีมาก";
+        else if (netAssets >= 0.20 * income) wealthStatus = "พอใช้";
+
+        if (monthsCovered >= 6) emergencyStatus = "ดีมาก";
+        else if (monthsCovered >= 3) emergencyStatus = "พอใช้";
+
+        updateStatus("saving-circle", "saving-text", "saving-detail", savingsStatus, `การออม ${((savings / income) * 100).toFixed(1)}% ของรายได้`);
+        updateStatus("wealth-circle", "wealth-text", "wealth-detail", wealthStatus, `สินทรัพย์สุทธิ ${((netAssets / income) * 100).toFixed(1)}% ของรายได้`);
+        updateStatus("emergency-circle", "emergency-text", "emergency-detail", emergencyStatus, `เงินฉุกเฉินครอบคลุม ${monthsCovered.toFixed(1)} เดือน`);
+
+        // สรุป
+        const summaryText = `สรุปแผนการเงิน:\n- การออม: ${savingsStatus}\n- ความมั่งคั่ง: ${wealthStatus}\n- เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน\n\nคำแนะนำ: ${data.plan || "ไม่มีคำแนะนำ"}`;
+        document.getElementById("plan-summary").textContent = summaryText;
+      } catch (err) {
+        console.error(err);
+        document.getElementById("plan-title").textContent = "เกิดข้อผิดพลาดในการโหลดแผน";
+      }
+    });
+  </script>
 </body>
 </html>

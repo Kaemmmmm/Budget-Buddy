@@ -1,8 +1,12 @@
-
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, getDoc, setDoc, collection, addDoc
- } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+// ตัวแปรเก็บข้อมูลที่ใช้เมื่อคลิก "ยืนยัน"
+let cachedSummaryText = "";
+let cachedFinancialData = {};
+
+export { saveUserPlan, cachedSummaryText, cachedFinancialData };
 
 
 // ฟังก์ชันดึงข้อมูลและประเมินสุขภาพทางการเงิน
@@ -11,14 +15,13 @@ async function loadAssessmentData() {
   const DocRef = doc(db, "goal", userId);
   const docSnap = await getDoc(DocRef);
 
-  if(!docSnap.exists()) {
-    console.error("ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อน")
+  if (!docSnap.exists()) {
+    console.error("ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อน");
     return;
   }
 
   const data = docSnap.data();
 
-  // ดึงข้อมูลจากฐานข้อมูล
   const income = parseFloat(data.income) || 0;
   const expense = parseFloat(data.expense) || 0;
   const debt = parseFloat(data.debt) || 0;
@@ -29,62 +32,50 @@ async function loadAssessmentData() {
   const savingsAmount = parseFloat(data.savings?.amount) || 0;
   const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
 
-  // คำนวณค่า
   const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
   const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
   const netAssets = income - expense - debt;
   const monthsCovered = expense > 0 ? (emergencyFund / expense) : 0;
 
-  // ตัวแปรสถานะ
   let savingsStatus, wealthStatus, emergencyStatus;
-  
-  // ประเมินการออม
+
+  // การออม
   if (savings >= 0.10 * income) {
-    updateStatus("saving-circle", "saving-text", "saving-detail",
-      "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
+    updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
     savingsStatus = "ดีมาก";
-  } else if (savings >= 0.05 * income && savings < 0.10 * income) {
-    updateStatus("saving-circle", "saving-text", "saving-detail",
-      "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้");
+  } else if (savings >= 0.05 * income) {
+    updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้");
     savingsStatus = "พอใช้";
   } else {
-    updateStatus("saving-circle", "saving-text", "saving-detail",
-      "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้");
+    updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้");
     savingsStatus = "ต้องปรับปรุง";
   }
-  
-  // ประเมินความมั่งคั่ง
+
+  // ความมั่งคั่ง
   if (netAssets >= 0.50 * income) {
-    updateStatus("wealth-circle", "wealth-text", "wealth-detail",
-      "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
+    updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
     wealthStatus = "ดีมาก";
-  } else if (netAssets >= 0.20 * income && netAssets < 0.5 * income) {
-    updateStatus("wealth-circle", "wealth-text", "wealth-detail",
-      "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้");
+  } else if (netAssets >= 0.20 * income) {
+    updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้");
     wealthStatus = "พอใช้";
   } else {
-    updateStatus("wealth-circle", "wealth-text", "wealth-detail",
-      "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้");
+    updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้");
     wealthStatus = "ต้องปรับปรุง";
   }
 
-  // ประเมินเงินฉุกเฉิน
-  if (monthsCovered > 6) {
-    updateStatus("emergency-circle", "emergency-text", "emergency-detail",
-      "circle-green", "ดีมาก", "เงินฉุกเฉินครอบคลุม > 6 เดือน");
+  // เงินฉุกเฉิน
+  if (monthsCovered >= 6) {
+    updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-green", "ดีมาก", "เงินฉุกเฉินครอบคลุม > 6 เดือน");
     emergencyStatus = "ดีมาก";
   } else if (monthsCovered >= 3) {
-    updateStatus("emergency-circle", "emergency-text", "emergency-detail",
-      "circle-yellow", "พอใช้", "เงินฉุกเฉินครอบคลุม 3-6 เดือน");
+    updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-yellow", "พอใช้", "เงินฉุกเฉินครอบคลุม 3-6 เดือน");
     emergencyStatus = "พอใช้";
   } else {
-    updateStatus("emergency-circle", "emergency-text", "emergency-detail",
-      "circle-red", "ต้องปรับปรุง", "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน");
+    updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-red", "ต้องปรับปรุง", "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน");
     emergencyStatus = "ต้องปรับปรุง";
   }
-  
-  // เรียกใช้ฟังก์ชันแสดงสรุปแผนการเงินและคำแนะนำ
-  displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund,  savings, netAssets, monthsCovered });
+
+  displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund, savings, netAssets, monthsCovered });
 }
 
 // ฟังก์ชันอัปเดตสถานะใน UI
@@ -92,33 +83,30 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
   const circleEl = document.getElementById(circleId);
   const textEl = document.getElementById(textId);
   const detailEl = document.getElementById(detailId);
-  if (!circleEl || !textEl || !detailEl) {
-    console.error("ไม่พบ element ใน UI:", circleId, textId, detailId);
-    return;
-  }
+  if (!circleEl || !textEl || !detailEl) return;
+
   circleEl.classList.remove("circle-green", "circle-yellow", "circle-red");
   circleEl.classList.add(colorClass);
-  
+
   if (colorClass === "circle-green") {
     circleEl.innerHTML = '<i class="fa-solid fa-shield-heart"></i>';
   } else if (colorClass === "circle-yellow") {
     circleEl.innerHTML = '<i class="fa-solid fa-face-meh"></i>';
-  } else if (colorClass === "circle-red") {
+  } else {
     circleEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
   }
-  
+
   textEl.textContent = titleText;
   detailEl.textContent = detailText;
 }
 
-// ฟังก์ชันแสดงสรุปแผนการเงินและคำแนะนำ
+// ฟังก์ชันแสดงสรุปแผน (ยังไม่บันทึก)
 function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund, savings, netAssets, monthsCovered }) {
   const planSummaryEl = document.getElementById("plan-summary");
   if (!planSummaryEl) return;
-  
+
   let recommendation = "";
-  
-  // คำแนะนำสำหรับการออม
+
   if (savingsStatus === "ดีมาก") {
     recommendation += "ยอดเงินออมของคุณอยู่ในระดับดีมาก คุณสามารถสานต่อแนวทางการออมที่มีวินัยอยู่แล้ว. ";
   } else if (savingsStatus === "พอใช้") {
@@ -126,8 +114,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   } else {
     recommendation += "การออมของคุณต่ำเกินไป ควรลดรายจ่ายและวางแผนเพิ่มการออมให้มากขึ้น. ";
   }
-  
-  // คำแนะนำสำหรับความมั่งคั่ง
+
   if (wealthStatus === "ดีมาก") {
     recommendation += "สินทรัพย์ของคุณอยู่ในระดับดี แสดงถึงความสามารถในการบริหารการเงินที่ยอดเยี่ยม. ";
   } else if (wealthStatus === "พอใช้") {
@@ -135,8 +122,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   } else {
     recommendation += "สถานะสินทรัพย์ของคุณยังควรปรับปรุง ควรมีแผนการลงทุนที่เหมาะสมและการจัดสรรสินทรัพย์ใหม่. ";
   }
-  
-  // คำแนะนำสำหรับเงินฉุกเฉิน
+
   if (emergencyStatus === "ดีมาก") {
     recommendation += "เงินฉุกเฉินของคุณเพียงพอสำหรับสถานการณ์ฉุกเฉิน.";
   } else if (emergencyStatus === "พอใช้") {
@@ -144,7 +130,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
   } else {
     recommendation += "เงินฉุกเฉินของคุณไม่เพียงพอ ควรเพิ่มการสะสมเงินฉุกเฉินอย่างน้อย 3 เดือนของรายจ่าย.";
   }
-  
+
   const summaryText = `
     สรุปแผนการเงิน:
     - การออม: ${savingsStatus}
@@ -153,68 +139,80 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, inco
     
     คำแนะนำ: ${recommendation}
   `;
-  
+
+  // เก็บข้อมูลไว้ก่อน ยังไม่บันทึก
+  cachedSummaryText = summaryText;
+  cachedFinancialData = { income, expense, debt, dcaInvested, savingsAmount, emergencyFund };
+
   planSummaryEl.textContent = summaryText;
-  saveUserPlan(summaryText, { income, expense, debt, dcaInvested, savingsAmount, emergencyFund });
 }
 
+// ฟังก์ชันบันทึกแผนการเงิน (เมื่อคลิกปุ่มยืนยัน)
 async function saveUserPlan(planSummaryHTML, financialData) {
+  console.log("🔁 Running saveUserPlan()");
+
   const user = auth.currentUser;
   if (!user) {
-    console.error("ผู้ใช้ยังไม่ได้ล็อกอิน");
+    console.error("🚫 ผู้ใช้ยังไม่ได้ล็อกอิน");
     return;
   }
-  
+
+  console.log("👤 Logged-in user ID:", user.uid);
+  console.log("📝 Summary to save:", planSummaryHTML);
+  console.log("💰 Financial data:", financialData);
+
   const goalDocRef = doc(db, "goal", user.uid);
   const goalSnap = await getDoc(goalDocRef);
   if (!goalSnap.exists()) {
-    console.error("ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อนสร้าง plan");
+    console.error("🚫 ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อนสร้าง plan");
     return;
-  }  
+  }
 
   const planDocRef = doc(db, "plan", user.uid);
+  console.log("📄 Plan document path:", planDocRef.path);
 
   try {
-    // 1) ดึงข้อมูลแผนปัจจุบัน (ถ้ามี) เพื่อนำไปเก็บเป็นประวัติ
     const currentPlanSnap = await getDoc(planDocRef);
+
     if (currentPlanSnap.exists()) {
-      const oldPlandata = currentPlanSnap.data();
+      const oldPlanData = currentPlanSnap.data();
 
-      if(oldPlandata.plan !== planSummaryHTML) {
-      // เก็บข้อมูลปัจจุบันลงใน sub-collection "planHistory"
-      const historyCollectionRef = collection(planDocRef, "planHistory");
-      await addDoc(historyCollectionRef, {
-        ...currentPlanSnap.data(),
-        archivedAt: new Date()
-      });
+      if (oldPlanData.plan !== planSummaryHTML) {
+        const historyCollectionRef = collection(planDocRef, "planHistory");
+        console.log("📦 Archiving previous plan to planHistory");
+        await addDoc(historyCollectionRef, {
+          ...oldPlanData,
+          archivedAt: new Date()
+        });
+      } else {
+        console.log("📌 Plan hasn't changed — skipping archive");
+      }
+    } else {
+      console.log("🆕 Creating new plan for the user");
     }
-  
+
+    await setDoc(planDocRef, {
+      plan: planSummaryHTML,
+      planUpdatedAt: new Date(),
+      ...financialData
+    }, { merge: true });
+
+    console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว");
+  } catch (error) {
+    console.error("❌ เกิดข้อผิดพลาดในการบันทึกแผนการเงิน:", error);
+    throw error;
   }
-  // ใช้ setDoc พร้อม merge: true เพื่ออัปเดต field plan และ planUpdatedAt
-await setDoc(planDocRef, {
-    plan: planSummaryHTML,
-    planUpdatedAt: new Date(),
-    income: financialData.income,
-    expense: financialData.expense,
-    debt: financialData.debt,
-    dcaInvested: financialData.dcaInvested,
-    savingsAmount: financialData.savingsAmount,
-    emergencyFund: financialData.emergencyFund
-  }, { merge: true });
-
-  console.log("บันทึกแผนการเงิน (และเก็บประวัติ) ลง Firebase เรียบร้อยแล้ว");
-} catch (error) {
-  console.error("เกิดข้อผิดพลาดในการบันทึกแผนการเงิน:", error);
-}
 }
 
-// ตรวจสอบผู้ใช้และเรียกใช้ฟังก์ชัน loadAssessmentData
+
+
+// ตรวจสอบผู้ใช้
 onAuthStateChanged(auth, (user) => {
   if (user) {
     loadAssessmentData();
-    loadAllPlansForUser();
   } else {
     console.log("ไม่มีผู้ใช้ล็อกอิน");
   }
 });
+
 
