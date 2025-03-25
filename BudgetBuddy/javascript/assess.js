@@ -63,7 +63,7 @@ async function loadAssessmentData() {
   // Saving assessment
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้ แสดงถึงสภาพคล่องและวินัยการออมที่ดี");
-  } else if (avings >= 0.05 * income && savings < 0.10 * income) {
+  } else if (savings >= 0.05 * income && savings < 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้ ยังพอใช้ได้ แต่ควรเพิ่มขึ้นเพื่อความมั่นคง");
   } else {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้ ค่อนข้างน้อย ควรเพิ่มการออม");
