@@ -27,9 +27,9 @@ async function loadAssessmentData() {
   const savingsAmount = parseFloat(data.savings?.amount) || 0;
   const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
 
-  const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-  const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
-  const netAssets = income - expense - debt;
+  const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12)) || 0;
+  const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund || 0;
+  const netAssets = income - expense - debt || 0;
   const monthsCovered = expense > 0 ? (emergencyFund / expense) : 0;
 
   // Load transactions to assess debt status
@@ -79,7 +79,7 @@ async function loadAssessmentData() {
   }
 
   // Debt assessment
-  if (totalDebtTransactions == 0) {
+  if (totalDebtTransactions <= 0) {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-green", "ไม่มีหนี้", "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี");
   } else if (!hasUnpaidDebt && !hasLatePayment) {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-yellow", "ผ่อนตรงเวลา", "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้");
