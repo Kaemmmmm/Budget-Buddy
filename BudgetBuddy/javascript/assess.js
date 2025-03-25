@@ -27,9 +27,9 @@ async function loadAssessmentData() {
   const savingsAmount = parseFloat(data.savings?.amount) || 0;
   const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
 
-  const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12)) || 0;
-  const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund || 0;
-  const netAssets = income - expense - debt || 0;
+  const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
+  const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
+  const netAssets = income - expense - debt;
   const monthsCovered = expense > 0 ? (emergencyFund / expense) : 0;
 
   // Load transactions to assess debt status
@@ -43,7 +43,7 @@ async function loadAssessmentData() {
     const transaction = transactionDoc.data();
   
     // Check only debt-related transactions
-    if (["debt", "loan", "installment", "DCA"].includes(transaction.type)) {
+    if (["debt", "loan", "installment", "DCA", "bill"].includes(transaction.type)) {
       if (transaction.paid === false) hasUnpaidDebt = true;
       if (transaction.onTime === false) hasLatePayment = true;
     }
@@ -63,7 +63,7 @@ async function loadAssessmentData() {
   // Saving assessment
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้ แสดงถึงสภาพคล่องและวินัยการออมที่ดี");
-  } else if (savings >= 0.05 * income && savings < 0.10 * income) {
+  } else if (savings >= 0.05 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้ ยังพอใช้ได้ แต่ควรเพิ่มขึ้นเพื่อความมั่นคง");
   } else {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้ ค่อนข้างน้อย ควรเพิ่มการออม");
@@ -72,7 +72,7 @@ async function loadAssessmentData() {
   // Wealth assessment
   if (netAssets >= 0.5 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้ต่อเดือน สะท้อนความมั่งคั่งสูง");
-  } else if (netAssets >= 0.20 * income && netAssets < 0.50 * income) {
+  } else if (netAssets >= 0.20 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้ต่อเดือน ควรเพิ่มสินทรัพย์หรือปรับลดหนี้");
   } else {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้ต่อเดือน เสี่ยงต่อปัญหาการเงินในอนาคต");

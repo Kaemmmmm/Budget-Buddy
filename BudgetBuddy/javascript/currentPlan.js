@@ -44,7 +44,7 @@ async function loadAssessmentData() {
   snapshot.forEach((transactionDoc) => {
     const transaction = transactionDoc.data();
 
-    if (["debt", "loan", "installment", "DCA"].includes(transaction.type)) {
+    if (["debt", "loan", "installment", "DCA", "bill"].includes(transaction.type)) {
       if (transaction.paid === false) hasUnpaidDebt = true;
       if (transaction.onTime === false) hasLatePayment = true;
     }
@@ -59,39 +59,39 @@ async function loadAssessmentData() {
   // Saving
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
-    savingsStatus = "ดีมาก เนื่องจากการออมของคุณมีมากกว่า 10% ของรายได้ต่อเดือน";
+    savingsStatus = "ดีมาก";
   } else if (savings >= 0.05 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้");
-    savingsStatus = "พอใช้ เนื่องจากการออมของคุณครอบคลุม 5-9% ของรายได้ต่อเดือน";
+    savingsStatus = "พอใช้";
   } else {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้");
-    savingsStatus = "ต้องปรับปรุง เนื่องจากการออมของคุณน้อยกว่า 5% ของรายได้ต่อเดือน";
+    savingsStatus = "ต้องปรับปรุง";
   }
 
   // Wealth
   if (netAssets >= 0.50 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
-    wealthStatus = "ดีมาก เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้คงเหลือมากกว่าหรือเท่ากับ 50% ของรายได้ต่อเดือน";
+    wealthStatus = "ดีมาก";
   } else if (netAssets >= 0.20 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้");
-    wealthStatus = "พอใช้ เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้มีคงเหลือ 20-49% ของรายได้ต่อเดือน";
+    wealthStatus = "พอใช้";
   } else {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้");
-    wealthStatus = "ต้องปรับปรุง เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้มีคงเหลือน้อยกว่า 20% ของรายได้ต่อเดือน";
+    wealthStatus = "ต้องปรับปรุง";
   }
 
   // Debt
   if (totalDebtTransactions <= 0) {
-    debtStatus = "ไม่มีหนี้ เนื่องจากไม่มีค่าใช้จ่ายที่ต้องชำระ";
+    debtStatus = "ไม่มีหนี้";
   } else if (!hasUnpaidDebt && !hasLatePayment) {
-    debtStatus = "ผ่อนตรงเวลา เนื่องจากคุณมีหนี้แต่สามารถชำระได้ตรงเวลา";
+    debtStatus = "ผ่อนตรงเวลา";
   } else {
-    debtStatus = "มีหนี้ค้างชำระ เนื่องจากคุณมีหนี้และไม่มีความสามารถในการชำระหนี้ได้ตรงเวลา";
+    debtStatus = "มีหนี้ค้างชำระ";
   }
 
-  if (debtStatus === "ไม่มีหนี้ เนื่องจากไม่มีค่าใช้จ่ายที่ต้องชำระ") {
+  if (debtStatus === "ไม่มีหนี้") {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-green", "ไม่มีหนี้", "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี");
-  } else if (debtStatus === "ผ่อนตรงเวลา เนื่องจากคุณมีหนี้แต่สามารถชำระได้ตรงเวลา") {
+  } else if (debtStatus === "ผ่อนตรงเวลา") {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-yellow", "ผ่อนตรงเวลา", "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้");
   } else {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-red", "มีหนี้ค้างชำระ", "มีหนี้ที่ค้างชำระหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้");
@@ -101,13 +101,13 @@ async function loadAssessmentData() {
   // Emergency
   if (monthsCovered >= 6) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-green", "ดีมาก", "เงินฉุกเฉินครอบคลุม > 6 เดือน");
-    emergencyStatus = "ดีมาก เนื่องจากคุณมีเงินสำรองครอบคลุมมากกว่า 6 เดือนของรายได้ต่อเดือน";
+    emergencyStatus = "ดีมาก";
   } else if (monthsCovered >= 3) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-yellow", "พอใช้", "เงินฉุกเฉินครอบคลุม 3-6 เดือน");
-    emergencyStatus = "พอใช้ เนื่องจากคุณมีเงินสำรองครอบคลุมอยู่ที่ 3-6 เดือนของรายได้ต่อเดือน";
+    emergencyStatus = "พอใช้";
   } else {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-red", "ต้องปรับปรุง", "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน");
-    emergencyStatus = "ต้องปรับปรุง เนื่องจากคุณมีเงินสำรองครอบคลุมน้อยกว่า 3 เดือนของรายได้ต่อเดือน";
+    emergencyStatus = "ต้องปรับปรุง";
   }
 
   displayPlanSummary({ 
@@ -164,28 +164,28 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debt
 
   let recommendation = "";
 
-  recommendation += savingsStatus === "ดีมาก" ? "การออมของคุณอยู่ในระดับดีมาก รักษาวินัยในการออมเงินให้คงที่. " :
-    savingsStatus === "พอใช้" ? "การออมของคุณอยู่ในระดับพอใช้ ควรปรับปรุงอัตราการออมเพิ่มขึ้นเล็กน้อย. " :
-    "การออมของคุณต่ำเกินไป ปรับปรุงอัตราการออมอย่างเร่งด่วน.";
+  recommendation += savingsStatus === "ดีมาก" ? "ยอดเงินออมของคุณอยู่ในระดับดีมาก คุณสามารถสานต่อแนวทางการออมที่มีวินัยอยู่แล้ว. " :
+    savingsStatus === "พอใช้" ? "การออมของคุณอยู่ในระดับพอใช้ ควรเพิ่มการออมอีกเล็กน้อย. " :
+    "การออมของคุณต่ำเกินไป ควรเพิ่มการออมให้มากขึ้น. ";
 
-  recommendation += wealthStatus === "ดีมาก" ? "สินทรัพย์สุทธิของคุณอยู่ในระดับดีมาก รักษาวินัยการใช้จ่ายของคุณให้คงที่. " :
-    wealthStatus === "พอใช้" ? "สินทรัพย์ของคุณอยู่ในระดับปานกลาง ควรปรับลดค่าใช้จ่ายที่ไม่จำเป็นหรือเพิ่มรายรับ." :
-    "สินทรัพย์ของคุณคงเหลือน้อยเกินไป ปรับลดค่าใช้จ่ายที่ไม่จำเป็นหรือเพิ่มรายรับ อาจปรึกษาผู้เชี่ยวชาญเพิ่มหากสถานะทางการเงินเปราะบาง";
+  recommendation += wealthStatus === "ดีมาก" ? "สินทรัพย์สุทธิของคุณอยู่ในระดับดีมาก. " :
+    wealthStatus === "พอใช้" ? "สินทรัพย์ของคุณอยู่ในระดับปานกลาง ควรลงทุนเพิ่ม. " :
+    "คุณควรปรับปรุงการบริหารสินทรัพย์. ";
 
-  recommendation += debtStatus === "ไม่มีหนี้" ? "คุณไม่มีหนี้ที่ต้องกังวล รักษาวินัยการใช้จ่ายของคุณไม่ให้เป็นหนี้ต่อไป. " :
-    debtStatus === "ผ่อนตรงเวลา" ? "คุณมีหนี้แต่บริหารได้ดี ควรปรับลดภาระหนี้ เพื่อความมั่นคงทางการเงินมากยิ่งขึ้น และลดค่าใช้จ่ายในระยะยาว. " :
-    "คุณมีหนี้ค้างชำระ ควรจัดการแผนชำระหนี้อย่างจริงจังและกำหนดการจ่ายให้ตรงเวลา.";
+  recommendation += debtStatus === "ไม่มีหนี้" ? "คุณไม่มีหนี้ที่ต้องกังวล ถือว่าดีมาก. " :
+    debtStatus === "ผ่อนตรงเวลา" ? "คุณมีหนี้แต่บริหารได้ดี ชำระตรงเวลาอย่างสม่ำเสมอ. " :
+    "คุณมีหนี้ค้างชำระ ควรเร่งจัดการและชำระให้ทันกำหนด. ";
 
-  recommendation += emergencyStatus === "ดีมาก" ? "เงินฉุกเฉินของคุณเพียงพอสำหรับสถานการณ์ฉุกเฉิน รักษาวินัยการเก็บเงินสำรองฉุกเฉิน และทบทวนค่าใช้จ่ายเป็นประจำเพื่อปรับยอดเงินสำรองฉุกเฉินให้เหมาะสม." :
-    emergencyStatus === "พอใช้" ? "เงินฉุกเฉินของคุณพอใช้ได้ ปรับลดค่าใช้จ่ายบางอย่าง เพื่อนำมาเก็บเพิ่มในเงินสำรองฉุกเฉิน. " :
-    "เงินฉุกเฉินของคุณน้อยเกินไป ปรับลดค่าใช้จ่ายที่ไม่จำเป็นอย่างเร่งด่วนและหารายได้เสริม เพื่อนำมาเก็บเพิ่มในเงินสำรองฉุกเฉิน.";
+  recommendation += emergencyStatus === "ดีมาก" ? "เงินฉุกเฉินของคุณเพียงพอสำหรับสถานการณ์ฉุกเฉิน. " :
+    emergencyStatus === "พอใช้" ? "เงินฉุกเฉินของคุณพอใช้ได้ แต่ควรเพิ่มอีกเล็กน้อย. " :
+    "เงินฉุกเฉินของคุณน้อยเกินไป ควรสะสมเพิ่มให้เพียงพอ. ";
 
   const summaryText = `
     สรุปแผนการเงิน:
     - การออม: ${savingsStatus}
     - ความมั่งคั่ง: ${wealthStatus}
     - สถานะหนี้: ${debtStatus}
-    - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน,${emergencyStatus}
+    - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน
 
     คำแนะนำ: ${recommendation}
   `;
@@ -252,6 +252,8 @@ async function saveUserPlan(planSummaryHTML, financialData) {
     throw error;
   }
 }
+
+
 
 // ตรวจสอบผู้ใช้
 onAuthStateChanged(auth, (user) => {
