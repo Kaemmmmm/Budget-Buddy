@@ -191,7 +191,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debt
   `;
 
   cachedSummaryText = summaryText;
-  cachedFinancialData = { income, expense, debt, dcaInvested, savingsAmount, emergencyFund };
+  cachedFinancialData = { income, expense, debt, dcaInvested, savingsAmount, emergencyFund, debtStatus };
 
   planSummaryEl.textContent = summaryText;
 }
@@ -243,8 +243,8 @@ async function saveUserPlan(planSummaryHTML, financialData) {
     await setDoc(planDocRef, {
       plan: planSummaryHTML,
       planUpdatedAt: new Date(),
-      ...financialData
-    }, { merge: true });
+      ...financialData  // ← จะรวม debtStatus ไปแล้ว
+    }, { merge: true });    
 
     console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว");
   } catch (error) {
