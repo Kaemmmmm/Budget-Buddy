@@ -74,13 +74,7 @@ onAuthStateChanged(auth, async (user) => {
     updateStatus("debt-circle", "debt-text", "debt-detail", debtStatus, debtDetailText); // ✅ ใช้ค่าจาก plan โดยตรง
 
     const summaryText = `
-      สรุปแผนการเงิน:
-      - การออม: ${savingsStatus}
-      - ความมั่งคั่ง: ${wealthStatus}
-      - สถานะหนี้: ${debtStatus}
-      - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน
-
-      คำแนะนำ: ${data.plan || "ไม่มีคำแนะนำ"}
+       ${data.plan || "ไม่มีคำแนะนำ"}
     `;
     document.getElementById("plan-summary").textContent = summaryText;
 
