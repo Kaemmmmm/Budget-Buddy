@@ -63,7 +63,7 @@ async function loadAssessmentData() {
   // Saving assessment
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้ แสดงถึงสภาพคล่องและวินัยการออมที่ดี");
-  } else if (savings >= 0.05 * income) {
+  } else if (avings >= 0.05 * income && savings < 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้ ยังพอใช้ได้ แต่ควรเพิ่มขึ้นเพื่อความมั่นคง");
   } else {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้ ค่อนข้างน้อย ควรเพิ่มการออม");
@@ -72,14 +72,14 @@ async function loadAssessmentData() {
   // Wealth assessment
   if (netAssets >= 0.5 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้ต่อเดือน สะท้อนความมั่งคั่งสูง");
-  } else if (netAssets >= 0.20 * income) {
+  } else if (netAssets >= 0.20 * income && netAssets < 0.50 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้ต่อเดือน ควรเพิ่มสินทรัพย์หรือปรับลดหนี้");
   } else {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้ต่อเดือน เสี่ยงต่อปัญหาการเงินในอนาคต");
   }
 
   // Debt assessment
-  if (totalDebtTransactions <= 0) {
+  if (totalDebtTransactions == 0) {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-green", "ไม่มีหนี้", "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี");
   } else if (!hasUnpaidDebt && !hasLatePayment) {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-yellow", "ผ่อนตรงเวลา", "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้");
