@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const data = docSnap.data();
-      const expense = data.expense || 10000;
+      const expense = data.expense || 0;
       emergencyGoal = expense * 6;
       savedAmount = data.emergencyFund?.amount || 0;
 

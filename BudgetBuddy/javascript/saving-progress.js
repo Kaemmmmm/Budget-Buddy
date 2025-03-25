@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
           amount = parseFloat(data.savings.amount) || 0;
         } else {
           // If "savings" isn't in the doc, you could optionally initialize it
-          savingGoal = 100000;
+          savingGoal = 0;
           savingDuration = 10;
           amount = 0;
         }
