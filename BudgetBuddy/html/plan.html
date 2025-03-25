@@ -77,6 +77,11 @@
           <div id="wealth-detail" class="status-detail"></div>
         </div>
         <div class="status-box">
+          <div id="debt-circle" class="circle"></div>
+          <div id="debt-text" class="status-text"></div>
+          <div id="debt-detail" class="status-detail"></div>
+        </div>
+        <div class="status-box">
           <div id="emergency-circle" class="circle"></div>
           <div id="emergency-text" class="status-text"></div>
           <div id="emergency-detail" class="status-detail"></div>
@@ -91,87 +96,6 @@
     </section>
   </div>
 
-  <script type="module">
-    import { db, auth } from "../javascript/firebase.js";
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const type = urlParams.get("type");
-    const id = urlParams.get("id");
-
-    const statusMap = {
-      "ดีมาก": { color: "circle-green", icon: "fa-shield-heart" },
-      "พอใช้": { color: "circle-yellow", icon: "fa-face-meh" },
-      "ต้องปรับปรุง": { color: "circle-red", icon: "fa-triangle-exclamation" }
-    };
-
-    function updateStatus(circleId, textId, detailId, status, detailText) {
-      const circleEl = document.getElementById(circleId);
-      const textEl = document.getElementById(textId);
-      const detailEl = document.getElementById(detailId);
-      const conf = statusMap[status];
-      if (!circleEl || !textEl || !detailEl || !conf) return;
-      circleEl.className = `circle ${conf.color}`;
-      circleEl.innerHTML = `<i class="fa-solid ${conf.icon}"></i>`;
-      textEl.textContent = status;
-      detailEl.textContent = detailText;
-    }
-
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
-      try {
-        let planRef;
-        if (type === "current") {
-          planRef = doc(db, "plan", user.uid);
-        } else if (type === "history" && id) {
-          planRef = doc(db, "plan", user.uid, "planHistory", id);
-        } else {
-          document.getElementById("plan-title").textContent = "❌ URL ไม่ถูกต้อง";
-          return;
-        }
-
-        const snap = await getDoc(planRef);
-        if (!snap.exists()) {
-          document.getElementById("plan-title").textContent = "❌ ไม่พบแผน";
-          return;
-        }
-
-        const data = snap.data();
-        document.getElementById("plan-title").textContent = type === "current" ? "แผนการเงินปัจจุบัน" : "แผนการเงินย้อนหลัง";
-
-        // Read fields
-        const { income, expense, debt, dcaInvested, savingsAmount, emergencyFund } = data;
-        const totalInstallmentPaid = 0; // if needed, calculate if data includes it
-        const savings = (dcaInvested || 0) + (savingsAmount || 0) + (emergencyFund || 0);
-        const netAssets = income - expense - debt;
-        const monthsCovered = expense > 0 ? emergencyFund / expense : 0;
-
-        let savingsStatus = "ต้องปรับปรุง";
-        let wealthStatus = "ต้องปรับปรุง";
-        let emergencyStatus = "ต้องปรับปรุง";
-
-        if (savings >= 0.10 * income) savingsStatus = "ดีมาก";
-        else if (savings >= 0.05 * income) savingsStatus = "พอใช้";
-
-        if (netAssets >= 0.50 * income) wealthStatus = "ดีมาก";
-        else if (netAssets >= 0.20 * income) wealthStatus = "พอใช้";
-
-        if (monthsCovered >= 6) emergencyStatus = "ดีมาก";
-        else if (monthsCovered >= 3) emergencyStatus = "พอใช้";
-
-        updateStatus("saving-circle", "saving-text", "saving-detail", savingsStatus, `การออม ${((savings / income) * 100).toFixed(1)}% ของรายได้`);
-        updateStatus("wealth-circle", "wealth-text", "wealth-detail", wealthStatus, `สินทรัพย์สุทธิ ${((netAssets / income) * 100).toFixed(1)}% ของรายได้`);
-        updateStatus("emergency-circle", "emergency-text", "emergency-detail", emergencyStatus, `เงินฉุกเฉินครอบคลุม ${monthsCovered.toFixed(1)} เดือน`);
-
-        // สรุป
-        const summaryText = `สรุปแผนการเงิน:\n- การออม: ${savingsStatus}\n- ความมั่งคั่ง: ${wealthStatus}\n- เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน\n\nคำแนะนำ: ${data.plan || "ไม่มีคำแนะนำ"}`;
-        document.getElementById("plan-summary").textContent = summaryText;
-      } catch (err) {
-        console.error(err);
-        document.getElementById("plan-title").textContent = "เกิดข้อผิดพลาดในการโหลดแผน";
-      }
-    });
-  </script>
+  <script type="module" src="../javascript/plan.js"></script>
 </body>
 </html>

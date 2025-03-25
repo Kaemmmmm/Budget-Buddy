@@ -1,15 +1,12 @@
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { doc, getDoc, setDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+import { doc, getDoc, setDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-// ตัวแปรเก็บข้อมูลที่ใช้เมื่อคลิก "ยืนยัน"
 let cachedSummaryText = "";
 let cachedFinancialData = {};
 
 export { saveUserPlan, cachedSummaryText, cachedFinancialData };
 
-
-// ฟังก์ชันดึงข้อมูลและประเมินสุขภาพทางการเงิน
 async function loadAssessmentData() {
   const userId = auth.currentUser.uid;
   const DocRef = doc(db, "goal", userId);
@@ -37,9 +34,29 @@ async function loadAssessmentData() {
   const netAssets = income - expense - debt;
   const monthsCovered = expense > 0 ? (emergencyFund / expense) : 0;
 
-  let savingsStatus, wealthStatus, emergencyStatus;
+  const transactionsRef = collection(db, "budget", userId, "transaction");
+  const snapshot = await getDocs(transactionsRef);
 
-  // การออม
+  let hasLatePayment = false;
+  let hasUnpaidDebt = false;
+  let totalDebtTransactions = 0;
+
+  snapshot.forEach((transactionDoc) => {
+    const transaction = transactionDoc.data();
+
+    if (["debt", "loan", "installment", "DCA"].includes(transaction.type)) {
+      if (transaction.paid === false) hasUnpaidDebt = true;
+      if (transaction.onTime === false) hasLatePayment = true;
+    }
+
+    if (!["dca", "saving"].includes(transaction.type.toLowerCase())) {
+      totalDebtTransactions += 1;
+    }
+  });
+
+  let savingsStatus, wealthStatus, emergencyStatus, debtStatus;
+
+  // Saving
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
     savingsStatus = "ดีมาก";
@@ -51,7 +68,7 @@ async function loadAssessmentData() {
     savingsStatus = "ต้องปรับปรุง";
   }
 
-  // ความมั่งคั่ง
+  // Wealth
   if (netAssets >= 0.50 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
     wealthStatus = "ดีมาก";
@@ -63,7 +80,25 @@ async function loadAssessmentData() {
     wealthStatus = "ต้องปรับปรุง";
   }
 
-  // เงินฉุกเฉิน
+  // Debt
+  if (totalDebtTransactions <= 0) {
+    debtStatus = "ไม่มีหนี้";
+  } else if (!hasUnpaidDebt && !hasLatePayment) {
+    debtStatus = "ผ่อนตรงเวลา";
+  } else {
+    debtStatus = "มีหนี้ค้างชำระ";
+  }
+
+  if (debtStatus === "ไม่มีหนี้") {
+    updateStatus("debt-circle", "debt-text", "debt-detail", "circle-green", "ไม่มีหนี้", "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี");
+  } else if (debtStatus === "ผ่อนตรงเวลา") {
+    updateStatus("debt-circle", "debt-text", "debt-detail", "circle-yellow", "ผ่อนตรงเวลา", "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้");
+  } else {
+    updateStatus("debt-circle", "debt-text", "debt-detail", "circle-red", "มีหนี้ค้างชำระ", "มีหนี้ที่ผิดนัดหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้");
+  }
+
+
+  // Emergency
   if (monthsCovered >= 6) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-green", "ดีมาก", "เงินฉุกเฉินครอบคลุม > 6 เดือน");
     emergencyStatus = "ดีมาก";
@@ -75,8 +110,30 @@ async function loadAssessmentData() {
     emergencyStatus = "ต้องปรับปรุง";
   }
 
-  displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund, savings, netAssets, monthsCovered });
+  displayPlanSummary({ 
+    savingsStatus, 
+    wealthStatus, 
+    emergencyStatus, 
+    debtStatus, 
+    income, 
+    expense, 
+    debt, 
+    savings, 
+    monthsCovered,
+    dcaInvested,
+    savingsAmount,
+    emergencyFund,
+    netAssets
+  });
+  
 }
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loadAssessmentData();
+  }
+});
+
 
 // ฟังก์ชันอัปเดตสถานะใน UI
 function updateStatus(circleId, textId, detailId, colorClass, titleText, detailText) {
@@ -101,46 +158,38 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
 }
 
 // ฟังก์ชันแสดงสรุปแผน (ยังไม่บันทึก)
-function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, income, expense, debt, dcaInvested, savingsAmount, emergencyFund, savings, netAssets, monthsCovered }) {
+function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debtStatus, income, expense, debt, savings, monthsCovered, dcaInvested, savingsAmount, emergencyFund, netAssets }) {
   const planSummaryEl = document.getElementById("plan-summary");
   if (!planSummaryEl) return;
 
   let recommendation = "";
 
-  if (savingsStatus === "ดีมาก") {
-    recommendation += "ยอดเงินออมของคุณอยู่ในระดับดีมาก คุณสามารถสานต่อแนวทางการออมที่มีวินัยอยู่แล้ว. ";
-  } else if (savingsStatus === "พอใช้") {
-    recommendation += "การออมของคุณอยู่ในระดับพอใช้ แต่ควรตั้งเป้าเพิ่มการออมเพื่อความมั่นคงในอนาคต. ";
-  } else {
-    recommendation += "การออมของคุณต่ำเกินไป ควรลดรายจ่ายและวางแผนเพิ่มการออมให้มากขึ้น. ";
-  }
+  recommendation += savingsStatus === "ดีมาก" ? "ยอดเงินออมของคุณอยู่ในระดับดีมาก คุณสามารถสานต่อแนวทางการออมที่มีวินัยอยู่แล้ว. " :
+    savingsStatus === "พอใช้" ? "การออมของคุณอยู่ในระดับพอใช้ ควรเพิ่มการออมอีกเล็กน้อย. " :
+    "การออมของคุณต่ำเกินไป ควรเพิ่มการออมให้มากขึ้น. ";
 
-  if (wealthStatus === "ดีมาก") {
-    recommendation += "สินทรัพย์ของคุณอยู่ในระดับดี แสดงถึงความสามารถในการบริหารการเงินที่ยอดเยี่ยม. ";
-  } else if (wealthStatus === "พอใช้") {
-    recommendation += "สินทรัพย์ของคุณอยู่ในระดับปานกลาง ควรพิจารณาการลงทุนเพิ่มเติมเพื่อเพิ่มมูลค่าสินทรัพย์. ";
-  } else {
-    recommendation += "สถานะสินทรัพย์ของคุณยังควรปรับปรุง ควรมีแผนการลงทุนที่เหมาะสมและการจัดสรรสินทรัพย์ใหม่. ";
-  }
+  recommendation += wealthStatus === "ดีมาก" ? "สินทรัพย์สุทธิของคุณอยู่ในระดับดีมาก. " :
+    wealthStatus === "พอใช้" ? "สินทรัพย์ของคุณอยู่ในระดับปานกลาง ควรลงทุนเพิ่ม. " :
+    "คุณควรปรับปรุงการบริหารสินทรัพย์. ";
 
-  if (emergencyStatus === "ดีมาก") {
-    recommendation += "เงินฉุกเฉินของคุณเพียงพอสำหรับสถานการณ์ฉุกเฉิน.";
-  } else if (emergencyStatus === "พอใช้") {
-    recommendation += "เงินฉุกเฉินของคุณอยู่ในระดับพอใช้ แต่ควรตั้งเป้าเพิ่มขึ้นเพื่อความปลอดภัยในยามฉุกเฉิน.";
-  } else {
-    recommendation += "เงินฉุกเฉินของคุณไม่เพียงพอ ควรเพิ่มการสะสมเงินฉุกเฉินอย่างน้อย 3 เดือนของรายจ่าย.";
-  }
+  recommendation += debtStatus === "ไม่มีหนี้" ? "คุณไม่มีหนี้ที่ต้องกังวล ถือว่าดีมาก. " :
+    debtStatus === "ผ่อนตรงเวลา" ? "คุณมีหนี้แต่บริหารได้ดี ชำระตรงเวลาอย่างสม่ำเสมอ. " :
+    "คุณมีหนี้ค้างชำระ ควรเร่งจัดการและชำระให้ทันกำหนด. ";
+
+  recommendation += emergencyStatus === "ดีมาก" ? "เงินฉุกเฉินของคุณเพียงพอสำหรับสถานการณ์ฉุกเฉิน. " :
+    emergencyStatus === "พอใช้" ? "เงินฉุกเฉินของคุณพอใช้ได้ แต่ควรเพิ่มอีกเล็กน้อย. " :
+    "เงินฉุกเฉินของคุณน้อยเกินไป ควรสะสมเพิ่มให้เพียงพอ. ";
 
   const summaryText = `
     สรุปแผนการเงิน:
     - การออม: ${savingsStatus}
     - ความมั่งคั่ง: ${wealthStatus}
+    - สถานะหนี้: ${debtStatus}
     - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน
-    
+
     คำแนะนำ: ${recommendation}
   `;
 
-  // เก็บข้อมูลไว้ก่อน ยังไม่บันทึก
   cachedSummaryText = summaryText;
   cachedFinancialData = { income, expense, debt, dcaInvested, savingsAmount, emergencyFund };
 
