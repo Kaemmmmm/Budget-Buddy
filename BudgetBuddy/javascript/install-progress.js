@@ -275,7 +275,7 @@ function fetchAndShowInstallmentSummary() {
 fetchAndShowInstallmentSummary();
 
 
-// ใช้สูตรเป็น flat rate  สมมุตร
+// ใช้สูตรเป็น flat rate  สมมติ
 // interest = 100,000 × 0.07 × (60 / 12) = 35,000
 // รวมต้องจ่ายทั้งหมด = 100,000 + 35,000 = 135,000
 // หาร 60 เดือน = 135,000 / 60 = 2,250 บาท/เดือน ✅

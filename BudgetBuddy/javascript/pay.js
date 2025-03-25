@@ -125,7 +125,23 @@ import {
               await updateDoc(goalRef, {
                 "installment.paidMonths": paidMonths + paidMonthsToAdd
               });
-            }            
+            } else if (type === "bill") {
+              // สร้างประวัติสำหรับ bill (ถ้าต้องการเก็บประวัติ)
+              await addDoc(collection(db, "goal", user.uid, "bill_history"), {
+                amount: data.amount,
+                date: now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })
+              });
+            }
+            
+            // ถ้าธุรกรรมเป็นประเภท bill หรือ installment ให้เพิ่มจำนวนเงินที่จ่ายเข้าไปใน debt
+            if (type === "bill" || type === "installment") {
+              const goalRef = doc(db, "goal", user.uid);
+              const goalSnap = await getDoc(goalRef);
+              let currentDebt = goalSnap.data()?.debt || 0;
+              await updateDoc(goalRef, {
+                debt: currentDebt + data.amount
+              });
+            }          
         
             alert("✅ ทำรายการสำเร็จ กำลังกลับไปหน้าปฏิทิน...");
             location.href = "calendar.html";
