@@ -184,7 +184,7 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debt
     - การออม: ${savingsStatus}
     - ความมั่งคั่ง: ${wealthStatus}
     - สถานะหนี้: ${debtStatus}
-    - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน
+    - เงินฉุกเฉินครอบคลุม: ${monthsCovered.toFixed(1)} เดือน, ${emergencyStatus}
 
     คำแนะนำ: ${recommendation}
   `;
