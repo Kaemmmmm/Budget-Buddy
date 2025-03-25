@@ -65,7 +65,7 @@ onAuthStateChanged(auth, async (user) => {
     } else if (debtStatus === "ผ่อนตรงเวลา") {
       debtDetailText = "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้";
     } else {
-      debtDetailText = "มีหนี้ที่ผิดนัดหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้";
+      debtDetailText = "มีหนี้ที่ค้างชำระหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้";
     }
 
     updateStatus("saving-circle", "saving-text", "saving-detail", savingsStatus, `การออม ${(savings / income * 100).toFixed(1)}% ของรายได้`);
