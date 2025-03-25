@@ -81,7 +81,7 @@ async function loadAssessmentData() {
   }
 
   // Debt
-  if (totalDebtTransactions <= 0) {
+  if (totalDebtTransactions == 0) {
     debtStatus = "ไม่มีหนี้ เนื่องจากไม่มีค่าใช้จ่ายที่ต้องชำระ";
   } else if (!hasUnpaidDebt && !hasLatePayment) {
     debtStatus = "ผ่อนตรงเวลา เนื่องจากคุณมีหนี้แต่สามารถชำระได้ตรงเวลา";
