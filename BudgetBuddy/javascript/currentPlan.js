@@ -59,39 +59,39 @@ async function loadAssessmentData() {
   // Saving
   if (savings >= 0.10 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-green", "ดีมาก", "การออม ≥ 10% ของรายได้");
-    savingsStatus = "ดีมาก";
+    savingsStatus = "ดีมาก เนื่องจากการออมของคุณมีมากกว่า 10% ของรายได้ต่อเดือน";
   } else if (savings >= 0.05 * income) {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-yellow", "พอใช้", "การออม 5-9% ของรายได้");
-    savingsStatus = "พอใช้";
+    savingsStatus = "พอใช้ เนื่องจากการออมของคุณครอบคลุม 5-9% ของรายได้ต่อเดือน";
   } else {
     updateStatus("saving-circle", "saving-text", "saving-detail", "circle-red", "ต้องปรับปรุง", "การออม < 5% ของรายได้");
-    savingsStatus = "ต้องปรับปรุง";
+    savingsStatus = "ต้องปรับปรุง เนื่องจากการออมของคุณน้อยกว่า 5% ของรายได้ต่อเดือน";
   }
 
   // Wealth
   if (netAssets >= 0.50 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-green", "ดีมาก", "สินทรัพย์สุทธิ ≥ 50% ของรายได้");
-    wealthStatus = "ดีมาก";
+    wealthStatus = "ดีมาก เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้คงเหลือมากกว่าหรือเท่ากับ 50% ของรายได้ต่อเดือน";
   } else if (netAssets >= 0.20 * income) {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-yellow", "พอใช้", "สินทรัพย์สุทธิ 20-49% ของรายได้");
-    wealthStatus = "พอใช้";
+    wealthStatus = "พอใช้ เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้มีคงเหลือ 20-49% ของรายได้ต่อเดือน";
   } else {
     updateStatus("wealth-circle", "wealth-text", "wealth-detail", "circle-red", "ต้องปรับปรุง", "สินทรัพย์สุทธิ < 20% ของรายได้");
-    wealthStatus = "ต้องปรับปรุง";
+    wealthStatus = "ต้องปรับปรุง เนื่องจากสินทรัพย์ของคุณหลังจากหักรายจ่ายและหนี้มีคงเหลือน้อยกว่า 20% ของรายได้ต่อเดือน";
   }
 
   // Debt
   if (totalDebtTransactions <= 0) {
-    debtStatus = "ไม่มีหนี้";
+    debtStatus = "ไม่มีหนี้ เนื่องจากไม่มีค่าใช้จ่ายที่ต้องชำระ";
   } else if (!hasUnpaidDebt && !hasLatePayment) {
-    debtStatus = "ผ่อนตรงเวลา";
+    debtStatus = "ผ่อนตรงเวลา เนื่องจากคุณมีหนี้แต่สามารถชำระได้ตรงเวลา";
   } else {
-    debtStatus = "มีหนี้ค้างชำระ";
+    debtStatus = "มีหนี้ค้างชำระ เนื่องจากคุณมีหนี้และไม่มีความสามารถในการชำระหนี้ได้ตรงเวลา";
   }
 
-  if (debtStatus === "ไม่มีหนี้") {
+  if (debtStatus === "ไม่มีหนี้ เนื่องจากไม่มีค่าใช้จ่ายที่ต้องชำระ") {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-green", "ไม่มีหนี้", "ไม่มีหนี้คงค้าง ถือเป็นสถานะการเงินที่ดี");
-  } else if (debtStatus === "ผ่อนตรงเวลา") {
+  } else if (debtStatus === "ผ่อนตรงเวลา เนื่องจากคุณมีหนี้แต่สามารถชำระได้ตรงเวลา") {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-yellow", "ผ่อนตรงเวลา", "มีหนี้แต่ผ่อนชำระตรงเวลา อยู่ในเกณฑ์ที่จัดการได้");
   } else {
     updateStatus("debt-circle", "debt-text", "debt-detail", "circle-red", "มีหนี้ค้างชำระ", "มีหนี้ที่ค้างชำระหรือจ่ายล่าช้า ควรเร่งปรับแผนชำระหนี้");
@@ -101,13 +101,13 @@ async function loadAssessmentData() {
   // Emergency
   if (monthsCovered >= 6) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-green", "ดีมาก", "เงินฉุกเฉินครอบคลุม > 6 เดือน");
-    emergencyStatus = "ดีมาก";
+    emergencyStatus = "ดีมาก เนื่องจากคุณมีเงินสำรองครอบคลุมมากกว่า 6 เดือนของรายได้ต่อเดือน";
   } else if (monthsCovered >= 3) {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-yellow", "พอใช้", "เงินฉุกเฉินครอบคลุม 3-6 เดือน");
-    emergencyStatus = "พอใช้";
+    emergencyStatus = "พอใช้ เนื่องจากคุณมีเงินสำรองครอบคลุมอยู่ที่ 3-6 เดือนของรายได้ต่อเดือน";
   } else {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", "circle-red", "ต้องปรับปรุง", "เงินฉุกเฉินครอบคลุมน้อยกว่า 3 เดือน");
-    emergencyStatus = "ต้องปรับปรุง";
+    emergencyStatus = "ต้องปรับปรุง เนื่องจากคุณมีเงินสำรองครอบคลุมน้อยกว่า 3 เดือนของรายได้ต่อเดือน";
   }
 
   displayPlanSummary({ 
@@ -252,8 +252,6 @@ async function saveUserPlan(planSummaryHTML, financialData) {
     throw error;
   }
 }
-
-
 
 // ตรวจสอบผู้ใช้
 onAuthStateChanged(auth, (user) => {
