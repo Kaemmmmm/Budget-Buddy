@@ -28,7 +28,7 @@ async function loadAssessmentData() {
   const emergencyFund = parseFloat(data.emergencyFund?.amount) || 0;
 
   const totalInstallmentPaid = paidMonths * (assetPrice / (installmentDuration * 12));
-  const savings = dcaInvested + totalInstallmentPaid + savingsAmount + emergencyFund;
+  const savings = dcaInvested + totalInstallmentPaid + savingsAmount;
   const netAssets = income - expense - debt;
   const monthsCovered = expense > 0 ? (emergencyFund / expense) : 0;
 
