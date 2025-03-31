@@ -64,13 +64,22 @@ document.addEventListener("DOMContentLoaded", () => {
         // Document exists; read the nested fields
         const data = docSnap.data();
         let income = parseFloat(data.income) || 0;
+        const goalDocRef = doc(db, "goal", user.uid); // Adjust UID source if needed
         
         if (data.goal === "No Goal" && income > 0) {
-          savingGoal = income;               // savingAmount becomes income
-          savingDuration = 10;               // fixed at 10 months
-          amount = 0;                        // assume no savings yet
+          savingGoal = income;         // Default savingAmount = income
+          savingDuration = 10;         // Fixed 10 months
+          amount = 0;
+        
+          // Save to Firestore under savings
+          await setDoc(goalDocRef, {
+            savings: {
+              savingAmount: savingGoal,
+              savingDuration: savingDuration
+            }
+          }, { merge: true });
+        
         } else {
-          // If savings info is present, use it
           if (data.savings) {
             savingGoal = parseFloat(data.savings.savingAmount) || 100000;
             savingDuration = parseFloat(data.savings.savingDuration) || 10;
@@ -81,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
             amount = 0;
           }
         }
-        
       }
 
       // Update UI
