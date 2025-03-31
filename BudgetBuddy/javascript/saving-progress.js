@@ -63,16 +63,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }else {
         // Document exists; read the nested fields
         const data = docSnap.data();
-        if (data.savings) {
-          savingGoal = parseFloat(data.savings.savingAmount) || 100000;
-          savingDuration = parseFloat(data.savings.savingDuration) || 10;
-          amount = parseFloat(data.savings.amount) || 0;
+        let income = parseFloat(data.income) || 0;
+        
+        if (data.goal === "No Goal" && income > 0) {
+          savingGoal = income;               // savingAmount becomes income
+          savingDuration = 10;               // fixed at 10 months
+          amount = 0;                        // assume no savings yet
         } else {
-          // If "savings" isn't in the doc, you could optionally initialize it
-          savingGoal = 0;
-          savingDuration = 10;
-          amount = 0;
+          // If savings info is present, use it
+          if (data.savings) {
+            savingGoal = parseFloat(data.savings.savingAmount) || 100000;
+            savingDuration = parseFloat(data.savings.savingDuration) || 10;
+            amount = parseFloat(data.savings.amount) || 0;
+          } else {
+            savingGoal = 0;
+            savingDuration = 10;
+            amount = 0;
+          }
         }
+        
       }
 
       // Update UI
