@@ -20,7 +20,7 @@ async function handleLogin(event) {
 
             if (userDocSnap.exists()) {
                 const userData = userDocSnap.data(); // Get user data
-                
+                /*
                 // Check if "goal" field exists and is not empty
                 if (userData.goal && Object.keys(userData.goal).length > 0) {
                     console.log("Goal exists, redirecting to dashboard.html");
@@ -28,7 +28,10 @@ async function handleLogin(event) {
                 } else {
                     console.log("No goal found, redirecting to start.html");
                     window.location.href = '../html/start.html'; // Redirect if no goal
-                }
+                }*/
+                    console.log("Login successful and user document exists, but redirect is disabled for now.");
+                    alert("Login successful! (No redirect applied)");
+                    window.location.href = '../html/start.html'; // Redirect if no document
             } else {
                 console.log("No user document found, redirecting to start.html");
                 window.location.href = '../html/start.html'; // Redirect if no document
