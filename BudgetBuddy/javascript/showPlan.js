@@ -53,9 +53,17 @@ function displayPlanList(plans) {
 
   planListEl.innerHTML = ""; // Clear existing list
 
+  /*
   if (plans.length === 0) {
     planListEl.textContent = "ยังไม่มีแผนการเงิน";
     return;
+  }
+*/
+  // ถ้าไม่มีแผนการเงินให้ popup แล้ว redirect ไปหน้า start.html 
+  if (plans.length === 0) { 
+    alert("คุณยังไม่มีแผนการเงินในขณะนี้ โปรดสร้างแผนการเงิน"); 
+    window.location.href = "start.html"; 
+    return; 
   }
 
   // ✅ Sort by most recent date (descending)
