@@ -78,7 +78,7 @@ async function loadTransactionData(userId) {
       const debt = parseFloat(data.debt) || 0;
 
       // ✅ Monthly totals
-      const dcaInvested = await getMonthlyTotal(userId, "dca_history", "monthlyInvestment", "investmentDate");
+      const dcaInvested = await getMonthlyTotal(userId, "dca_history", "amount", "date");
       const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
       const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
 
