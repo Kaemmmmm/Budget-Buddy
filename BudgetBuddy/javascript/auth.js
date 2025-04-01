@@ -31,10 +31,10 @@ async function handleLogin(event) {
                 }*/
                     console.log("Login successful and user document exists, but redirect is disabled for now.");
                     alert("Login successful! (No redirect applied)");
-                    window.location.href = '../html/start.html'; // Redirect if no document
+                    window.location.href = '../html/showPlan.html'; // Redirect if no document
             } else {
                 console.log("No user document found, redirecting to start.html");
-                window.location.href = '../html/start.html'; // Redirect if no document
+                window.location.href = '../html/showPlan.html'; // Redirect if no document
             }
         } else {
             console.warn("No user returned from Firebase.");
