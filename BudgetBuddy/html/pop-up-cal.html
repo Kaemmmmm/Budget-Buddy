@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคิดเลขการ DCA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+    *{
+        font-family: 'Prompt', sans-serif !important;
+    }
+        html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background: #f9f9f9;
+        font-family: 'Prompt', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.15);
+        width: 90%;
+        max-width: 500px;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+        body {
+            font-family: 'Prompt', sans-serif;
+            margin: 20px;
+            background: #f9f9f9;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-label {
+            font-weight: 500;
+            margin-top: 15px;
+            display: block;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .submit-button {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .chart {
+            margin-top: 30px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">DCA Calculator</div>
+        <form class="dca-form" id="dcaForm">
+            <label for="monthly-investment" class="form-label">ลงทุนเดือนละ:</label>
+            <input type="number" id="monthly-investment" class="form-input" placeholder="บาท" required>
+
+            <label for="investment-duration" class="form-label">ทำซ้ำเป็นเวลา:</label>
+            <input type="number" id="investment-duration" class="form-input" placeholder="ปี" required>
+
+            <label for="interest-rate" class="form-label">อัตราดอกเบี้ย:</label>
+            <input type="number" id="interest-rate" class="form-input" placeholder="%" required>
+
+            <button type="button" class="submit-button" id="calculate-btn">Calculate &rarr;</button>
+        </form>
+
+        <div id="results">
+            <h3>ผลการคำนวณ</h3>
+            <p id="total-invested">เงินลงทุนทั้งหมด: -</p>
+            <p id="final-amount">มูลค่ารวมที่ได้รับ: -</p>
+        </div>
+        <canvas id="dcaChart" class="chart"></canvas>
+    </div>
+
+    <script type="module" src="../javascript/calculator.js"></script>
+</body>
+</html>

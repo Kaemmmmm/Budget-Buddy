@@ -10,6 +10,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
     <link rel="stylesheet" href="../css/dca.css">
 
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            height: 90%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 10px;
+            z-index: 1001;
+        }
+    </style>
 </head>
 <body>
  <!-- SIDEBAR -->
@@ -26,23 +63,23 @@
                 <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
             </ul>
         </li>
-   
+
         <li class="has-submenu">
             <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
             <ul class="submenu">
                 <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
             </ul>
         </li>
-   
+
         <li class="has-submenu">
             <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
             <ul class="submenu">
                 <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
             </ul>
         </li>
-       
+
         <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
-   
+
         <li><a href="showPlan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
     </ul>
     <div class="user-info">
@@ -56,59 +93,57 @@
     </div>
 </div>  
     
-    <div class="container">
-        <div class="title">เริ่มต้นวางแผน <strong>DCA</strong></div>
-        <form class="dca-form">
+<div class="container">
+    <div class="title">เริ่มต้นวางแผน <strong>DCA</strong></div>
+    <form class="dca-form">
+        <div class="label-row">
             <label for="investment-amount" class="form-label">จำนวนเงินที่ต้องการลงทุนต่อเดือน</label>
-            <input type="text" id="investment-amount" class="form-input" placeholder="บาท">
+            <a href="#" id="open-calculator" class="calculator-link">ลองคำนวณ DCA</a>
+        </div>          
+        <input type="text" id="investment-amount" class="form-input" placeholder="บาท">
 
-            <label for="investment-date" class="form-label">ต้องการลงทุนทุกวันที่</label>
-            <select id="investment-date" class="form-input">
-                <option value="">-- เลือกวันที่ --</option>
-                <!-- Generate options from 1 to 30 -->
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-                <option value="25">25</option>
-                <option value="26">26</option>
-                <option value="27">27</option>
-                <option value="28">28</option>
-                <option value="29">29</option>
-                <option value="30">30</option>
-            </select>
+        <label for="investment-date" class="form-label">ต้องการลงทุนทุกวันที่</label>
+        <select id="investment-date" class="form-input">
+            <option value="">-- เลือกวันที่ --</option>
+            " + Array.from({length: 30}, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('') + "
+        </select>
 
-            <label for="investment-duration" class="form-label">ระยะเวลาที่ต้องการลงทุน</label>
-            <input type="text" id="investment-duration" class="form-input" placeholder="เดือน">
+        <label for="investment-duration" class="form-label">ระยะเวลาที่ต้องการลงทุน</label>
+        <input type="text" id="investment-duration" class="form-input" placeholder="เดือน">
 
-            <p class="form-note">** อัตราผลตอบแทนที่คำนวณ + ระยะเวลา ขึ้นอยู่กับการวางแผนส่วนตัวที่สอดคล้องกับข้อมูลทางการเงินของคุณ</p>
+        <p class="form-note">** อัตราผลตอบแทนที่คำนวณ + ระยะเวลา ขึ้นอยู่กับการวางแผนส่วนตัวที่สอดคล้องกับข้อมูลทางการเงินของคุณ</p>
 
-            <button type="button" class="submit-button">ถัดไป &rarr;</button>
 
-        </form>
-    </div>
-    <script type="module" src="../javascript/nav.js"></script>
-    <script type="module" src="../javascript/goal-dca.js"></script>
+        <button type="button" class="submit-button">ถัดไป &rarr;</button>
+    </form>
+</div>
 
+<div id="calculator-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <iframe src="pop-up-cal.html" width="100%" height="100%" style="border: none;"></iframe>
+  </div>
+</div>
+
+<script>
+document.getElementById("open-calculator").addEventListener("click", function (e) {
+  e.preventDefault();
+  document.getElementById("calculator-modal").style.display = "block";
+});
+
+document.querySelector(".close-btn").addEventListener("click", function () {
+  document.getElementById("calculator-modal").style.display = "none";
+});
+
+window.addEventListener("click", function (event) {
+  const modal = document.getElementById("calculator-modal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+</script>
+
+<script type="module" src="../javascript/nav.js"></script>
+<script type="module" src="../javascript/goal-dca.js"></script>
 </body>
 </html>

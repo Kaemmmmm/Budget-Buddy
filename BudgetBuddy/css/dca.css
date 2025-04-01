@@ -10,6 +10,34 @@ body {
   min-height: 100vh;
   padding: 50px 20px 20px 320px; /* top-right-bottom-left */
 }
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.calculator-link {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 90%;
+  max-width: 800px;
+  height: 90%;
+  border-radius: 20px; /* Add this */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden; /* Optional: to clean up iframe edges */
+}
+
 
 /* Sidebar */
 .sidebar {
