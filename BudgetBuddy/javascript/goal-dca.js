@@ -50,3 +50,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// DCA Info Modal Logic
+const dcaInfoModal = document.getElementById("dca-info-modal");
+const dcaInfoBtn = document.getElementById("dca-info-button");
+const dcaInfoClose = document.getElementById("dca-info-close");
+
+dcaInfoBtn.addEventListener("click", () => {
+  dcaInfoModal.style.display = "flex";
+});
+
+dcaInfoClose.addEventListener("click", () => {
+  dcaInfoModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === dcaInfoModal) {
+    dcaInfoModal.style.display = "none";
+  }
+});
+

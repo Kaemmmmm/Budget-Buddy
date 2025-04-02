@@ -74,3 +74,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+const comboInfoBtn = document.getElementById("combo-info-button");
+const comboInfoModal = document.getElementById("combo-info-modal");
+const comboInfoClose = document.getElementById("combo-info-close");
+
+comboInfoBtn.addEventListener("click", () => {
+  comboInfoModal.style.display = "flex";
+});
+
+comboInfoClose.addEventListener("click", () => {
+  comboInfoModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === comboInfoModal) {
+    comboInfoModal.style.display = "none";
+  }
+});

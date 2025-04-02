@@ -57,3 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+const installmentInfoBtn = document.getElementById("installment-info-button");
+const installmentInfoModal = document.getElementById("installment-info-modal");
+const installmentInfoClose = document.getElementById("installment-info-close");
+
+installmentInfoBtn.addEventListener("click", () => {
+  installmentInfoModal.style.display = "flex";
+});
+
+installmentInfoClose.addEventListener("click", () => {
+  installmentInfoModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === installmentInfoModal) {
+    installmentInfoModal.style.display = "none";
+  }
+});

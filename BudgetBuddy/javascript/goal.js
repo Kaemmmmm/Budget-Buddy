@@ -99,3 +99,24 @@ function saveGoalAndRedirect(goalValue, nextPage) {
         }
     });
 }
+
+const infoModal = document.getElementById("info-modal");
+const infoButton = document.getElementById("info-button");
+const infoClose = document.getElementById("info-close");
+
+infoButton.addEventListener("click", () => {
+  infoModal.style.display = "flex";
+});
+
+infoClose.addEventListener("click", () => {
+  infoModal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === infoModal) {
+    infoModal.style.display = "none";
+  }
+});
+
+  
+  

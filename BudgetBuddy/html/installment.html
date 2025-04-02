@@ -102,6 +102,7 @@
     
     <div class="container">
         <div class="title">เริ่มต้นวางแผนผ่อนชำระ</div>
+        <button id="installment-info-button" class="info-main-button">ℹ️ ข้อมูลเกี่ยวกับการผ่อนชำระ</button>
         <form class="installment-form" id="installmentForm">
             <label for="asset-type" class="form-label">เลือกประเภททรัพย์สิน:</label>
             <select id="asset-type" class="form-input" required>
@@ -122,8 +123,23 @@
             <button type="button" class="submit-button">ถัดไป &rarr;</button>
         </form>
     </div>
-    <script type="module" src="../javascript/nav.js"></script>
-    <script type="module" src="../javascript/goal-install.js"></script>
+    <div id="installment-info-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content installment-modal">
+        <span id="installment-info-close" class="modal-close">&times;</span>
+        <h3>การผ่อนชำระคืออะไร?</h3>
+        <p style="text-align:left;">
+          การผ่อนชำระคือการแบ่งการจ่ายค่าสินค้าหรือบริการออกเป็นงวด ๆ เช่น ผ่อนบ้านหรือรถ<br><br>
+          ✅ เหมาะสำหรับคนที่มีรายได้ประจำ<br>
+          ✅ ช่วยให้ได้ของที่มีมูลค่าสูงโดยไม่ต้องจ่ายเงินก้อน<br>
+          ✅ ฝึกการบริหารเงินระยะยาว<br>
+          ⚠️ ต้องวางแผนดอกเบี้ยและระยะเวลาให้ดี
 
+        </p>
+      </div>
+    </div>
+    
 </body>
+
+<script type="module" src="../javascript/nav.js"></script>
+<script type="module" src="../javascript/goal-install.js"></script>
 </html>

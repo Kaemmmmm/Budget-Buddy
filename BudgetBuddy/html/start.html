@@ -104,6 +104,7 @@
     
     <div class="container">
         <div class="title">สร้างแผนการเงินและกำหนดเป้าหมายการเงินใหม่</div>
+        <button id="info-button" class="info-main-button">ℹ️ ข้อมูลเพิ่มเติมเกี่ยวกับเป้าหมาย</button>
         <div class="subtitle">กรุณาเลือกเป้าหมายทางการเงิน</div>
         <div class="button-grid">
             <button type="button" class="option-button" data-goal="DCA">DCA</button>
@@ -120,6 +121,23 @@
         <script type="module" src="../javascript/nav.js"></script>
         <script type="module" src="../javascript/goal.js"></script>
    
+<!-- Info Button -->
+
+
+<!-- Modal for All Goal Info -->
+<div id="info-modal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <span id="info-close" class="modal-close">&times;</span>
+    <h3 style="margin-top: 0;">คำอธิบายแต่ละเป้าหมาย</h3>
+    <ul style="text-align: left; padding-left: 20px;">
+      <li><strong>DCA:</strong> การลงทุนแบบ DCA คือการลงทุนเท่า ๆ กันทุกเดือน ช่วยลดความเสี่ยงจากความผันผวนของตลาด</li>
+      <li><strong>Installment Trial:</strong> การผ่อนชำระสินค้าเหมือนจำลองการซื้อบ้านหรือรถ ช่วยฝึกวางแผนทางการเงินระยะยาว</li>
+      <li><strong>DCA & Installment Trial:</strong> ฝึกลงทุนและผ่อนชำระพร้อมกัน เหมาะกับคนที่อยากพัฒนาทักษะการเงินครบทุกด้าน</li>
+      <li><strong>Saving:</strong> ออมเงินให้ครบตามเป้าหมาย เช่น เก็บเงินไปเที่ยวหรือซื้อของในอนาคต</li>
+    </ul>
+  </div>
+</div>
+
 
 </body>
 </html>
