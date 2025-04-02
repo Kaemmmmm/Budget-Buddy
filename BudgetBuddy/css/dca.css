@@ -162,6 +162,7 @@ input[type="text"] {
   flex-direction: column;
   z-index: 1000;
   border-right: 1px solid #f0f0f0;
+  font-size: small;
 }
 
 /* App Logo/Title - Add this to your HTML if needed */
