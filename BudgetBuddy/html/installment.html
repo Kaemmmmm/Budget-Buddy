@@ -13,47 +13,92 @@
 <body>
  <!-- SIDEBAR -->
  <div class="sidebar">
-    <ul class="menu">
-        <li><a href="start.html"><i class="fas fa-bullseye"></i> กำหนดเป้าหมายใหม่</a></li>
-        <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> ปฏิทินรายรับ-รายจ่าย</a></li>
-        <li><a href="dashboard.html"><i class="fas fa-file-alt"></i> รายงานธุรกรรม</a></li>
-        
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-chart-line"></i> ลงทุนDCA </a>
-            <ul class="submenu">
-                <li><a href="calculator.html">คำนวณDCA</a></li>
-                <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
-            </ul>
-        </li>
-   
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-credit-card"></i> การชำระผ่อน </a>
-            <ul class="submenu">
-                <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
-            </ul>
-        </li>
-   
-        <li class="has-submenu">
-            <a href="#" class="toggle-submenu"><i class="fas fa-piggy-bank"></i> การออมเงิน </a>
-            <ul class="submenu">
-                <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
-            </ul>
-        </li>
-       
-        <li><a href="emergencyfund-progress.html"><i class="fa-solid fa-shield-heart"></i> เงินสำรองฉุกเฉิน</a></li>
-   
-        <li><a href="showPlan.html"><i class="fas fa-cogs"></i> ดูแผนการเงิน</a></li>
-    </ul>
-    <div class="user-info">
-      <div class="user-dropdown">
-        👤 <span class="user-name">กำลังโหลดชื่อ...</span>
-        <i class="fas fa-caret-up dropdown-icon"></i>
-        <ul class="dropdown-menu">
-          <li id="sign-out-btn">ออกจากระบบ</li>
-        </ul>
-      </div>
+    <!-- Logo/Brand Area -->
+    <div class="sidebar-header">
+      <img src="../picture/logo.png" alt="Logo" class="logo" style="width: 200px; height: auto;" />
     </div>
-</div>  
+    
+    <!-- Main Navigation Menu -->
+    <ul class="menu">
+      <li class="menu-item">
+        <a href="start.html" class="menu-link">
+          <i class="fas fa-bullseye"></i>
+          <span>กำหนดเป้าหมายใหม่</span>
+        </a>
+      </li>
+      
+      <li class="menu-item">
+        <a href="calendar.html" class="menu-link">
+          <i class="fas fa-calendar-alt"></i>
+          <span>ปฏิทินรายรับ-รายจ่าย</span>
+        </a>
+      </li>
+      
+      <li class="menu-item">
+        <a href="dashboard.html" class="menu-link">
+          <i class="fas fa-file-alt"></i>
+          <span>รายงานธุรกรรม</span>
+        </a>
+      </li>
+      
+      
+      <li class="menu-item has-submenu">
+        <a href="#" class="menu-link toggle-submenu">
+          <i class="fas fa-chart-line"></i>
+          <span>ลงทุนDCA</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="calculator.html">คำนวณDCA</a></li>
+          <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
+        </ul>
+      </li>
+      
+      <li class="menu-item has-submenu">
+        <a href="#" class="menu-link toggle-submenu">
+          <i class="fas fa-credit-card"></i>
+          <span>การชำระผ่อน</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
+        </ul>
+      </li>
+      
+      <li class="menu-item has-submenu">
+        <a href="#" class="menu-link toggle-submenu">
+          <i class="fas fa-piggy-bank"></i>
+          <span>การออมเงิน</span>
+        </a>
+        <ul class="submenu">
+          <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
+        </ul>
+      </li>
+      
+      <li class="menu-item">
+        <a href="emergencyfund-progress.html" class="menu-link">
+          <i class="fa-solid fa-shield-heart"></i>
+          <span>เงินสำรองฉุกเฉิน</span>
+        </a>
+      </li>
+      
+      <li class="menu-item">
+        <a href="showPlan.html" class="menu-link">
+          <i class="fas fa-cogs"></i>
+          <span>ดูแผนการเงิน</span>
+        </a>
+      </li>
+    </ul>
+    
+    <!-- User Profile Area -->
+    <div class="user-info">
+        <div class="user-name-display">
+          👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+        </div>
+        <button id="sign-out-btn" class="sign-out-btn">
+          <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
+        </button>
+      </div>
+    </div>  
+        
     
     <div class="container">
         <div class="title">เริ่มต้นวางแผนผ่อนชำระ</div>
