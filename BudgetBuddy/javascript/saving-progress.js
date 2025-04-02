@@ -57,42 +57,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!docSnap.exists()) {
         console.warn("No data found for user.");
-        
-        // Don't create any default savings data, just return
         return;
-    }else {
-        // Document exists; read the nested fields
-        const data = docSnap.data();
-        let income = parseFloat(data.income) || 0;
-        const goalDocRef = doc(db, "goal", user.uid); // Adjust UID source if needed
-        
-        if (data.goal === "No Goal" && income > 0) {
-          savingGoal = income;         // Default savingAmount = income
-          savingDuration = 10;         // Fixed 10 months
-          amount = 0;
-        
-          // Save to Firestore under savings
-          await setDoc(goalDocRef, {
-            savings: {
-              savingAmount: savingGoal,
-              savingDuration: savingDuration
-            }
-          }, { merge: true });
-        
-        } else {
-          if (data.savings) {
-            savingGoal = parseFloat(data.savings.savingAmount) || 100000;
-            savingDuration = parseFloat(data.savings.savingDuration) || 10;
-            amount = parseFloat(data.savings.amount) || 0;
-          } else {
-            savingGoal = 0;
-            savingDuration = 10;
-            amount = 0;
-          }
-        }
       }
 
-      // Update UI
+      const data = docSnap.data();
+      let income = parseFloat(data.income) || 0;
+      const goalDocRef = doc(db, "goal", user.uid);
+
+      if (data.goal === "No Goal" && income > 0) {
+        savingGoal = income;
+        savingDuration = 10;
+        amount = 0;
+
+        await setDoc(goalDocRef, {
+          savings: {
+            savingAmount: savingGoal,
+            savingDuration: savingDuration,
+          },
+        }, { merge: true });
+
+      } else {
+        if (!data.savings) {
+          alert("คุณยังไม่ได้ตั้งเป้าหมายการออม กรุณาตั้งเป้าหมายก่อนใช้งานระบบ");
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+        const { savingAmount, savingDuration: duration, amount: currentAmount } = data.savings;
+
+        if (
+          savingAmount === undefined || savingAmount === null ||
+          duration === undefined || duration === null
+        ) {
+          alert("ข้อมูลเป้าหมายการออมไม่สมบูรณ์ กรุณาตั้งค่าใหม่อีกครั้ง");
+          window.location.href = "dashboard.html";
+          return;
+        }
+
+        savingGoal = parseFloat(savingAmount) || 100000;
+        savingDuration = parseFloat(duration) || 10;
+        amount = parseFloat(currentAmount) || 0;
+      }
+
       document.getElementById("saved-amount").textContent = amount.toLocaleString("th-TH");
       document.getElementById("goal-amount").textContent = savingGoal.toLocaleString("th-TH");
 
@@ -104,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
 
 /**
  * Increments the user's saved amount and writes a new record to "saving_history".

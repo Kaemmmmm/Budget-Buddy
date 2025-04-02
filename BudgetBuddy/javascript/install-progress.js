@@ -38,17 +38,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = docSnap.data();
       if (!data.installment) {
-        console.error("No 'installment' object found in user data.");
-        updateChart(0, 12);
+        alert("คุณยังไม่ได้ตั้งเป้าหมายการผ่อน กรุณาตั้งเป้าหมายก่อนใช้งานระบบ");
+        window.location.href = "dashboard.html";
         return;
       }
 
-      const assetPrice = parseFloat(data.installment.assetPrice) || 0;
-      const installmentDuration = parseFloat(data.installment.installmentDuration) || 1;
+      // ✅ Check if any required field is missing
+      const { assetPrice, assetType, installmentDuration } = data.installment;
+      if (
+        assetPrice === undefined || assetPrice === null ||
+        assetType === undefined || assetType.trim() === "" ||
+        installmentDuration === undefined || installmentDuration === null
+      ) {
+        alert("ข้อมูลเป้าหมายการผ่อนไม่สมบูรณ์ กรุณาตั้งค่าใหม่อีกครั้ง");
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      const assetPriceFloat = parseFloat(assetPrice) || 0;
+      const installmentDurationFloat = parseFloat(installmentDuration) || 1;
 
       paidMonths = parseFloat(data.installment.paidMonths) || 0;
-
-      totalMonths = installmentDuration * 12;
+      totalMonths = installmentDurationFloat * 12;
 
       document.getElementById("paid-months").textContent = paidMonths;
       document.getElementById("total-months").textContent = totalMonths;
@@ -68,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Error: #update-payment-btn element not found.");
   }
 });
+
 
 async function updatePaymentProgress() {
   onAuthStateChanged(auth, async (user) => {

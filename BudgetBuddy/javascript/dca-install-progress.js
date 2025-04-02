@@ -41,63 +41,66 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const docSnap = await getDoc(userDoc);
       if (!docSnap.exists()) {
-        console.error("No data found for user.");
+        alert("ไม่พบข้อมูลผู้ใช้ กรุณาตั้งค่าเป้าหมายก่อน");
+        window.location.href = "dashboard.html";
         return;
       }
 
-      // Extract data
       const data = docSnap.data();
+
+      // ❗ Validate Installment
+      if (
+        !data.installment ||
+        data.installment.installmentDuration === undefined ||
+        data.installment.installmentDuration === null
+      ) {
+        alert("คุณยังไม่ได้ตั้งเป้าหมายการผ่อน กรุณาตั้งค่าก่อนใช้งาน");
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      // ❗ Validate DCA
+      if (
+        !data.dca ||
+        data.dca.monthlyInvestment === undefined ||
+        data.dca.investmentDuration === undefined
+      ) {
+        alert("คุณยังไม่ได้ตั้งเป้าหมายการลงทุนแบบ DCA กรุณาตั้งค่าก่อนใช้งาน");
+        window.location.href = "dashboard.html";
+        return;
+      }
 
       // -----------------------------
       // Installment
       // -----------------------------
-      if (data.installment) {
-        paidMonths = data.installment.paidMonths || 0;
-        installmentDuration = data.installment.installmentDuration || 0;
-      } else {
-        paidMonths = 0;
-        installmentDuration = 0;
-      }
+      paidMonths = data.installment.paidMonths || 0;
+      installmentDuration = data.installment.installmentDuration || 0;
 
       const totalInstallmentMonths = installmentDuration * 12;
       const remainMonths = totalInstallmentMonths - paidMonths;
 
-      // Update text
       document.getElementById("paid-months").textContent = paidMonths;
       document.getElementById("total-months").textContent = remainMonths;
-
-      // Draw installment chart => [paidMonths, remainMonths]
       updateInstallmentChart(paidMonths, remainMonths);
 
       // -----------------------------
       // DCA
       // -----------------------------
-      if (data.dca) {
-        dcaInvested = data.dca.invested || 0;
-        dcaDuration = data.dca.investmentDuration || 0;
-        dcaMonthlyInvestment = data.dca.monthlyInvestment || 0;
-      } else {
-        dcaInvested = 0;
-        dcaDuration = 0;
-        dcaMonthlyInvestment = 0;
-      }
+      dcaInvested = data.dca.invested || 0;
+      dcaDuration = data.dca.investmentDuration || 0;
+      dcaMonthlyInvestment = data.dca.monthlyInvestment || 0;
 
       dcaGoal = dcaDuration * 12 * dcaMonthlyInvestment;
 
-      // Update text
       document.getElementById("invested-amount").textContent = dcaInvested;
       document.getElementById("goal-amount").textContent = dcaGoal;
-
-      // Draw DCA chart => [dcaInvested, dcaGoal - dcaInvested]
       updateDcaChart(dcaInvested, dcaGoal);
 
-      // -----------------------------
-      // Load history
-      // -----------------------------
       await loadHistory(userId);
 
     } catch (error) {
       console.error("Error fetching data:", error);
+      alert("เกิดข้อผิดพลาดในการโหลดข้อมูล");
     }
   });
 
@@ -110,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("update-dca-btn")
     .addEventListener("click", updateDcaProgress);
 });
+
 
 // ---------------------
 // loadHistory

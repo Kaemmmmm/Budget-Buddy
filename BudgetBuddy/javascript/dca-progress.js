@@ -23,21 +23,31 @@ document.addEventListener("DOMContentLoaded", () => {
       if (docSnap.exists()) {
         const data = docSnap.data();
 
-        if (data.dca) {
-          monthlyInvestment = parseFloat(data.dca.monthlyInvestment) || 0;
-          const investmentDuration = parseFloat(data.dca.investmentDuration) || 1;
-          investedAmount = parseFloat(data.dca.invested) || 0;
-
-          goalAmount = monthlyInvestment * (investmentDuration * 12);
-
-          document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
-          document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
-
-          updateChart(investedAmount, goalAmount);
-        } else {
-          console.error("No dca object found in user data.");
-          updateChart(0, 0);
-        }
+          if (data.dca) {
+            // Check if 'goal' exists and is not empty
+            if (!data.dca.goal || data.dca.goal.trim() === "") {
+              alert("คุณยังไม่ได้ตั้งเป้าหมาย กรุณาตั้งเป้าหมายเพื่อเริ่มต้นการลงทุนแบบ DCA");
+              window.location.href = "dashboard.html"; // 🔁 Redirect after alert
+              return; // Stop further execution
+              // You could also redirect to goal setting page if needed:
+              // window.location.href = "/path-to-goal-setting-page.html";
+            }
+          
+            monthlyInvestment = parseFloat(data.dca.monthlyInvestment) || 0;
+            const investmentDuration = parseFloat(data.dca.investmentDuration) || 1;
+            investedAmount = parseFloat(data.dca.invested) || 0;
+          
+            goalAmount = monthlyInvestment * (investmentDuration * 12);
+          
+            document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
+            document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
+          
+            updateChart(investedAmount, goalAmount);
+          } else {
+            console.error("No dca object found in user data.");
+            updateChart(0, 0);
+          }
+          
 
         loadInvestmentHistory(userId);
 
