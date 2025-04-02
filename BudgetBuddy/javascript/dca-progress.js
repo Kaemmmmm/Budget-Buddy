@@ -3,8 +3,9 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { doc, getDoc, updateDoc, deleteDoc, collection, addDoc, query, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
-let investedAmount = 0;
+let investmentDuration = 0;
 let monthlyInvestment = 0;
+let investedAmount = 0;
 let goalAmount = 0;
 let dcaChart;
 
@@ -23,30 +24,36 @@ document.addEventListener("DOMContentLoaded", () => {
       if (docSnap.exists()) {
         const data = docSnap.data();
 
-          if (data.dca) {
-            // Check if 'goal' exists and is not empty
-            if (!data.dca.goal || data.dca.goal.trim() === "") {
-              alert("คุณยังไม่ได้ตั้งเป้าหมาย กรุณาตั้งเป้าหมายเพื่อเริ่มต้นการลงทุนแบบ DCA");
-              window.location.href = "dashboard.html"; // 🔁 Redirect after alert
-              return; // Stop further execution
-              // You could also redirect to goal setting page if needed:
-              // window.location.href = "/path-to-goal-setting-page.html";
-            }
+        if (data.dca) {
+          const tempMonthlyInvestment = parseFloat(data.dca.monthlyInvestment);
+          const tempInvestmentDuration = parseFloat(data.dca.investmentDuration);
+          investedAmount = parseFloat(data.dca.invested) || 0;
           
-            monthlyInvestment = parseFloat(data.dca.monthlyInvestment) || 0;
-            const investmentDuration = parseFloat(data.dca.investmentDuration) || 1;
-            investedAmount = parseFloat(data.dca.invested) || 0;
-          
-            goalAmount = monthlyInvestment * (investmentDuration * 12);
-          
-            document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
-            document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
-          
-            updateChart(investedAmount, goalAmount);
-          } else {
-            console.error("No dca object found in user data.");
-            updateChart(0, 0);
+          // Validate
+          if (
+            isNaN(tempMonthlyInvestment) ||
+            isNaN(tempInvestmentDuration)
+          ) {
+            alert("คุณยังไม่ได้ตั้งเป้าหมาย กรุณาตั้งเป้าหมายเพื่อเริ่มต้นการลงทุนแบบ DCA");
+            window.location.href = "dashboard.html";
+            return;
           }
+          
+          // ✅ Assign to global variables after validation
+          monthlyInvestment = tempMonthlyInvestment;
+          investmentDuration = tempInvestmentDuration;
+          goalAmount = monthlyInvestment * (investmentDuration * 12);
+          
+        
+          document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
+          document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
+        
+          updateChart(investedAmount, goalAmount);
+        } else {
+          console.error("No dca object found in user data.");
+          updateChart(0, 0);
+        }
+        
           
 
         loadInvestmentHistory(userId);
@@ -112,7 +119,7 @@ async function loadInvestmentHistory(userId) {
     historyItem.innerHTML = `
       <span>
         ${data.date}:
-        <strong>${data.amount.toLocaleString("th-TH")}</strong> บาท
+        <strong>${(parseFloat(data.amount) || 0).toLocaleString("th-TH")}</strong> บาท
       </span>
       <button
         class="delete-btn"
