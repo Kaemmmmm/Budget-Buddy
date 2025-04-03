@@ -73,11 +73,14 @@ async function loadTransactionData(userId) {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
+      // ✅ แสดง goal ของผู้ใช้
+      const goalText = data.goal ? `🎯 เป้าหมายทางการเงินของคุณ: <strong>${data.goal}</strong>` : "ยังไม่ได้ตั้งเป้าหมายทางการเงิน";
+      document.getElementById("user-goal").innerHTML = goalText;
+
       const income = parseFloat(data.income) || 0;
       const expense = parseFloat(data.expense) || 0;
       const debt = parseFloat(data.debt) || 0;
 
-      // ✅ Monthly totals
       const dcaInvested = await getMonthlyTotal(userId, "dca_history", "amount", "date");
       const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
       const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
@@ -96,12 +99,15 @@ async function loadTransactionData(userId) {
 
     } else {
       console.error("No data found for user.");
+      document.getElementById("user-goal").textContent = "ไม่พบข้อมูลเป้าหมาย";
       updateChart([0, 0, 0, 0, 0], { dca: 0, savings: 0, installment: 0 });
     }
   } catch (error) {
     console.error("Error fetching financial data:", error);
+    document.getElementById("user-goal").textContent = "เกิดข้อผิดพลาดในการโหลดเป้าหมาย";
   }
 }
+
 
 let transactionChart = null;
 

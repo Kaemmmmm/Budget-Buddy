@@ -1,11 +1,29 @@
 import { db, auth } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import { doc, getDoc, setDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
 let cachedSummaryText = "";
 let cachedFinancialData = {};
 
 export { saveUserPlan, cachedSummaryText, cachedFinancialData };
+
+document.addEventListener("DOMContentLoaded", () => {
+  const confirmBtn = document.querySelector(".confirm-btn");
+
+  // Prevent multiple listeners
+  if (confirmBtn && !confirmBtn.classList.contains("listener-attached")) {
+    confirmBtn.classList.add("listener-attached");
+
+    confirmBtn.addEventListener("click", async () => {
+      try {
+        await saveUserPlan(cachedSummaryText, cachedFinancialData);
+        openModal(); // show the success modal
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการบันทึกแผนการเงิน");
+      }
+    });
+  }
+});
+
 
 async function loadAssessmentData() {
   const userId = auth.currentUser.uid;
@@ -128,13 +146,6 @@ async function loadAssessmentData() {
   
 }
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    loadAssessmentData();
-  }
-});
-
-
 // ฟังก์ชันอัปเดตสถานะใน UI
 function updateStatus(circleId, textId, detailId, colorClass, titleText, detailText) {
   const circleEl = document.getElementById(circleId);
@@ -199,36 +210,34 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debt
 // ฟังก์ชันบันทึกแผนการเงิน (เมื่อคลิกปุ่มยืนยัน)
 async function saveUserPlan(planSummaryHTML, financialData) {
   console.log("🔁 Running saveUserPlan()");
-
   const user = auth.currentUser;
   if (!user) {
     console.error("🚫 ผู้ใช้ยังไม่ได้ล็อกอิน");
     return;
   }
 
-  console.log("👤 Logged-in user ID:", user.uid);
-  console.log("📝 Summary to save:", planSummaryHTML);
-  console.log("💰 Financial data:", financialData);
-
-  const goalDocRef = doc(db, "goal", user.uid);
-  const goalSnap = await getDoc(goalDocRef);
-  if (!goalSnap.exists()) {
-    console.error("🚫 ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อนสร้าง plan");
-    return;
-  }
-
-  const planDocRef = doc(db, "plan", user.uid);
-  console.log("📄 Plan document path:", planDocRef.path);
+  const userId = user.uid;
+  const planDocRef = doc(db, "plan", userId);
+  const goalDocRef = doc(db, "goal", userId);
 
   try {
-    const currentPlanSnap = await getDoc(planDocRef);
+    // 🔽 STEP 1: Get the user's goal name from /goal/<userId>
+    const goalSnap = await getDoc(goalDocRef);
+    if (!goalSnap.exists()) {
+      console.error("🚫 ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อน");
+      return;
+    }
+    const goalData = goalSnap.data();
+    const goalName = goalData.goal || "ไม่ระบุ";
 
+    // 🔄 STEP 2: Check if old plan exists for archiving
+    const currentPlanSnap = await getDoc(planDocRef);
     if (currentPlanSnap.exists()) {
       const oldPlanData = currentPlanSnap.data();
-
       if (oldPlanData.plan !== planSummaryHTML) {
         const historyCollectionRef = collection(planDocRef, "planHistory");
         console.log("📦 Archiving previous plan to planHistory");
+
         await addDoc(historyCollectionRef, {
           ...oldPlanData,
           archivedAt: new Date()
@@ -236,22 +245,32 @@ async function saveUserPlan(planSummaryHTML, financialData) {
       } else {
         console.log("📌 Plan hasn't changed — skipping archive");
       }
-    } else {
-      console.log("🆕 Creating new plan for the user");
     }
 
+    // ✅ STEP 3: Save plan with dynamic goal name and flat structure
     await setDoc(planDocRef, {
       plan: planSummaryHTML,
       planUpdatedAt: new Date(),
-      ...financialData  // ← จะรวม debtStatus ไปแล้ว
-    }, { merge: true });    
+      goal: goalName,
+      income: financialData.income || 0,
+      expense: financialData.expense || 0,
+      debt: financialData.debt || 0,
+      dcaInvested: financialData.dcaInvested || 0,
+      savingsAmount: financialData.savingsAmount || 0,
+      emergencyFund: financialData.emergencyFund || 0,
+      debtStatus: financialData.debtStatus || "ไม่ทราบ"
+    }, { merge: true });
 
-    console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว");
+    console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว (goal =", goalName, ")");
+
   } catch (error) {
-    console.error("❌ เกิดข้อผิดพลาดในการบันทึกแผนการเงิน:", error);
+    console.error("❌ เกิดข้อผิดพลาดในการบันทึกแผน:", error);
     throw error;
   }
 }
+
+
+
 
 
 
@@ -259,9 +278,29 @@ async function saveUserPlan(planSummaryHTML, financialData) {
 onAuthStateChanged(auth, (user) => {
   if (user) {
     loadAssessmentData();
+    insertGoalToTitle();
   } else {
     console.log("ไม่มีผู้ใช้ล็อกอิน");
   }
 });
 
+async function insertGoalToTitle() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const goalRef = doc(db, "goal", user.uid);
+  const goalSnap = await getDoc(goalRef);
+
+  if (goalSnap.exists()) {
+    const goalData = goalSnap.data();
+    const goalText = goalData.goal;
+
+    if (goalText) {
+      const titleEl = document.getElementById("plan-title");
+      if (titleEl) {
+        titleEl.innerHTML = `แผนการเงินปัจจุบัน <span style="font-weight: 400;">(${goalText})</span>`;
+      }
+    }
+  }
+}
 

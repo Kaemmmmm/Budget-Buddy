@@ -168,7 +168,11 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     const data = snap.data();
-    document.getElementById("plan-title").textContent = type === "current" ? "แผนการเงินปัจจุบัน" : "แผนการเงินย้อนหลัง";
+    const goalName = data.goal || null;
+    const baseTitle = type === "current" ? "แผนการเงินปัจจุบัน" : "แผนการเงินย้อนหลัง";
+    const fullTitle = goalName ? `${baseTitle} (${goalName})` : baseTitle;
+    document.getElementById("plan-title").textContent = fullTitle;
+
 
     const { income, expense, dcaInvested, savingsAmount, emergencyFund } = data;
     const savings = (dcaInvested || 0) + (savingsAmount || 0) + (emergencyFund || 0);
