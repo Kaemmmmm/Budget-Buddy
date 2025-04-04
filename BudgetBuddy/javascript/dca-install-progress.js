@@ -18,6 +18,27 @@ const auth = getAuth();
 let paidMonths = 0;            // from data.installment.paidMonths
 let installmentDuration = 0;   // in years (data.installment.installmentDuration)
 
+// ฟังก์ชันคำนวณเงินผ่อนต่อเดือนแบบ flat rate
+function calculateMonthlyPaymentFlatRate(principal, annualRate, months) {
+  const totalInterest = principal * annualRate * (months / 12);
+  const totalPayment = principal + totalInterest;
+  return totalPayment / months;
+}
+// ฟังก์ชันคำนวณการผ่อนชำระโดยพิจารณาประเภทและระยะเวลาผ่อน
+function calculateInstallmentPayment(principal, type, months) {
+  let annualRate = 0;
+  if (type === "house") {
+    // สำหรับบ้าน: ถ้าผ่อนไม่เกิน 36 เดือน ใช้อัตราดอกเบี้ย 3% ต่อปี,
+    // ถ้าผ่อนเกิน 36 เดือน ใช้อัตราดอกเบี้ย 7% ต่อปี
+    annualRate = (months <= 36) ? 0.03 : 0.07;
+  } else if (type === "car") {
+    // สำหรับรถ: ถ้าผ่อนไม่เกิน 36 เดือน ใช้อัตราดอกเบี้ย 4% ต่อปี,
+    // ถ้าผ่อนเกิน 36 เดือน ใช้อัตราดอกเบี้ย 9% ต่อปี
+    annualRate = (months <= 36) ? 0.04 : 0.09;
+  }
+  return calculateMonthlyPaymentFlatRate(principal, annualRate, months);
+}
+
 // DCA variables
 let dcaInvested = 0;           // data.dca.invested
 let dcaDuration = 0;           // in years (data.dca.investmentDuration)
@@ -193,6 +214,8 @@ async function loadHistory(userId) {
     historyList.appendChild(historyItem);
   });
 }
+
+const monthlyPayment = calculateInstallmentPayment(principal, type, months);
 
 
 // ---------------------
