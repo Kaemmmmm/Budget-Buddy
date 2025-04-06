@@ -34,7 +34,7 @@ async function loadNotifications() {
           text.textContent = `${data.date} : ${data.type} - ${data.amount} บาท`;
       
           const button = document.createElement("button");
-          button.textContent = "จ่าย";
+          button.textContent = "สำเร็จ";
           button.classList.add("pay-now-button");
           button.onclick = () => {
             window.location.href = `pay.html?id=${doc.id}`;

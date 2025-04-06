@@ -1,7 +1,5 @@
-// saving.js
 import { db, setDoc, doc } from "../javascript/firebase.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-// นำเข้า getDoc จาก firebase-firestore แทน firebase-auth
 import { getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
@@ -83,7 +81,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 redirectURL = "../html/saving(goal).html";
               }
               window.location.href = redirectURL;
-            }
+            } else {
+                // Confirm ที่สอง: ถาม user ว่าต้องการดำเนินการต่อหรือไม่
+                if (confirm("คุณต้องการดำเนินการต่อหรือไม่?\nกด OK เพื่อไปที่ Dashboard")) {
+                  window.location.href = "../html/dashboard.html";
+                }
+              }
             return; 
           }
                     console.log("✅ Financial data saved successfully!");

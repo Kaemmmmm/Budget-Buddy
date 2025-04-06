@@ -331,6 +331,15 @@ body {
   margin: 50px auto;
 }
 
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #007bff;
+}
+
 .calendar-wrapper {
   display: flex;
   gap: 20px;
