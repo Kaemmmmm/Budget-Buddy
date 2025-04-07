@@ -422,7 +422,29 @@ button {
   transform: translateY(-2px);
 }
 
+/* จัดให้อยู่ในแถวเดียวกัน โดยให้ตัวสูง (vertical) เรียงชิดขอบด้านบนเท่ากัน */
+.main-content-row {
+  display: flex;             /* เปิดใช้ Flexbox */
+  align-items: flex-start;   /* จัดแนวให้อยู่ระดับเดียวกันด้านบน */
+  gap: 20px;                 /* ระยะห่างระหว่างปุ่มกับกล่อง */
+  margin: 20px;              /* ระยะขอบรอบๆ แล้วแต่ความต้องการ */
+}
 
+/* สไตล์ปุ่มย้อนกลับเล็กลง ดูน่ารัก */
+.back-btn {
+  background-color: #95a7fa; /* สีพาสเทลน่ารัก */
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #7d94f9;
+}
 
 
 
