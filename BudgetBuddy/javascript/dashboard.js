@@ -74,8 +74,12 @@ async function loadTransactionData(userId) {
       const data = docSnap.data();
 
       // ✅ แสดง goal ของผู้ใช้
-      const goalText = data.goal ? `🎯 เป้าหมายทางการเงินของคุณ: <strong>${data.goal}</strong>` : "ยังไม่ได้ตั้งเป้าหมายทางการเงิน";
+      const formattedGoal = formatGoalLabel(data.goal, data);
+      const goalText = formattedGoal
+        ? `🎯 เป้าหมายทางการเงินของคุณ: <strong>${formattedGoal}</strong>`
+        : "ยังไม่ได้ตั้งเป้าหมายทางการเงิน";
       document.getElementById("user-goal").innerHTML = goalText;
+      
 
       const income = parseFloat(data.income) || 0;
       const expense = parseFloat(data.expense) || 0;
@@ -167,4 +171,24 @@ function updateChart(financialData, detailedData) {
       }
     }
   });
+}
+
+function formatGoalLabel(goalRaw, goalData) {
+  if (!goalRaw) return "";
+
+  const lowerGoal = goalRaw.toLowerCase?.() || "";
+
+  if (lowerGoal === "saving") return "ออมเงิน";
+  if (lowerGoal === "dca") return "DCA";
+  if (lowerGoal === "no goal") return "ไม่มีเป้าหมายการเงิน";
+
+  const assetType = goalData?.installment?.assetType;
+  const assetLabel = assetType === "house" ? "ซ้อมผ่อน บ้าน"
+                   : assetType === "car" ? "ซ้อมผ่อน รถ"
+                   : "ซ้อมผ่อน";
+
+  if (lowerGoal === "installment trial") return assetLabel;
+  if (lowerGoal === "dca & installment trial") return `DCA & ${assetLabel}`;
+
+  return goalRaw;
 }
