@@ -141,7 +141,10 @@ async function loadAssessmentData() {
     dcaInvested,
     savingsAmount,
     emergencyFund,
-    netAssets
+    netAssets,
+    paidMonths,
+    assetPrice,
+    installmentDuration
   });
   
 }
@@ -169,7 +172,7 @@ function updateStatus(circleId, textId, detailId, colorClass, titleText, detailT
 }
 
 // ฟังก์ชันแสดงสรุปแผน (ยังไม่บันทึก)
-function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debtStatus, income, expense, debt, savings, monthsCovered, dcaInvested, savingsAmount, emergencyFund, netAssets }) {
+function displayPlanSummary({savingsStatus,wealthStatus, emergencyStatus, debtStatus, income, expense, debt, savings, monthsCovered,dcaInvested,savingsAmount,emergencyFund,netAssets,paidMonths,installmentDuration,assetPrice }) {
   const planSummaryEl = document.getElementById("plan-summary");
   if (!planSummaryEl) return;
 
@@ -204,7 +207,19 @@ function displayPlanSummary({ savingsStatus, wealthStatus, emergencyStatus, debt
   `;
 
   cachedSummaryText = summaryText;
-  cachedFinancialData = { income, expense, debt, dcaInvested, savingsAmount, emergencyFund, debtStatus };
+  cachedFinancialData = {
+    income,
+    expense,
+    debt,
+    dcaInvested,
+    savingsAmount,
+    emergencyFund,
+    debtStatus,
+    paidMonths,
+    assetPrice,
+    installmentDuration
+  };
+   
 
   planSummaryEl.innerHTML = summaryText;
 }
@@ -260,8 +275,12 @@ async function saveUserPlan(planSummaryHTML, financialData) {
       dcaInvested: financialData.dcaInvested || 0,
       savingsAmount: financialData.savingsAmount || 0,
       emergencyFund: financialData.emergencyFund || 0,
-      debtStatus: financialData.debtStatus || "ไม่ทราบ"
+      debtStatus: financialData.debtStatus || "ไม่ทราบ",
+      paidMonths: financialData.paidMonths || 0,
+      assetPrice: financialData.assetPrice || 0,                 // ✅ NEW
+      installmentDuration: financialData.installmentDuration || 1 // ✅ NEW
     }, { merge: true });
+    
 
     console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว (goal =", goalName, ")");
 
@@ -289,14 +308,35 @@ async function insertGoalToTitle() {
 
   if (goalSnap.exists()) {
     const goalData = goalSnap.data();
-    const goalText = goalData.goal;
+    const goalTextRaw = goalData.goal;
+    const goalText = formatGoalLabel(goalTextRaw, goalData);
 
-    if (goalText) {
-      const titleEl = document.getElementById("plan-title");
-      if (titleEl) {
-        titleEl.innerHTML = `แผนการเงินปัจจุบัน <span style="font-weight: 400;">(${goalText})</span>`;
-      }
+    const titleEl = document.getElementById("plan-title");
+    if (titleEl) {
+      titleEl.innerHTML = `แผนการเงินปัจจุบัน <span style="font-weight: 400;">(${goalText})</span>`;
     }
   }
 }
+
+
+function formatGoalLabel(goalRaw, goalData) {
+  if (!goalRaw) return "";
+
+  const lowerGoal = goalRaw.toLowerCase?.() || "";
+
+  if (lowerGoal === "saving") return "ออมเงิน";
+  if (lowerGoal === "dca") return "DCA";
+  if (lowerGoal === "no goal") return "ไม่มีเป้าหมายการเงิน";
+
+  const assetType = goalData?.installment?.assetType;
+  const assetLabel = assetType === "house" ? "ซ้อมผ่อน บ้าน"
+                   : assetType === "car" ? "ซ้อมผ่อน รถ"
+                   : "ซ้อมผ่อน";
+
+  if (lowerGoal === "installment trial") return assetLabel;
+  if (lowerGoal === "dca & installment trial") return `DCA & ${assetLabel}`;
+
+  return goalRaw;
+}
+
 

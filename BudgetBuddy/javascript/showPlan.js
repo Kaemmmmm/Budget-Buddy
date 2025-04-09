@@ -85,6 +85,25 @@ async function getGoalFromPlanHistory(userId, planId) {
   return null;
 }
 
+async function formatGoalLabel(goalRaw) {
+  if (goalRaw === "Saving") return "ออมเงิน";
+  if (goalRaw === "DCA") return "DCA";
+
+  const goalRef = doc(db, "goal", auth.currentUser.uid);
+  const goalSnap = await getDoc(goalRef);
+  const assetType = goalSnap.exists() ? goalSnap.data()?.installment?.assetType : null;
+  const assetLabel = assetType === "house" ? "ซ้อมผ่อน บ้าน" : assetType === "car" ? "ซ้อมผ่อน รถ" : "ซ้อมผ่อน";
+
+  if (goalRaw === "Installment Trial") return assetLabel;
+  if (goalRaw === "DCA & Installment Trial") return `DCA & ${assetLabel}`;
+  if (goalRaw?.toLowerCase?.() === "no goal") return "ไม่มีเป้าหมายการเงิน";
+
+  return goalRaw || "";
+}
+
+
+
+
 // แสดงรายการแผนใน #plan-list
 async function displayPlanList(plans, userGoal) {
   const planListEl = document.getElementById("plan-list");
@@ -117,11 +136,12 @@ async function displayPlanList(plans, userGoal) {
     let label = "";
 
     if (isCurrent) {
-      label = `แผนปัจจุบัน${userGoal ? " (" + userGoal + ")" : ""}`;
+      const displayGoal = await formatGoalLabel(userGoal);
+      label = `แผนปัจจุบัน${displayGoal ? " (" + displayGoal + ")" : ""}`;
     } else {
-      // 🔹 ดึง goal ของแผนเก่าจาก Firestore
       const goal = await getGoalFromPlanHistory(auth.currentUser.uid, planObj.id);
-      label = `แผนเก่า #${historyIndex++}${goal ? " (" + goal + ")" : ""}`;
+      const displayGoal = await formatGoalLabel(goal);
+      label = `แผนเก่า #${historyIndex++}${displayGoal ? " (" + displayGoal + ")" : ""}`;
     }
 
     const date = planObj.data.planUpdatedAt || planObj.data.archivedAt;
@@ -141,7 +161,6 @@ async function displayPlanList(plans, userGoal) {
 
   planListEl.appendChild(ul);
 }
-
 
 
 
