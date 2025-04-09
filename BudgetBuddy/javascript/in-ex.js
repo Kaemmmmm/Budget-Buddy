@@ -1,6 +1,5 @@
-import { db, setDoc, doc } from "../javascript/firebase.js";
+import { db, setDoc, doc, getDoc } from "../javascript/firebase.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-import { getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
 const auth = getAuth();
 
@@ -67,9 +66,29 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("Total Commitment (from page data):", totalCommitment);
           console.log("Net Income:", netIncome);
 
-          // ตรวจสอบว่า totalCommitment เกินรายรับสุทธิหรือไม่
-          if (totalCommitment > netIncome) {
-            if (confirm("จำนวนเงินในเป้าหมายที่คุณกรอกไว้เกินรายรับสุทธิ\nกด OK เพื่อกลับไปแก้ไขข้อมูล")) {
+         // คำนวณยอดผ่อนต่อเดือน (monthlyPayment) ตามเป้าหมายที่ผู้ใช้เลือก
+         let monthlyPayment = 0;
+         if (firestoreGoal === "dca") {
+           monthlyPayment = totalCommitment;
+         } else if (firestoreGoal === "installment trial") {
+           const installmentDuration = goalData.installment ? parseFloat(goalData.installment.installmentDuration) || 1 : 1;
+           monthlyPayment = (totalCommitment / installmentDuration) / 12;
+         } else if (firestoreGoal === "dca & installment trial") {
+           const installmentDuration = goalData.installment ? parseFloat(goalData.installment.installmentDuration) || 1 : 1;
+           monthlyPayment = totalCommitment / installmentDuration;
+         } else if (firestoreGoal === "saving") {
+           const savingDuration = goalData.savings ? parseFloat(goalData.savings.savingDuration) || 1 : 1;
+           monthlyPayment = totalCommitment / savingDuration;
+         }
+          console.log("Monthly Payment:", monthlyPayment);
+
+          // ตรวจสอบว่าหากยอดผ่อนต่อเดือนเกินรายรับสุทธิ
+          if (monthlyPayment > netIncome) {
+            if (
+              confirm(
+                `ยอดผ่อนต่อเดือนของคุณ (${monthlyPayment.toFixed(2)}) เกินยอดคงเหลือต่อเดือน (${netIncome.toFixed(2)})\nกด OK เพื่อกลับไปแก้ไขข้อมูล`
+              )
+            ) {
               let redirectURL = "../html/saving.html"; // ค่า default
               if (firestoreGoal === "dca") {
                 redirectURL = "../html/dca.html";
