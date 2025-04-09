@@ -84,33 +84,116 @@
         .chart {
             margin-top: 30px;
         }
+        .info-main-button {
+          margin: 20px 0;
+          padding: 10px 16px;
+          font-size: 16px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-family: 'Prompt', sans-serif;
+          transition: background-color 0.3s ease, transform 0.25s ease;
+          box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        }
 
+        .info-main-button:hover {
+          background-color: #0056b3;
+          transform: scale(1.05);
+          box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
+        }
+
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .modal-content {
+          background: #ffffff;
+          padding: 20px 30px;
+          border-radius: 12px;
+          max-width: 500px;
+          width: 90%;
+          position: relative;
+          font-family: 'Prompt', sans-serif;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 10px;
+          right: 15px;
+          font-size: 24px;
+          cursor: pointer;
+        }
 
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="title">DCA Calculator</div>
-        <form class="dca-form" id="dcaForm">
-            <label for="monthly-investment" class="form-label">ลงทุนเดือนละ:</label>
-            <input type="number" id="monthly-investment" class="form-input" placeholder="บาท" required>
-
-            <label for="investment-duration" class="form-label">ทำซ้ำเป็นเวลา:</label>
-            <input type="number" id="investment-duration" class="form-input" placeholder="ปี" required>
-
-            <label for="interest-rate" class="form-label">อัตราดอกเบี้ย:</label>
-            <input type="number" id="interest-rate" class="form-input" placeholder="%" required>
-
-            <button type="button" class="submit-button" id="calculate-btn">Calculate &rarr;</button>
-        </form>
-
-        <div id="results">
-            <h3>ผลการคำนวณ</h3>
-            <p id="total-invested">เงินลงทุนทั้งหมด: -</p>
-            <p id="final-amount">มูลค่ารวมที่ได้รับ: -</p>
-        </div>
-        <canvas id="dcaChart" class="chart"></canvas>
-    </div>
+           <div class="container">
+               <div class="title">DCA Calculator</div>
+               <button type="button" class="info-main-button" id="info-button">
+                 ℹ️ ข้อมูลอัตราดอกเบี้ย
+               </button>
+               
+               <form class="dca-form" id="dcaForm">
+                   <label for="monthly-investment" class="form-label">ลงทุนเดือนละ:</label>
+                   <input type="number" id="monthly-investment" class="form-input" placeholder="บาท" required>
+           
+                   <label for="investment-duration" class="form-label">ทำซ้ำเป็นเวลา:</label>
+                   <input type="number" id="investment-duration" class="form-input" placeholder="ปี" required>
+           
+                   <label for="interest-rate" class="form-label">อัตราดอกเบี้ย:</label>
+                   <input type="number" id="interest-rate" class="form-input" placeholder="%" required>
+           
+                   <!-- Calculate button inside container -->
+                     <button type="button" class="submit-button" id="calculate-btn">Calculate &rarr;</button>
+                   
+       
+               </form>
+               <div id="results">
+                   <h3>ผลการคำนวณ</h3>
+                   <p id="total-invested">เงินลงทุนทั้งหมด: -</p>
+                   <p id="final-amount">มูลค่ารวมที่ได้รับ: -</p>
+               </div>
+               <canvas id="dcaChart" class="chart"></canvas>
+               <p id="dca-advice" style="margin-top: 1rem; font-weight: 500;"></p>
+       
+           </div>
+           </div>
+       
+           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+           <script type="module" src="../javascript/calculator.js"></script>
+           <script type="module" src="../javascript/nav.js"></script>
+           <script type="module" src="../javascript/popup.js"></script>
+       
+           <div id="info-modal" class="modal-overlay" style="display: none;">
+             <div class="modal-content">
+               <span id="info-close" class="modal-close">&times;</span>
+               <h3 style="margin-top: 0;">คำอธิบายแต่ละเป้าหมาย</h3>
+               <h2>ข้อมูลเกี่ยวกับอัตราดอกเบี้ย</h2>
+               <p>
+                 อัตราดอกเบี้ยที่กรอกในเครื่องคิดเลขนี้หมายถึงผลตอบแทนเฉลี่ยต่อปีที่คุณคาดว่าจะได้รับจากการลงทุน<br><br>
+                 ตัวอย่างเช่น:
+                 <ul>
+                   <li>กองทุนตลาดเงิน: ~1-2% ต่อปี</li>
+                   <li>กองทุนรวมทั่วไป: ~3-6% ต่อปี</li>
+                   <li>กองทุนหุ้นระยะยาวหรือ ETF: ~6-10%+ ต่อปี</li>
+                 </ul>
+                 โปรดทราบว่าอัตราผลตอบแทนในอดีตไม่สามารถยืนยันผลในอนาคตได้
+               </ul>
+             </div>
+           </div>
+       </body>
 
     <script type="module" src="../javascript/calculator.js"></script>
 </body>

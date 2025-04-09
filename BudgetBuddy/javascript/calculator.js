@@ -15,19 +15,20 @@ function calculateDCA() {
         return;
     }
 
-    const months = years * 12; // Convert years to months
-    const monthlyRate = annualInterestRate / 100 / 12; // Convert annual interest rate to monthly rate
+    const months = years * 12;
+    const monthlyRate = annualInterestRate / 100 / 12;
 
     let futureValue = 0;
     if (monthlyRate > 0) {
         futureValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
     } else {
-        futureValue = monthlyInvestment * months; // No interest case
+        futureValue = monthlyInvestment * months;
     }
 
     const totalInvested = monthlyInvestment * months;
     displayResults(totalInvested, futureValue);
     updateChart(totalInvested, futureValue);
+    displayDCAAdvice(totalInvested, futureValue); // ✅ advice added here
 }
 
 function displayResults(totalInvested, finalAmount) {
@@ -38,7 +39,6 @@ function displayResults(totalInvested, finalAmount) {
 function updateChart(totalInvested, finalAmount) {
     const ctx = document.getElementById('dcaChart').getContext('2d');
 
-    // Destroy existing chart to prevent duplication
     if (dcaChart) {
         dcaChart.destroy();
     }
@@ -66,3 +66,46 @@ function updateChart(totalInvested, finalAmount) {
         }
     });
 }
+
+function displayDCAAdvice(totalInvested, finalAmount) {
+    const gain = finalAmount - totalInvested;
+    const gainPercent = (gain / totalInvested) * 100;
+
+    let advice = "";
+
+    if (gainPercent >= 100) {
+        advice = "✅ ยอดเงินของคุณเติบโตมากกว่าเท่าตัว ถือว่าเป็นอัตราผลตอบแทนที่ยอดเยี่ยม! รักษาวินัยในการลงทุนอย่างต่อเนื่อง";
+    } else if (gainPercent >= 50) {
+        advice = "👍 คุณได้รับผลตอบแทนที่ดีจากการลงทุน ควรศึกษาหรือตรวจสอบกองทุนที่ให้ผลตอบแทนต่อเนื่อง";
+    } else if (gainPercent >= 20) {
+        advice = "⚠️ ผลตอบแทนอยู่ในระดับพอใช้ อาจลองพิจารณากองทุนที่มีศักยภาพสูงขึ้นหรือเพิ่มระยะเวลาลงทุน";
+    } else {
+        advice = "❗ ผลตอบแทนค่อนข้างต่ำ ลองตรวจสอบว่าอัตราดอกเบี้ยที่ใส่สอดคล้องกับความคาดหวังหรือไม่ และทบทวนแผนการลงทุนอีกครั้ง";
+    }
+
+    document.getElementById("dca-advice").textContent = advice;
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const infoModal = document.getElementById("info-modal");
+    const infoButton = document.getElementById("info-button");
+    const infoClose = document.getElementById("info-close");
+  
+    if (infoButton && infoModal && infoClose) {
+      infoButton.addEventListener("click", () => {
+        infoModal.style.display = "flex";
+      });
+  
+      infoClose.addEventListener("click", () => {
+        infoModal.style.display = "none";
+      });
+  
+      window.addEventListener("click", (e) => {
+        if (e.target === infoModal) {
+          infoModal.style.display = "none";
+        }
+      });
+    }
+  });
+  
