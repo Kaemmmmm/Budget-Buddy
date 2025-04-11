@@ -230,6 +230,22 @@ function updateInstallmentChart(paid, remain) {
   const total = paid + remain;
   const pct = total > 0 ? ((paid / total) * 100).toFixed(1) : 0;
 
+  // ✅ Disable Installment update button if complete
+  const instBtn = document.getElementById("update-installment-btn");
+  if (instBtn) {
+    if (pct >= 100) {
+      instBtn.disabled = true;
+      instBtn.style.opacity = "0.5";
+      instBtn.style.cursor = "not-allowed";
+      instBtn.textContent = "ผ่อนครบแล้ว";
+    } else {
+      instBtn.disabled = false;
+      instBtn.style.opacity = "1";
+      instBtn.style.cursor = "pointer";
+      instBtn.textContent = "อัปเดตการผ่อน";
+    }
+  }
+
   installmentChart = new Chart(canvas.getContext("2d"), {
     type: "doughnut",
     data: {
@@ -252,6 +268,7 @@ function updateInstallmentChart(paid, remain) {
   });
 }
 
+
 // ---------------------
 // DCA Chart
 // ---------------------
@@ -263,6 +280,22 @@ function updateDcaChart(invested, goal) {
 
   const pct = goal > 0 ? ((invested / goal) * 100).toFixed(1) : 0;
   const dataArr = goal > 0 ? [invested, goal - invested] : [0, 1];
+
+  // ✅ Disable DCA update button if complete
+  const dcaBtn = document.getElementById("update-dca-btn");
+  if (dcaBtn) {
+    if (pct >= 100) {
+      dcaBtn.disabled = true;
+      dcaBtn.style.opacity = "0.5";
+      dcaBtn.style.cursor = "not-allowed";
+      dcaBtn.textContent = "บรรลุเป้าหมายแล้ว";
+    } else {
+      dcaBtn.disabled = false;
+      dcaBtn.style.opacity = "1";
+      dcaBtn.style.cursor = "pointer";
+      dcaBtn.textContent = "อัปเดต DCA";
+    }
+  }
 
   dcaChart = new Chart(canvas.getContext("2d"), {
     type: "doughnut",
@@ -285,6 +318,7 @@ function updateDcaChart(invested, goal) {
     plugins: [centerTextPlugin(pct, "#007bff")]
   });
 }
+
 
 // ---------------------
 // Center Text Plugin
@@ -312,6 +346,11 @@ function centerTextPlugin(percentage, textColor) {
 // Update Installment
 // ---------------------
 async function updateInstallmentProgress() {
+  const totalMonths = installmentDuration * 12;
+  if (paidMonths >= totalMonths) {
+    alert("คุณได้ผ่อนครบตามแผนแล้ว");
+    return;
+  }
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
@@ -376,6 +415,10 @@ async function updateInstallmentProgress() {
 // Update DCA
 // ---------------------
 async function updateDcaProgress() {
+  if (dcaInvested >= dcaGoal) {
+    alert("คุณได้บรรลุเป้าหมายการลงทุนแบบ DCA แล้ว");
+    return;
+  }
   console.log("Updating DCA progress...");
   onAuthStateChanged(auth, async (user) => {
     if (!user) {

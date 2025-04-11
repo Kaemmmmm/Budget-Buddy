@@ -80,8 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 async function updatePaymentProgress() {
+  if (paidMonths >= totalMonths) {
+    alert("คุณได้ผ่อนครบตามแผนแล้ว");
+    return;
+  }
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
@@ -230,6 +233,20 @@ function updateChart(paidMonths, totalMonths) {
     totalMonths > 0 ? ((paidMonths / totalMonths) * 100).toFixed(1) : 0;
   const remainingPercentage = 100 - progressPercentage;
 
+  // ✅ Disable update button if already 100%
+  const updateButton = document.getElementById("update-payment-btn");
+  if (progressPercentage >= 100) {
+    updateButton.disabled = true;
+    updateButton.style.opacity = "0.5";
+    updateButton.style.cursor = "not-allowed";
+    updateButton.textContent = "ผ่อนครบแล้ว";
+  } else {
+    updateButton.disabled = false;
+    updateButton.style.opacity = "1";
+    updateButton.style.cursor = "pointer";
+    updateButton.textContent = "อัปเดตการชำระเงิน";
+  }
+
   installmentChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -253,6 +270,7 @@ function updateChart(paidMonths, totalMonths) {
     plugins: [centerTextPlugin(progressPercentage)],
   });
 }
+
 
 function centerTextPlugin(progressPercentage) {
   return {

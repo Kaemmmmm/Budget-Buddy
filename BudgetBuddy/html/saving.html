@@ -99,10 +99,6 @@
         </button>
       </div>
     </div>  
-       
-    <div class="main-content-row">
-      <!-- ปุ่มย้อนกลับ -->
-      <button class="back-btn" onclick="window.history.back()">ย้อนกลับ</button>
     
     <div class="container">
         <div class="title">กรอกข้อมูลการเงินเบื้องต้น</div>
@@ -118,6 +114,10 @@
 
             <p class="form-note">** หากไม่มีหนี้สินกรุณากรอก 0 ในช่องหนี้สิน</p>
 
+            <p style="margin-top: 20px; color: #ff4d4d; font-size: 0.91rem;margin-bottom: 20px;">
+              หากไม่ได้เลือกเป้าหมาย ระบบจะตั้งค่าให้ออมเป็น 10% ของรายได้จำนวน 10 เดือนอัตโนมัติ
+            </p>
+
             <button type="button" class="submit-button">บันทึก</button>
 
         </form>
@@ -125,6 +125,7 @@
     </div>
     <script type="module" src="../javascript/nav.js"></script>
     <script type="module" src="../javascript/in-ex.js"></script>
+    <script src="../javascript/backButton.js" defer></script>
   
 </body>
 </html>

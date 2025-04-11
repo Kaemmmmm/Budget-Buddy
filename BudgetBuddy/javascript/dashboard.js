@@ -73,14 +73,21 @@ async function loadTransactionData(userId) {
     if (docSnap.exists()) {
       const data = docSnap.data();
 
-      // ✅ แสดง goal ของผู้ใช้
+      // ✅ Format and show user goal
       const formattedGoal = formatGoalLabel(data.goal, data);
       const goalText = formattedGoal
         ? `🎯 เป้าหมายทางการเงินของคุณ: <strong>${formattedGoal}</strong>`
         : "ยังไม่ได้ตั้งเป้าหมายทางการเงิน";
       document.getElementById("user-goal").innerHTML = goalText;
-      
 
+      // ✅ Hide "โปรแกรมคำนวณ DCA" button if goal is not dca or dca & installment
+      const rawGoal = (data.goal || "").toLowerCase();
+      const dcaButton = document.querySelector(".button-dca");
+      if (dcaButton && rawGoal !== "dca" && rawGoal !== "dca & installment trial") {
+        dcaButton.style.display = "none";
+      }
+
+      // ✅ Financial calculations
       const income = parseFloat(data.income) || 0;
       const expense = parseFloat(data.expense) || 0;
       const debt = parseFloat(data.debt) || 0;
@@ -100,7 +107,6 @@ async function loadTransactionData(userId) {
           installment: installmentPaid
         }
       );
-
     } else {
       console.error("No data found for user.");
       document.getElementById("user-goal").textContent = "ไม่พบข้อมูลเป้าหมาย";
@@ -111,6 +117,9 @@ async function loadTransactionData(userId) {
     document.getElementById("user-goal").textContent = "เกิดข้อผิดพลาดในการโหลดเป้าหมาย";
   }
 }
+
+  
+
 
 
 let transactionChart = null;
@@ -192,3 +201,4 @@ function formatGoalLabel(goalRaw, goalData) {
 
   return goalRaw;
 }
+

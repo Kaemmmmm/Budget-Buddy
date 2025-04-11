@@ -71,6 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function updateProgress() {
+  if (investedAmount >= goalAmount) {
+    alert("คุณได้บรรลุเป้าหมายการลงทุนแบบ DCA แล้ว");
+    return;
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
@@ -103,6 +108,7 @@ async function updateProgress() {
     }
   });
 }
+
 
 async function loadInvestmentHistory(userId) {
   const historyList = document.getElementById("history-list");
@@ -177,6 +183,20 @@ function updateChart(investedAmount, goalAmount) {
     : 0;
   const remainingPercentage = 100 - progressPercentage;
 
+  // ✅ Disable button if progress >= 100%
+  const updateButton = document.getElementById("update-progress-btn");
+  if (progressPercentage >= 100) {
+    updateButton.disabled = true;
+    updateButton.style.opacity = "0.5";
+    updateButton.style.cursor = "not-allowed";
+    updateButton.textContent = "บรรลุเป้าหมายแล้ว";
+  } else {
+    updateButton.disabled = false;
+    updateButton.style.opacity = "1";
+    updateButton.style.cursor = "pointer";
+    updateButton.textContent = "อัปเดตความคืบหน้า";
+  }
+
   dcaChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -200,6 +220,7 @@ function updateChart(investedAmount, goalAmount) {
     plugins: [centerTextPlugin(progressPercentage)]
   });
 }
+
 
 function centerTextPlugin(progressPercentage) {
   return {

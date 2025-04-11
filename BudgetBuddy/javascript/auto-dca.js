@@ -47,6 +47,7 @@ async function autoAddDcaTransactionIfNotExists(userId) {
       type: "DCA",
       detail: "เพิ่มอัตโนมัติจากแผน DCA",
       notify: true,
+      paid:false,
       createdAt: serverTimestamp()
     };
 

@@ -425,18 +425,23 @@ body {
   margin: 20px;              /* ระยะขอบรอบๆ แล้วแต่ความต้องการ */
 }
 
-/* สไตล์ปุ่มย้อนกลับเล็กลง ดูน่ารัก */
+/* style.css */
 .back-btn {
-  background-color: #95a7fa; /* สีพาสเทลน่ารัก */
-  color: #fff;
+  position: fixed;
+  top: 20px;
+  left: 300px;
+  background-color: #95a7fa; /* pastel purple */
+  color: white; /* deeper purple for text */
   border: none;
-  border-radius: 20px;
-  padding: 4px 12px;
-  font-size: 14px;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(92, 45, 145, 0.2);
+  z-index: 9999;
+  transition: background-color 0.2s ease;
 }
 
 .back-btn:hover {
-  background-color: #7d94f9;
+  background-color: #7d94f9;/* slightly deeper pastel on hover */
 }

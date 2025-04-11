@@ -116,6 +116,11 @@ document.addEventListener("DOMContentLoaded", () => {
  * Increments the user's saved amount and writes a new record to "saving_history".
  */
 async function updateProgress() {
+  if (amount >= savingGoal) {
+    alert("คุณได้บรรลุเป้าหมายการออมแล้ว");
+    return;
+  }
+
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
       alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
@@ -231,6 +236,20 @@ function updateChart(saved, goal) {
 
   const progressPercentage = goal > 0 ? ((saved / goal) * 100).toFixed(1) : 0;
   const remainingPercentage = 100 - progressPercentage;
+
+  // ✅ Disable update button when savings is 100% or more
+  const updateBtn = document.getElementById("update-progress-btn");
+  if (progressPercentage >= 100 && updateBtn) {
+    updateBtn.disabled = true;
+    updateBtn.style.opacity = "0.5";
+    updateBtn.style.cursor = "not-allowed";
+    updateBtn.textContent = "บรรลุเป้าหมายแล้ว";
+  } else if (updateBtn) {
+    updateBtn.disabled = false;
+    updateBtn.style.opacity = "1";
+    updateBtn.style.cursor = "pointer";
+    updateBtn.textContent = "อัปเดตความคืบหน้า";
+  }
 
   savingChart = new Chart(ctx, {
     type: "doughnut",
