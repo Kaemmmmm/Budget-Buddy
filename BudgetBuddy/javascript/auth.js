@@ -30,7 +30,7 @@ async function handleLogin(event) {
                     window.location.href = '../html/start.html'; // Redirect if no goal
                 }*/
                     console.log("Login successful and user document exists, but redirect is disabled for now.");
-                    alert("Login successful! (No redirect applied)");
+                    alert("Login successful!");
                     window.location.href = '../html/showPlan.html'; // Redirect if no document
             } else {
                 console.log("No user document found, redirecting to start.html");

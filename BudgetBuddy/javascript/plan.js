@@ -155,7 +155,7 @@ function updateChart(financialData, detailedData) {
       labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
       datasets: [{
         data: financialData,
-        backgroundColor: ["#28a745", "#dc3545", "#007bff", "#ff0000", "#ffc107"]
+        backgroundColor: ["#2ecc71", "#e74c3c", "#2980b9", "#d35400", "#1abc9c"]
       }]
     },
     options: {

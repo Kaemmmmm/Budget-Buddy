@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (monthlyPayment > netIncome) {
             if (
               confirm(
-                `ยอดผ่อนต่อเดือนของคุณ (${monthlyPayment.toFixed(2)}) เกินยอดคงเหลือต่อเดือน (${netIncome.toFixed(2)})\nกด OK เพื่อกลับไปแก้ไขข้อมูล`
+                `ยอดผ่อนต่อเดือนของคุณ (${monthlyPayment.toFixed(2)}) เกินยอดคงเหลือต่อเดือน (${netIncome.toFixed(2)})\nกด OK เพื่อกลับไปแก้ไขข้อมูล\nกด Cancle เพื่อดำเนินการต่อ`
               )
             ) {
               let redirectURL = "../html/saving.html"; // ค่า default
