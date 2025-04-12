@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateStatus("emergency-circle", "emergency-text", "emergency-detail", emergencyStatus, `เงินฉุกเฉินครอบคลุม ${monthsCovered.toFixed(1)} เดือน`);
     updateStatus("debt-circle", "debt-text", "debt-detail", debtStatus, debtDetailText);
 
-    document.getElementById("plan-summary").textContent = data.plan || "ไม่มีคำแนะนำ";
+    document.getElementById("plan-summary").innerHTML = data.plan || "ไม่มีคำแนะนำ";
   });
 
   updateSubtitleDate();
@@ -218,5 +218,5 @@ function updateStatus(circleId, textId, detailId, status, detailText) {
   circleEl.className = `circle ${conf.color}`;
   circleEl.innerHTML = `<i class="fa-solid ${conf.icon}"></i>`;
   textEl.textContent = status;
-  detailEl.textContent = detailText;
+  detailEl.innerHTML = detailText;
 }
