@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     submitButton.addEventListener("click", () => {
         if (!selectedGoal) {
             console.log("No goal selected, saving as 'No Goal'.");
-            saveGoalAndRedirect("No Goal", "../html/saving.html");
+            saveGoalAndRedirect("No Goal", "../html/in-ex.html");
         } else {
             let nextPage = getNextPage(selectedGoal);
             console.log("Redirecting user to:", nextPage); // Debugging log
@@ -65,7 +65,7 @@ function getNextPage(goalValue) {
         case "Saving":
             return "../html/saving(goal).html";
         default:
-            return "../html/saving.html"; // Default if no selection
+            return "../html/in-ex.html"; // Default if no selection
     }
 }
 

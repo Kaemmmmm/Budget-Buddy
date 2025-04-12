@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `ยอดผ่อนต่อเดือนของคุณ (${monthlyPayment.toFixed(2)}) เกินยอดคงเหลือต่อเดือน (${netIncome.toFixed(2)})\nกด OK เพื่อกลับไปแก้ไขข้อมูล\nกด Cancle เพื่อดำเนินการต่อ`
               )
             ) {
-              let redirectURL = "../html/saving.html"; // ค่า default
+              let redirectURL = "../html/in-ex.html"; // ค่า default
               if (firestoreGoal === "dca") {
                 redirectURL = "../html/dca.html";
               } else if (firestoreGoal === "installment trial") {

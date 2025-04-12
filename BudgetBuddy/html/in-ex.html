@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ความคืบหน้าการออมเงินฉุกเฉิน</title>
+    <title>กรอกข้อมูลการเงิน</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/emergencyfund-progress.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/in-ex.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 <body>
@@ -100,34 +99,33 @@
         </button>
       </div>
     </div>  
-      
-
+    
     <div class="container">
-        <div class="progress-section">
-            <h2 class="title">เงินสำรองฉุกเฉิน</h2>
+        <div class="title">กรอกข้อมูลการเงินเบื้องต้น</div>
+        <form class="financial-form">
+            <label for="income" class="form-label">รายรับ / เดือน</label>
+            <input type="text" id="income" class="form-input" placeholder="บาท" required>
 
-            <p class="savings-progress">
-                ออมไปแล้ว <span class="highlight" id="saved-amount">0</span> บาท จากเป้าหมาย <span class="highlight-goal" id="goal-amount">0</span> บาท
+            <label for="expense" class="form-label">รายจ่าย / เดือน</label>
+            <input type="text" id="expense" class="form-input" placeholder="บาท" required>
+
+            <label for="debt" class="form-label">หนี้สิน / เดือน</label>
+            <input type="text" id="debt" class="form-input" placeholder="บาท" required>
+
+            <p class="form-note">** หากไม่มีหนี้สินกรุณากรอก 0 ในช่องหนี้สิน</p>
+
+            <p style="margin-top: 20px; color: #ff4d4d; font-size: 0.91rem;margin-bottom: 20px;">
+              หากไม่ได้เลือกเป้าหมาย ระบบจะตั้งค่าให้ออมเป็น 10% ของรายได้จำนวน 10 เดือนอัตโนมัติ
             </p>
 
-            <div class="chart-container">
-                <canvas id="savingsChart"></canvas>
-            </div>
+            <button type="button" class="submit-button">บันทึก</button>
 
-            <button id="update-progress-btn" class="progress-button">อัปเดตความคืบหน้า</button>
-
-            <p class="form-note">** เป้าหมายของเงินสำรองฉุกเฉินคำนวณจากรายจ่ายของคุณ x6 เพื่อครอบคลุม 6 เดือน</p>
-        </div>
-
-        <div class="history-section">
-            <h3>ประวัติการออมเงิน</h3>
-            <ul id="history-list" class="history-list"></ul>
-        </div>
+        </form>
     </div>
-    
-    <script type="module" src="../javascript/emergencyfund-progress.js"></script>
+    </div>
     <script type="module" src="../javascript/nav.js"></script>
+    <script type="module" src="../javascript/in-ex.js"></script>
     <script src="../javascript/backButton.js" defer></script>
-   
+  
 </body>
 </html>

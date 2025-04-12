@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.log("✅ DCA & Installment data saved successfully!");
 
                     // Redirect after saving data
-                    window.location.href = "../html/saving.html";
+                    window.location.href = "../html/in-ex.html";
                 } catch (error) {
                     console.error("❌ Error saving DCA & Installment data:", error);
                     alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง");

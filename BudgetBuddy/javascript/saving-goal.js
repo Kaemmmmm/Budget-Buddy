@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 console.log("✅ Data saved successfully!");
                 alert("บันทึกข้อมูลเรียบร้อย!");
-                window.location.href = "saving.html"; // Redirect after saving
+                window.location.href = "in-ex.html"; // Redirect after saving
             } catch (error) {
                 console.error("❌ Error saving data:", error);
                 alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");

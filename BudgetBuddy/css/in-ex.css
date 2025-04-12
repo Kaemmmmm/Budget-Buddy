@@ -2,15 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Prompt';
+  font-family: 'prompt';
 }
 
 body {
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
   min-height: 100vh;
   padding: 50px 20px 20px 320px; /* top-right-bottom-left */
 }
-
 
 /* Sidebar */
 .sidebar {
@@ -323,115 +322,79 @@ body {
 }
 
 .container {
-  background: #fff;
-  width: 800px;
+  width: 600px;
   max-width: 90%;
-  padding: 40px;
+  margin: 0 auto; /* Centers horizontally within the remaining space */
+  background: #fff;
+  padding: 40px 30px;
   border-radius: 20px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  margin: 50px auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.page-title {
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 10px;
+.title {
+  font-size: 28px;
+  font-weight: 600;
   color: #333;
+  margin-bottom: 30px;
 }
 
-.date-display {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 30px; /* เว้นช่องก่อนเริ่มฟอร์ม */
-}
-
-.transaction-form {
-  max-width: 400px;   /* ความกว้างฟอร์ม */
-  margin: 0 auto;      /* จัดกึ่งกลางใน container */
-}
-
-.form-group {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* label */
-.form-group label {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
-}
-
-/* input, textarea */
-.form-group input,
-.form-group textarea {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 14px;
+.financial-form {
   width: 100%;
 }
 
-.form-group textarea {
-  resize: vertical; /* ให้ผู้ใช้ย่อขยาย textarea ได้ตามต้องการ */
+.form-label {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 8px;
+  text-align: left;
+  display: block;
 }
 
-/* กรณีที่ checkbox + label อยู่แถวเดียวกัน */
-.receipt-group {
-  flex-direction: row;
-  align-items: center;
+.form-input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.receipt-group label {
-  margin-bottom: 0; /* ไม่ต้องเว้นบรรทัดล่าง */
-  margin-left: 8px; /* เว้นช่องระหว่าง checkbox กับข้อความ */
+.form-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+  outline: none;
 }
 
-/* ปุ่ม */
-.form-actions {
-  display: flex;
-  gap: 10px;
-}
-
-/* ปุ่มยกเลิก */
-.cancel-btn {
-  background-color: #d84444;
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #007bff;
   color: #fff;
+  font-weight: 600;
+  font-size: 18px;
   border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.cancel-btn:hover {
-  background-color: #d84444;
-}
-
-.submit {
-  background-color: #0099ff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 14px;
-}
-.submit:hover {
+.submit-button:hover {
   background-color: #0056b3;
+  transform: translateY(-3px);
 }
+
 .menu a i {
   margin-right: 12px;
 }
 
-.checkbox-inline label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;         /* ❗️ บังคับไม่ให้ตัดบรรทัด */
-  font-size: 14px;
-  color: #555;
+/* จัดให้อยู่ในแถวเดียวกัน โดยให้ตัวสูง (vertical) เรียงชิดขอบด้านบนเท่ากัน */
+.main-content-row {
+  display: flex;             /* เปิดใช้ Flexbox */
+  align-items: flex-start;   /* จัดแนวให้อยู่ระดับเดียวกันด้านบน */
+  gap: 20px;                 /* ระยะห่างระหว่างปุ่มกับกล่อง */
+  margin: 20px;              /* ระยะขอบรอบๆ แล้วแต่ความต้องการ */
 }
 
 /* style.css */
