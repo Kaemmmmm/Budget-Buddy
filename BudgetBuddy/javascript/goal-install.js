@@ -4,8 +4,25 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 const auth = getAuth();
 
+function formatNumberWithCommas(value) {
+    const numericValue = value.replace(/,/g, '');
+    if (isNaN(numericValue)) return '';
+    return parseFloat(numericValue).toLocaleString('en-US');
+}
+
+function attachCommaFormatting(input) {
+    input.addEventListener('input', () => {
+        const original = input.value.replace(/,/g, '');
+        const formatted = formatNumberWithCommas(original);
+        input.value = formatted;
+        input.setSelectionRange(formatted.length, formatted.length);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.querySelector(".submit-button");
+    const assetPriceInput = document.getElementById("asset-price");
+    if (assetPriceInput) attachCommaFormatting(assetPriceInput);
 
     if (!submitButton) {
         console.error("Error: Submit button not found.");
@@ -17,14 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (user) {
                 const userId = user.uid;
                 const assetType = document.getElementById("asset-type").value;
-                const assetPrice = document.getElementById("asset-price").value;
+                const assetPrice = assetPriceInput?.value.replace(/,/g, '') || "";
                 const installmentDuration = document.getElementById("installment-duration").value;
-
-                // Debugging: Check user inputs
-                console.log("User ID:", userId);
-                console.log("Asset Type:", assetType);
-                console.log("Asset Price:", assetPrice);
-                console.log("Installment Duration:", installmentDuration);
 
                 if (!assetType || !assetPrice || !installmentDuration) {
                     alert("กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการต่อ");
@@ -43,8 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, { merge: true });
 
                     console.log("✅ Installment data saved successfully!");
-
-                    // Redirect after saving data
                     window.location.href = "../html/in-ex.html";
                 } catch (error) {
                     console.error("❌ Error saving installment data:", error);
@@ -62,16 +71,18 @@ const installmentInfoBtn = document.getElementById("installment-info-button");
 const installmentInfoModal = document.getElementById("installment-info-modal");
 const installmentInfoClose = document.getElementById("installment-info-close");
 
-installmentInfoBtn.addEventListener("click", () => {
-  installmentInfoModal.style.display = "flex";
-});
+if (installmentInfoBtn && installmentInfoModal && installmentInfoClose) {
+    installmentInfoBtn.addEventListener("click", () => {
+      installmentInfoModal.style.display = "flex";
+    });
 
-installmentInfoClose.addEventListener("click", () => {
-  installmentInfoModal.style.display = "none";
-});
+    installmentInfoClose.addEventListener("click", () => {
+      installmentInfoModal.style.display = "none";
+    });
 
-window.addEventListener("click", (e) => {
-  if (e.target === installmentInfoModal) {
-    installmentInfoModal.style.display = "none";
-  }
-});
+    window.addEventListener("click", (e) => {
+      if (e.target === installmentInfoModal) {
+        installmentInfoModal.style.display = "none";
+      }
+    });
+}

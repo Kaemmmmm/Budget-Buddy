@@ -15,19 +15,41 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("saveButton").addEventListener("click", updateTransactionData);
+
+  // Attach comma formatting to inputs
+  const incomeInput = document.getElementById("income");
+  const expenseInput = document.getElementById("expense");
+  const debtInput = document.getElementById("debt");
+
+  [incomeInput, expenseInput, debtInput].forEach(input => {
+    if (input) attachCommaFormatting(input);
+  });
 });
 
-// ✅ Thai BE date string to JS Date
+function formatNumberWithCommas(value) {
+  const numericValue = value.replace(/,/g, '');
+  if (isNaN(numericValue)) return '';
+  return parseFloat(numericValue).toLocaleString('en-US');
+}
+
+function attachCommaFormatting(input) {
+  input.addEventListener('input', () => {
+    const unformatted = input.value.replace(/,/g, '');
+    const formatted = formatNumberWithCommas(unformatted);
+    input.value = formatted;
+    input.setSelectionRange(formatted.length, formatted.length);
+  });
+}
+
 function convertThaiDateToDateObject(thaiDateStr) {
   const [date, time] = thaiDateStr.split(" ");
   const [day, month, year] = date.split("/").map(Number);
-  const [hours, minutes, seconds] = time.split(":").map(Number);
+  const [hours, minutes, seconds] = time.split(":" ).map(Number);
   const gregorianYear = year - 543;
 
   return new Date(gregorianYear, month - 1, day, hours, minutes, seconds);
 }
 
-// ✅ Get total for current month from history
 async function getMonthlyTotal(userId, subcollection, amountField, dateField) {
   const ref = collection(db, "goal", userId, subcollection);
   const snapshot = await getDocs(ref);
@@ -63,18 +85,17 @@ async function loadTransactionData(userId) {
       const expense = parseFloat(data.expense) || 0;
       const debt = parseFloat(data.debt) || 0;
 
-      // ✅ Monthly totals
       const dcaInvested = await getMonthlyTotal(userId, "dca_history", "monthlyInvestment", "investmentDate");
       const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
       const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
-
       const emergencyFund = await getMonthlyTotal(userId, "emergencyfund_history", "amount", "date");
+
       const savings = dcaInvested + savingsAmount + installmentPaid + emergencyFund;
       const remaining = income - expense - savings - debt;
 
-      document.getElementById("income").value = income;
-      document.getElementById("expense").value = expense;
-      document.getElementById("debt").value = debt;
+      document.getElementById("income").value = income.toLocaleString();
+      document.getElementById("expense").value = expense.toLocaleString();
+      document.getElementById("debt").value = debt.toLocaleString();
 
       updateChart(
         [income, expense, savings, debt, remaining],
@@ -103,9 +124,9 @@ async function updateTransactionData() {
     return;
   }
 
-  const income = parseFloat(document.getElementById("income").value) || 0;
-  const expense = parseFloat(document.getElementById("expense").value) || 0;
-  const debt = parseFloat(document.getElementById("debt").value) || 0;
+  const income = parseFloat(document.getElementById("income").value.replace(/,/g, '')) || 0;
+  const expense = parseFloat(document.getElementById("expense").value.replace(/,/g, '')) || 0;
+  const debt = parseFloat(document.getElementById("debt").value.replace(/,/g, '')) || 0;
 
   try {
     await setDoc(doc(db, "goal", user.uid), {
@@ -115,7 +136,6 @@ async function updateTransactionData() {
       timestamp: new Date()
     }, { merge: true });
 
-    // ✅ Refresh chart after saving
     await loadTransactionData(user.uid);
     alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
     window.location.href = "dashboard.html";

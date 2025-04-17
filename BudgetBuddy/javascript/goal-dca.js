@@ -4,8 +4,25 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 
 const auth = getAuth();
 
+function formatNumberWithCommas(value) {
+    const numericValue = value.replace(/,/g, '');
+    if (isNaN(numericValue)) return '';
+    return parseFloat(numericValue).toLocaleString('en-US');
+}
+
+function attachCommaFormatting(input) {
+    input.addEventListener('input', () => {
+        const original = input.value.replace(/,/g, '');
+        const formatted = formatNumberWithCommas(original);
+        input.value = formatted;
+        input.setSelectionRange(formatted.length, formatted.length);
+    });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.querySelector(".submit-button");
+    const investmentAmountInput = document.getElementById("investment-amount");
+    if (investmentAmountInput) attachCommaFormatting(investmentAmountInput);
 
     if (!submitButton) {
         console.error("Error: Submit button not found.");
@@ -16,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const userId = user.uid;
-                const investmentAmount = document.getElementById("investment-amount").value;
+                const investmentAmount = investmentAmountInput.value.replace(/,/g, '');
                 const investmentDate = document.getElementById("investment-date").value;
                 const investmentDuration = document.getElementById("investment-duration").value;
 
@@ -36,8 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }, { merge: true });
 
                     console.log("DCA investment data saved successfully!");
-
-                    // Redirect after saving data
                     window.location.href = "../html/in-ex.html";
                 } catch (error) {
                     console.error("Error saving DCA data:", error);
@@ -69,4 +84,3 @@ window.addEventListener("click", (e) => {
     dcaInfoModal.style.display = "none";
   }
 });
-

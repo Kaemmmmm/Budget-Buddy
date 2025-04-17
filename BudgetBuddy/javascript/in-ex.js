@@ -20,9 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const userId = user.uid;
-            const income = document.getElementById("income").value;
-            const expense = document.getElementById("expense").value;
-            const debt = document.getElementById("debt").value;
+            const income = document.getElementById("income").value.replace(/,/g, '');
+            const expense = document.getElementById("expense").value.replace(/,/g, '');
+            const debt = document.getElementById("debt").value.replace(/,/g, '');
 
             if (!income || !expense || !debt) {
                 alert("กรุณากรอกข้อมูลให้ครบทุกช่องก่อนดำเนินการต่อ");
@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                // Save financial input
                 await setDoc(doc(db, "goal", userId), {
                     income: parseFloat(income),
                     expense: parseFloat(expense),
@@ -39,7 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     timestamp: new Date(),
                 }, { merge: true });
 
-                // Fetch goal data
                 const goalSnapshot = await getDoc(doc(db, "goal", userId));
                 const goalData = goalSnapshot.data();
                 const firestoreGoal = goalData.goal ? goalData.goal.toLowerCase() : "";
@@ -62,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         const months = parseInt(installmentDuration) * 12 || 60;
                         principal = parseFloat(assetPrice) || 0;
 
-                        // Assign rate
                         if (assetType === "house") {
                             annualRate = months <= 36 ? 0.03 : 0.07;
                         } else if (assetType === "car") {
@@ -126,4 +123,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+});
+
+function formatNumberWithCommas(value) {
+    const numericValue = value.replace(/,/g, '');
+    if (isNaN(numericValue)) return '';
+    return parseFloat(numericValue).toLocaleString('en-US');
+}
+
+function attachCommaFormatting(input) {
+    input.addEventListener('input', () => {
+        const cursorPosition = input.selectionStart;
+        const unformatted = input.value.replace(/,/g, '');
+        const formatted = formatNumberWithCommas(unformatted);
+        input.value = formatted;
+        const newCursorPosition = cursorPosition + (formatted.length - unformatted.length);
+        input.setSelectionRange(newCursorPosition, newCursorPosition);
+    });
+}
+
+const incomeInput = document.getElementById('income');
+const expenseInput = document.getElementById('expense');
+const debtInput = document.getElementById('debt');
+
+[incomeInput, expenseInput, debtInput].forEach(input => {
+    attachCommaFormatting(input);
 });
