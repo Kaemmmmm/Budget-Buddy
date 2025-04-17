@@ -95,8 +95,10 @@ async function loadTransactionData(userId) {
       const dcaInvested = await getMonthlyTotal(userId, "dca_history", "amount", "date");
       const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
       const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
+      const emergencyFund = await getMonthlyTotal(userId, "emergencyfund_history", "amount", "date");
 
-      const totalSavings = dcaInvested + savingsAmount + installmentPaid;
+
+      const totalSavings = dcaInvested + savingsAmount + installmentPaid + emergencyFund;
       const remaining = income - (expense + totalSavings + debt);
 
       updateChart(
@@ -104,7 +106,8 @@ async function loadTransactionData(userId) {
         {
           dca: dcaInvested,
           savings: savingsAmount,
-          installment: installmentPaid
+          installment: installmentPaid,
+          emergency: emergencyFund
         }
       );
     } else {
@@ -155,7 +158,8 @@ function updateChart(financialData, detailedData) {
                   `เงินออมรวม: ${value}`,
                   ` • DCA: ${detailedData.dca.toLocaleString()} บาท`,
                   ` • เงินออม: ${detailedData.savings.toLocaleString()} บาท`,
-                  ` • เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`
+                  ` • เงินผ่อน: ${detailedData.installment.toLocaleString()} บาท`,
+                  ` • เงินสำรองฉุกเฉิน: ${detailedData.emergency.toLocaleString()} บาท`
                 ];
               } else {
                 return `${context.label}: ${value}`;

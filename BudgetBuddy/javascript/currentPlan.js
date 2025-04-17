@@ -236,15 +236,17 @@ async function saveUserPlan(planSummaryHTML, financialData) {
   const userId = user.uid;
   const planDocRef = doc(db, "plan", userId);
   const goalDocRef = doc(db, "goal", userId);
+  let assetType = "";
 
   try {
     // 🔽 STEP 1: Get the user's goal name from /goal/<userId>
     const goalSnap = await getDoc(goalDocRef);
+  const goalData = goalSnap.data();
+  assetType = goalData?.installment?.assetType || "";
     if (!goalSnap.exists()) {
       console.error("🚫 ไม่พบข้อมูล goal ของผู้ใช้ กรุณากำหนด goal ก่อน");
       return;
     }
-    const goalData = goalSnap.data();
     const goalName = goalData.goal || "ไม่ระบุ";
 
     // 🔄 STEP 2: Check if old plan exists for archiving
@@ -277,9 +279,11 @@ async function saveUserPlan(planSummaryHTML, financialData) {
       emergencyFund: financialData.emergencyFund || 0,
       debtStatus: financialData.debtStatus || "ไม่ทราบ",
       paidMonths: financialData.paidMonths || 0,
-      assetPrice: financialData.assetPrice || 0,                 // ✅ NEW
-      installmentDuration: financialData.installmentDuration || 1 // ✅ NEW
+      assetPrice: financialData.assetPrice || 0,
+      installmentDuration: financialData.installmentDuration || 1,
+      assetType: assetType || ""  // ✅ ADD THIS
     }, { merge: true });
+
     
 
     console.log("✅ แผนการเงินถูกบันทึกลง Firestore แล้ว (goal =", goalName, ")");

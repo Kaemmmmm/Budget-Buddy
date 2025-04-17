@@ -68,7 +68,8 @@ async function loadTransactionData(userId) {
       const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
       const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
 
-      const savings = dcaInvested + savingsAmount + installmentPaid;
+      const emergencyFund = await getMonthlyTotal(userId, "emergencyfund_history", "amount", "date");
+      const savings = dcaInvested + savingsAmount + installmentPaid + emergencyFund;
       const remaining = income - expense - savings - debt;
 
       document.getElementById("income").value = income;
@@ -80,7 +81,8 @@ async function loadTransactionData(userId) {
         {
           dca: dcaInvested,
           savings: savingsAmount,
-          installment: installmentPaid
+          installment: installmentPaid,
+          emergency: emergencyFund
         }
       );
 
@@ -153,7 +155,8 @@ function updateChart(financialData, detailedData = {}) {
                   `เงินออมรวม: ${value}`,
                   ` • DCA: ${(detailedData.dca || 0).toLocaleString()} บาท`,
                   ` • เงินออม: ${(detailedData.savings || 0).toLocaleString()} บาท`,
-                  ` • เงินผ่อน: ${(detailedData.installment || 0).toLocaleString()} บาท`
+                  ` • เงินผ่อน: ${(detailedData.installment || 0).toLocaleString()} บาท`,
+                  ` • ฉุกเฉิน: ${(detailedData.emergency || 0).toLocaleString()} บาท`
                 ];
               } else {
                 return `${context.label}: ${value}`;
