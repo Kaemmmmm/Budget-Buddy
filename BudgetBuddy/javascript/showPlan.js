@@ -35,9 +35,7 @@ async function loadAllPlansForUser() {
 
   const planDocRef = doc(db, "plan", user.uid);
   const planSnap = await getDoc(planDocRef);
-
-  const goal = await getUserGoal(); // 🔹เพิ่มบรรทัดนี้
-
+  const goal = await getUserGoal(); 
   const allPlans = [];
 
   if (planSnap.exists()) {
@@ -58,7 +56,7 @@ async function loadAllPlansForUser() {
     });
   });
 
-  displayPlanList(allPlans, goal); // 🔹ส่ง goal ไปด้วย
+  displayPlanList(allPlans, goal); 
 }
 
 
