@@ -239,7 +239,7 @@ async function saveUserPlan(planSummaryHTML, financialData) {
   let assetType = "";
 
   try {
-    // 🔽 STEP 1: Get the user's goal name from /goal/<userId>
+    // Get the user's goal name from /goal/<userId>
     const goalSnap = await getDoc(goalDocRef);
   const goalData = goalSnap.data();
   assetType = goalData?.installment?.assetType || "";
@@ -249,7 +249,7 @@ async function saveUserPlan(planSummaryHTML, financialData) {
     }
     const goalName = goalData.goal || "ไม่ระบุ";
 
-    // 🔄 STEP 2: Check if old plan exists for archiving
+    // Check if old plan exists for archiving
     const currentPlanSnap = await getDoc(planDocRef);
     if (currentPlanSnap.exists()) {
       const oldPlanData = currentPlanSnap.data();
@@ -266,7 +266,7 @@ async function saveUserPlan(planSummaryHTML, financialData) {
       }
     }
 
-    // ✅ STEP 3: Save plan with dynamic goal name and flat structure
+    // Save plan with dynamic goal name and flat structure
     await setDoc(planDocRef, {
       plan: planSummaryHTML,
       planUpdatedAt: new Date(),

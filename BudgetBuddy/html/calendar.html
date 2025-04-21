@@ -1,170 +1,114 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ปฏิทินธุรกรรม</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/calendar.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
-
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ปฏิทินธุรกรรม</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/calendar.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css">
+</head>
 
 <body>
- <!-- SIDEBAR -->
- <div class="sidebar">
-    <!-- Logo/Brand Area -->
+  <!-- SIDEBAR -->
+  <div class="sidebar">
     <div class="sidebar-header">
       <img src="../picture/logo.png" alt="Logo" class="logo" style="width: 200px; height: auto;" />
     </div>
-    
-    <!-- Main Navigation Menu -->
+
     <ul class="menu">
-      <li class="menu-item">
-        <a href="start.html" class="menu-link">
-          <i class="fas fa-bullseye"></i>
-          <span>กำหนดเป้าหมายใหม่</span>
-        </a>
-      </li>
-      
-      <li class="menu-item">
-        <a href="calendar.html" class="menu-link">
-          <i class="fas fa-calendar-alt"></i>
-          <span>ปฏิทินธุรกรรม</span>
-        </a>
-      </li>
-      
-      <li class="menu-item">
-        <a href="dashboard.html" class="menu-link">
-          <i class="fas fa-file-alt"></i>
-          <span>รายงานธุรกรรม</span>
-        </a>
-      </li>
-      
-      
+      <li class="menu-item"><a href="start.html" class="menu-link"><i class="fas fa-bullseye"></i><span>กำหนดเป้าหมายใหม่</span></a></li>
+      <li class="menu-item"><a href="calendar.html" class="menu-link"><i class="fas fa-calendar-alt"></i><span>ปฏิทินธุรกรรม</span></a></li>
+      <li class="menu-item"><a href="dashboard.html" class="menu-link"><i class="fas fa-file-alt"></i><span>รายงานธุรกรรม</span></a></li>
+
       <li class="menu-item has-submenu">
-        <a href="#" class="menu-link toggle-submenu">
-          <i class="fas fa-chart-line"></i>
-          <span>ลงทุนDCA</span>
-        </a>
+        <a href="#" class="menu-link toggle-submenu"><i class="fas fa-chart-line"></i><span>ลงทุนDCA</span></a>
         <ul class="submenu">
           <li><a href="calculator.html">คำนวณDCA</a></li>
           <li><a href="dca-progress.html">ความคืบหน้าของDCA</a></li>
         </ul>
       </li>
-      
+
       <li class="menu-item has-submenu">
-        <a href="#" class="menu-link toggle-submenu">
-          <i class="fas fa-credit-card"></i>
-          <span>การชำระผ่อน</span>
-        </a>
+        <a href="#" class="menu-link toggle-submenu"><i class="fas fa-credit-card"></i><span>การชำระผ่อน</span></a>
         <ul class="submenu">
           <li><a href="install-progress.html">ความคืบหน้าของการซ้อมผ่อน</a></li>
         </ul>
       </li>
-      
+
       <li class="menu-item has-submenu">
-        <a href="#" class="menu-link toggle-submenu">
-          <i class="fas fa-piggy-bank"></i>
-          <span>การออมเงิน</span>
-        </a>
+        <a href="#" class="menu-link toggle-submenu"><i class="fas fa-piggy-bank"></i><span>การออมเงิน</span></a>
         <ul class="submenu">
           <li><a href="saving-progress.html">ความคืบหน้าของการออมเงิน</a></li>
         </ul>
       </li>
-      
-      <li class="menu-item">
-        <a href="emergencyfund-progress.html" class="menu-link">
-          <i class="fa-solid fa-shield-heart"></i>
-          <span>เงินสำรองฉุกเฉิน</span>
-        </a>
-      </li>
-      
-      <li class="menu-item">
-        <a href="showPlan.html" class="menu-link">
-          <i class="fas fa-cogs"></i>
-          <span>ดูแผนการเงิน</span>
-        </a>
-      </li>
+
+      <li class="menu-item"><a href="emergencyfund-progress.html" class="menu-link"><i class="fa-solid fa-shield-heart"></i><span>เงินสำรองฉุกเฉิน</span></a></li>
+      <li class="menu-item"><a href="showPlan.html" class="menu-link"><i class="fas fa-cogs"></i><span>ดูแผนการเงิน</span></a></li>
     </ul>
-    
-    <!-- User Profile Area -->
+
     <div class="user-info">
-        <div class="user-name-display">
-          👤 <span class="user-name">กำลังโหลดชื่อ...</span>
+      <div class="user-name-display">👤 <span class="user-name">กำลังโหลดชื่อ...</span></div>
+      <button id="sign-out-btn" class="sign-out-btn"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <div class="title">เพิ่มธุรกรรมรายจ่าย</div>
+    <div class="calendar-wrapper">
+      <div class="calendar-content">
+        <div class="header">
+          <div class="month-year">
+            <button class="nav-button" id="prevBtn">&lt;</button>
+            <p id="monthYearText">มกราคม <strong>2568</strong></p>
+            <button class="nav-button" id="nextBtn">&gt;</button>
+          </div>
         </div>
-        <button id="sign-out-btn" class="sign-out-btn">
-          <i class="fas fa-sign-out-alt"></i> ออกจากระบบ
-        </button>
+
+        <div class="calendar">
+          <div class="days">อา.</div>
+          <div class="days">จ.</div>
+          <div class="days">อ.</div>
+          <div class="days">พ.</div>
+          <div class="days">พฤ.</div>
+          <div class="days">ศ.</div>
+          <div class="days">ส.</div>
+
+          <!-- Sample Dates -->
+          <div class="date">1</div>
+          <div class="date">2</div>
+          <div class="date">3</div>
+          <div class="date">4</div>
+          <div class="date">5</div>
+          <div class="date" onclick="window.location.href='calendar-up.html'">6</div>
+          <!-- Add remaining days as needed -->
+        </div>
+
+        <div class="footer">
+          <button class="edit-btn" onclick="window.location.href='assess.html'">ประเมินสุขภาพการเงิน</button>
+          <button class="add-btn" onclick="window.location.href='add-transaction.html'">เพิ่มธุรกรรมรายจ่าย</button>
+        </div>
+      </div>
+
+      <div class="alert-row">
+        <div class="alert"><p>การแจ้งเตือนธุรกรรม</p></div>
+        <div class="non-alert">
+          <ul id="notification-list">
+            <li>ยังไม่มียอดค้างชำระในขณะนี้</li>
+          </ul>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="container">
-      <div class="title">เพิ่มธุรกรรมรายจ่าย</div>
-        <div class="calendar-wrapper">
-            
-            <!-- คอลัมน์ซ้าย: ปฏิทิน -->
-            <div class="calendar-content">
-                <div class="header">
-                    <div class="month-year">
-                        <button class="nav-button" id="prevBtn">&lt;</button>
-                        <p id="monthYearText">มกราคม <strong>2568</strong></p>
-                        <button class="nav-button" id="nextBtn">&gt;</button>
-                    </div>
-                </div>
-                <div class="calendar">
-                    <div class="days">อา.</div>
-                    <div class="days">จ.</div>
-                    <div class="days">อ.</div>
-                    <div class="days">พ.</div>
-                    <div class="days">พฤ.</div>
-                    <div class="days">ศ.</div>
-                    <div class="days">ส.</div>
-                    <!-- วันที่ -->
-                    <div class="date">1</div> <div class="date">2</div> <div class="date">3</div> <div class="date">4</div>
-                    <div class="date">5</div> <div class="date" onclick="window.location.href='calendar-up.html'">6</div>
-                    <div class="date">7</div> <div class="date">8</div>
-                    <div class="date">9</div> <div class="date">10</div> <div class="date">11</div> <div class="date">12</div>
-                    <div class="date">13</div> <div class="date">14</div> <div class="date">15</div> <div class="date">16</div>
-                    <div class="date">17</div> <div class="date">18</div> <div class="date">19</div> <div class="date">20</div>
-                    <div class="date">21</div> <div class="date">22</div> <div class="date">23</div> <div class="date">24</div>
-                    <div class="date">25</div> <div class="date">26</div> <div class="date">27</div> <div class="date">28</div>
-                    <div class="date">29</div> <div class="date">30</div> <div class="date">31</div>
-                </div>
-                <div class="footer">
-                    <button class="edit-btn" onclick="window.location.href='assess.html'">ประเมินสุขภาพการเงิน</button>
-                    <button class="add-btn" onclick="window.location.href='add-transaction.html'">
-                        เพิ่มธุรกรรมรายจ่าย
-                    </button>
-                </div>
-            </div>
-            
-            <!-- คอลัมน์ขวา: การแจ้งเตือน -->
-            <div class="alert-row">
-                <div class="alert">
-                    <p>การแจ้งเตือนธุรกรรม</p>
-                </div>
-            
-                <div class="non-alert">
-                    <ul id="notification-list">
-                      <li>ยังไม่มียอดค้างชำระในขณะนี้</li>
-                    </ul>
-                  </div>
-                  
-
-        </div>
-    </div>
- 
-    
-    <script type="module" src="../javascript/nav.js"></script>
-    <script src="../javascript/changemonth.js"></script>
-    <script type="module" src="../javascript/loadNotifications.js"></script>
-    <script type="module" src="../javascript/markTransactionDates.js"></script>
-    <script src="../javascript/backButton.js" defer></script>
-
-
+  <!-- Scripts -->
+  <script type="module" src="../javascript/nav.js"></script>
+  <script src="../javascript/changemonth.js"></script>
+  <script type="module" src="../javascript/loadNotifications.js"></script>
+  <script type="module" src="../javascript/markTransactionDates.js"></script>
+  <script src="../javascript/backButton.js" defer></script>
 </body>
 </html>

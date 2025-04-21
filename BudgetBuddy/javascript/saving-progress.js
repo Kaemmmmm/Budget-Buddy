@@ -237,7 +237,7 @@ function updateChart(saved, goal) {
   const progressPercentage = goal > 0 ? ((saved / goal) * 100).toFixed(1) : 0;
   const remainingPercentage = 100 - progressPercentage;
 
-  // ✅ Disable update button when savings is 100% or more
+  //  Disable update button when savings is 100% or more
   const updateBtn = document.getElementById("update-progress-btn");
   if (progressPercentage >= 100 && updateBtn) {
     updateBtn.disabled = true;

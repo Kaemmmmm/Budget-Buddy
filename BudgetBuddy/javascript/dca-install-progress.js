@@ -230,7 +230,7 @@ function updateInstallmentChart(paid, remain) {
   const total = paid + remain;
   const pct = total > 0 ? ((paid / total) * 100).toFixed(1) : 0;
 
-  // ✅ Disable Installment update button if complete
+  //  Disable Installment update button if complete
   const instBtn = document.getElementById("update-installment-btn");
   if (instBtn) {
     if (pct >= 100) {
@@ -281,7 +281,7 @@ function updateDcaChart(invested, goal) {
   const pct = goal > 0 ? ((invested / goal) * 100).toFixed(1) : 0;
   const dataArr = goal > 0 ? [invested, goal - invested] : [0, 1];
 
-  // ✅ Disable DCA update button if complete
+  //  Disable DCA update button if complete
   const dcaBtn = document.getElementById("update-dca-btn");
   if (dcaBtn) {
     if (pct >= 100) {

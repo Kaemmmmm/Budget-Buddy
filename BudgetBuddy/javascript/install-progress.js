@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✅ Check if any required field is missing
+      //  Check if any required field is missing
       const { assetPrice, assetType, installmentDuration } = data.installment;
       if (
         assetPrice === undefined || assetPrice === null ||
@@ -233,7 +233,7 @@ function updateChart(paidMonths, totalMonths) {
     totalMonths > 0 ? ((paidMonths / totalMonths) * 100).toFixed(1) : 0;
   const remainingPercentage = 100 - progressPercentage;
 
-  // ✅ Disable update button if already 100%
+  //  Disable update button if already 100%
   const updateButton = document.getElementById("update-payment-btn");
   if (progressPercentage >= 100) {
     updateButton.disabled = true;

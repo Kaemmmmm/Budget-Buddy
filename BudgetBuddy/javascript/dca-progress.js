@@ -21,47 +21,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const docSnap = await getDoc(userDoc);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-
-        if (data.dca) {
-          const tempMonthlyInvestment = parseFloat(data.dca.monthlyInvestment);
-          const tempInvestmentDuration = parseFloat(data.dca.investmentDuration);
-          investedAmount = parseFloat(data.dca.invested) || 0;
-          
-          // Validate
-          if (
-            isNaN(tempMonthlyInvestment) ||
-            isNaN(tempInvestmentDuration)
-          ) {
-            alert("คุณยังไม่ได้ตั้งเป้าหมาย กรุณาตั้งเป้าหมายเพื่อเริ่มต้นการลงทุนแบบ DCA");
-            window.location.href = "dashboard.html";
-            return;
-          }
-          
-          // ✅ Assign to global variables after validation
-          monthlyInvestment = tempMonthlyInvestment;
-          investmentDuration = tempInvestmentDuration;
-          goalAmount = monthlyInvestment * (investmentDuration * 12);
-          
-        
-          document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
-          document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
-        
-          updateChart(investedAmount, goalAmount);
-        } else {
-          console.error("No dca object found in user data.");
-          updateChart(0, 0);
-        }
-        
-          
-
-        loadInvestmentHistory(userId);
-
-      } else {
+      if (!docSnap.exists()) {
         console.error("No data found for user.");
         updateChart(0, 0);
+        return;
       }
+
+      const data = docSnap.data();
+
+      if (!data.dca) {
+        alert("คุณยังไม่ได้ตั้งเป้าหมายการลงทุนแบบ DCA กรุณาตั้งเป้าหมายก่อนใช้งานระบบ");
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      const tempMonthlyInvestment = parseFloat(data.dca.monthlyInvestment);
+      const tempInvestmentDuration = parseFloat(data.dca.investmentDuration);
+      investedAmount = parseFloat(data.dca.invested) || 0;
+
+      if (isNaN(tempMonthlyInvestment) || isNaN(tempInvestmentDuration)) {
+        alert("ข้อมูลเป้าหมายการลงทุนแบบ DCA ไม่สมบูรณ์ กรุณาตั้งค่าใหม่อีกครั้ง");
+        window.location.href = "dashboard.html";
+        return;
+      }
+
+      monthlyInvestment = tempMonthlyInvestment;
+      investmentDuration = tempInvestmentDuration;
+      goalAmount = monthlyInvestment * (investmentDuration * 12);
+
+      document.getElementById("invested-amount").textContent = investedAmount.toLocaleString("th-TH");
+      document.getElementById("goal-amount").textContent = goalAmount.toLocaleString("th-TH");
+
+      updateChart(investedAmount, goalAmount);
+      loadInvestmentHistory(userId);
+
     } catch (error) {
       console.error("Error fetching DCA progress:", error);
     }
@@ -85,9 +78,21 @@ async function updateProgress() {
     const userId = user.uid;
     const userDoc = doc(db, "goal", userId);
 
-    investedAmount += monthlyInvestment;
-
     try {
+      const docSnap = await getDoc(userDoc);
+      if (!docSnap.exists()) {
+        alert("ไม่พบข้อมูลเป้าหมาย");
+        return;
+      }
+
+      const data = docSnap.data();
+      if (!data.dca) {
+        alert("ไม่พบข้อมูลการลงทุนแบบ DCA กรุณาตั้งค่าเป้าหมายก่อน");
+        return;
+      }
+
+      investedAmount += monthlyInvestment;
+
       await updateDoc(userDoc, {
         "dca.invested": investedAmount
       });
@@ -108,7 +113,6 @@ async function updateProgress() {
     }
   });
 }
-
 
 async function loadInvestmentHistory(userId) {
   const historyList = document.getElementById("history-list");
@@ -139,7 +143,6 @@ async function loadInvestmentHistory(userId) {
     historyList.appendChild(historyItem);
   });
 
-  // Add delete functionality
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", async (event) => {
       const historyId = event.target.getAttribute("data-id");
@@ -183,7 +186,6 @@ function updateChart(investedAmount, goalAmount) {
     : 0;
   const remainingPercentage = 100 - progressPercentage;
 
-  // ✅ Disable button if progress >= 100%
   const updateButton = document.getElementById("update-progress-btn");
   if (progressPercentage >= 100) {
     updateButton.disabled = true;
@@ -220,7 +222,6 @@ function updateChart(investedAmount, goalAmount) {
     plugins: [centerTextPlugin(progressPercentage)]
   });
 }
-
 
 function centerTextPlugin(progressPercentage) {
   return {

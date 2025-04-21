@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         timestamp: new Date(),
                     }, { merge: true });
 
-                    console.log("✅ Installment data saved successfully!");
+                    console.log(" Installment data saved successfully!");
                     window.location.href = "../html/in-ex.html";
                 } catch (error) {
                     console.error("❌ Error saving installment data:", error);

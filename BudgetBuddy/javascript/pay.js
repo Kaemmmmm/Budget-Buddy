@@ -66,14 +66,14 @@ import {
           const onTime = now <= dueDate;
         
           try {
-            // ✅ Update transaction status
+            //  Update transaction status
             await updateDoc(docRef, {
               paid: true,
               paidAt: serverTimestamp(),
               onTime: onTime
             });
         
-            // ✅ Define correct collection path based on type
+            //  Define correct collection path based on type
             let collectionName = "";
             const type = data.type.toLowerCase();
         

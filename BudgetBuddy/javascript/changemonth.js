@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-  // ✅ แก้ตรงนี้ให้ใช้วันที่ปัจจุบัน
+  //  แก้ตรงนี้ให้ใช้วันที่ปัจจุบัน
   const today = new Date();
   let currentMonth = today.getMonth(); // 0 = ม.ค.
   let currentYear = today.getFullYear() + 543; // แปลงเป็น พ.ศ.
