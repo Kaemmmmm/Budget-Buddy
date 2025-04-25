@@ -17,25 +17,22 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("saveButton").addEventListener("click", updateTransactionData);
 
   // Attach comma formatting to inputs
-  const incomeInput = document.getElementById("income");
-  const expenseInput = document.getElementById("expense");
-  const debtInput = document.getElementById("debt");
-
-  [incomeInput, expenseInput, debtInput].forEach(input => {
+  ["income", "expense", "debt"].forEach(id => {
+    const input = document.getElementById(id);
     if (input) attachCommaFormatting(input);
   });
 });
 
 function formatNumberWithCommas(value) {
-  const numericValue = value.replace(/,/g, '');
-  if (isNaN(numericValue)) return '';
-  return parseFloat(numericValue).toLocaleString('en-US');
+  const numeric = value.replace(/,/g, '');
+  if (isNaN(numeric)) return '';
+  return parseFloat(numeric).toLocaleString('en-US');
 }
 
 function attachCommaFormatting(input) {
   input.addEventListener('input', () => {
-    const unformatted = input.value.replace(/,/g, '');
-    const formatted = formatNumberWithCommas(unformatted);
+    const cleaned = input.value.replace(/,/g, '');
+    const formatted = formatNumberWithCommas(cleaned);
     input.value = formatted;
     input.setSelectionRange(formatted.length, formatted.length);
   });
@@ -44,120 +41,94 @@ function attachCommaFormatting(input) {
 function convertThaiDateToDateObject(thaiDateStr) {
   const [date, time] = thaiDateStr.split(" ");
   const [day, month, year] = date.split("/").map(Number);
-  const [hours, minutes, seconds] = time.split(":" ).map(Number);
-  const gregorianYear = year - 543;
-
-  return new Date(gregorianYear, month - 1, day, hours, minutes, seconds);
+  const [h, m, s] = time.split(":").map(Number);
+  return new Date(year - 543, month - 1, day, h, m, s);
 }
 
-async function getMonthlyTotal(userId, subcollection, amountField, dateField) {
-  const ref = collection(db, "goal", userId, subcollection);
+async function getMonthlyTotal(userId, subcol, amountField, dateField) {
+  const ref = collection(db, "goal", userId, subcol);
   const snapshot = await getDocs(ref);
-
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-
   let total = 0;
 
   snapshot.forEach(doc => {
-    const data = doc.data();
-    if (data[dateField]) {
-      const dateObj = convertThaiDateToDateObject(data[dateField]);
-      if (dateObj.getMonth() === currentMonth && dateObj.getFullYear() === currentYear) {
-        total += parseFloat(data[amountField]) || 0;
+    const d = doc.data();
+    if (d[dateField]) {
+      const dateObj = convertThaiDateToDateObject(d[dateField]);
+      if (dateObj.getMonth() === now.getMonth() && dateObj.getFullYear() === now.getFullYear()) {
+        total += parseFloat(d[amountField]) || 0;
       }
     }
   });
-
   return total;
 }
 
 async function loadTransactionData(userId) {
-  const userDoc = doc(db, "goal", userId);
-
   try {
-    const snapshot = await getDoc(userDoc);
-    if (snapshot.exists()) {
-      const data = snapshot.data();
+    const snap = await getDoc(doc(db, "goal", userId));
+    if (!snap.exists()) throw new Error('No data');
+    const data = snap.data();
 
-      const income = parseFloat(data.income) || 0;
-      const expense = parseFloat(data.expense) || 0;
-      const debt = parseFloat(data.debt) || 0;
+    // populate inputs
+    ['income','expense','debt'].forEach(id => {
+      document.getElementById(id).value = (parseFloat(data[id])||0).toLocaleString();
+    });
 
-      const dcaInvested = await getMonthlyTotal(userId, "dca_history", "monthlyInvestment", "investmentDate");
-      const savingsAmount = await getMonthlyTotal(userId, "saving_history", "amount", "date");
-      const installmentPaid = await getMonthlyTotal(userId, "installment_history", "amount", "date");
-      const emergencyFund = await getMonthlyTotal(userId, "emergencyfund_history", "amount", "date");
+    // fetch breakdown
+    const dca = await getMonthlyTotal(userId, "dca_history", "monthlyInvestment", "investmentDate");
+    const savingsAmt = await getMonthlyTotal(userId, "saving_history", "amount", "date");
+    const installment = await getMonthlyTotal(userId, "installment_history", "amount", "date");
+    const emergency = await getMonthlyTotal(userId, "emergencyfund_history", "amount", "date");
 
-      const savings = dcaInvested + savingsAmount + installmentPaid + emergencyFund;
-      const remaining = income - expense - savings - debt;
+    const savings = dca + savingsAmt + emergency; // exclude installment
+    const income = parseFloat(data.income)||0;
+    const expense = parseFloat(data.expense)||0;
+    const debt = parseFloat(data.debt)||0;
+    const remaining = income - expense - savings - installment - debt;
 
-      document.getElementById("income").value = income.toLocaleString();
-      document.getElementById("expense").value = expense.toLocaleString();
-      document.getElementById("debt").value = debt.toLocaleString();
-
-      updateChart(
-        [income, expense, savings, debt, remaining],
-        {
-          dca: dcaInvested,
-          savings: savingsAmount,
-          installment: installmentPaid,
-          emergency: emergencyFund
-        }
-      );
-
-    } else {
-      console.error("No data found for user.");
-      updateChart([0, 0, 0, 0, 0], { dca: 0, savings: 0, installment: 0 });
-    }
-  } catch (error) {
-    console.error("Error fetching financial data:", error);
+    updateChart(
+      [income, expense, savings, installment, debt, remaining],
+      { dca, savings: savingsAmt, installment, emergency }
+    );
+  } catch (err) {
+    console.error(err);
+    updateChart([0,0,0,0,0,0], { dca:0, savings:0, installment:0, emergency:0 });
   }
 }
 
 async function updateTransactionData() {
   const user = auth.currentUser;
+  if (!user) return alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
 
-  if (!user) {
-    alert("กรุณาเข้าสู่ระบบก่อนอัปเดตข้อมูล");
-    return;
-  }
-
-  const income = parseFloat(document.getElementById("income").value.replace(/,/g, '')) || 0;
-  const expense = parseFloat(document.getElementById("expense").value.replace(/,/g, '')) || 0;
-  const debt = parseFloat(document.getElementById("debt").value.replace(/,/g, '')) || 0;
+  const vals = ['income','expense','debt'].reduce((o,id) => {
+    o[id] = parseFloat(document.getElementById(id).value.replace(/,/g,''))||0;
+    return o;
+  }, {});
 
   try {
-    await setDoc(doc(db, "goal", user.uid), {
-      income,
-      expense,
-      debt,
-      timestamp: new Date()
-    }, { merge: true });
-
+    await setDoc(doc(db, "goal", user.uid), { ...vals, timestamp: new Date() }, { merge: true });
     await loadTransactionData(user.uid);
     alert("ข้อมูลได้รับการอัปเดตเรียบร้อย!");
     window.location.href = "dashboard.html";
-
-  } catch (error) {
-    console.error("❌ Error updating data:", error);
+  } catch (e) {
+    console.error(e);
     alert("เกิดข้อผิดพลาดในการอัปเดตข้อมูล");
   }
 }
 
-function updateChart(financialData, detailedData = {}) {
+function updateChart(arr, det) {
   const ctx = document.getElementById("transactionChart").getContext("2d");
-
   if (transactionChart) transactionChart.destroy();
 
   transactionChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ["รายรับ", "รายจ่าย", "เงินออม", "หนี้สิน", "เงินคงเหลือ"],
+      labels: ["รายรับ","รายจ่าย","เงินออม","เงินผ่อน","หนี้สิน","เงินคงเหลือ"],
       datasets: [{
-        data: financialData,
-        backgroundColor: ["#2ecc71", "#e74c3c", "#2980b9", "#d35400", "#1abc9c"]
+        data: arr,
+        backgroundColor: [
+          '#2ecc71','#e74c3c','#2980b9','#f39c12','#d35400','#1abc9c'
+        ]
       }]
     },
     options: {
@@ -167,35 +138,27 @@ function updateChart(financialData, detailedData = {}) {
           titleFont: { family: 'Prompt', size: 14 },
           bodyFont: { family: 'Prompt', size: 14 },
           callbacks: {
-            label: function (context) {
-              const labelIndex = context.dataIndex;
-              const value = context.raw.toLocaleString() + " บาท";
-              if (labelIndex === 2) {
+            label: ctx => {
+              const i = ctx.dataIndex;
+              const val = ctx.raw.toLocaleString() + ' บาท';
+              if (i === 2) {
                 return [
-                  `เงินออมรวม: ${value}`,
-                  ` • DCA: ${(detailedData.dca || 0).toLocaleString()} บาท`,
-                  ` • เงินออม: ${(detailedData.savings || 0).toLocaleString()} บาท`,
-                  ` • เงินผ่อน: ${(detailedData.installment || 0).toLocaleString()} บาท`,
-                  ` • ฉุกเฉิน: ${(detailedData.emergency || 0).toLocaleString()} บาท`
+                  `เงินออมรวม: ${val}`,
+                  ` • DCA: ${det.dca.toLocaleString()} บาท`,
+                  ` • เงินออม: ${det.savings.toLocaleString()} บาท`,
+                  ` • ฉุกเฉิน: ${det.emergency.toLocaleString()} บาท`
                 ];
-              } else {
-                return `${context.label}: ${value}`;
               }
+              if (i === 3) return `เงินผ่อน: ${det.installment.toLocaleString()} บาท`;
+              const lbls = ["รายรับ","รายจ่าย","เงินออม","เงินผ่อน","หนี้สิน","เงินคงเหลือ"];
+              return `${lbls[i]}: ${val}`;
             }
           }
         }
       },
       scales: {
-        x: {
-          ticks: { font: { family: 'Prompt', size: 14 } }
-        },
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: value => value.toLocaleString() + " บาท",
-            font: { family: 'Prompt', size: 14 }
-          }
-        }
+        x: { ticks: { font: { family: 'Prompt', size: 14 } } },
+        y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() + ' บาท', font: { family: 'Prompt', size: 14 } } }
       }
     }
   });
