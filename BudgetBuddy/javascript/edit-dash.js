@@ -123,11 +123,11 @@ function updateChart(arr, det) {
   transactionChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ["รายรับ","รายจ่าย","เงินออม","เงินผ่อน","หนี้สิน","เงินคงเหลือ"],
+      labels: ["รายรับ","รายจ่าย","เงินออม","เงินซ้อมผ่อน","หนี้สิน","เงินคงเหลือ"],
       datasets: [{
         data: arr,
         backgroundColor: [
-          '#2ecc71','#e74c3c','#2980b9','#f39c12','#d35400','#1abc9c'
+          '#2ecc71','#e74c3c','#2980b9','#ffd1e3','#d35400','#1abc9c'
         ]
       }]
     },
@@ -149,8 +149,8 @@ function updateChart(arr, det) {
                   ` • ฉุกเฉิน: ${det.emergency.toLocaleString()} บาท`
                 ];
               }
-              if (i === 3) return `เงินผ่อน: ${det.installment.toLocaleString()} บาท`;
-              const lbls = ["รายรับ","รายจ่าย","เงินออม","เงินผ่อน","หนี้สิน","เงินคงเหลือ"];
+              if (i === 3) return `เงินซ้อมผ่อน: ${det.installment.toLocaleString()} บาท`;
+              const lbls = ["รายรับ","รายจ่าย","เงินออม","เงินซ้อมผ่อน","หนี้สิน","เงินคงเหลือ"];
               return `${lbls[i]}: ${val}`;
             }
           }

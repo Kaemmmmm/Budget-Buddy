@@ -111,7 +111,7 @@ function updateChart(dataArr, details) {
   transactionChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ["รายรับ", "รายจ่าย", "เงินออม", "เงินผ่อน", "หนี้สิน", "เงินคงเหลือ"],
+      labels: ["รายรับ", "รายจ่าย", "เงินออม", "เงินซ้อมผ่อน", "หนี้สิน", "เงินคงเหลือ"],
       datasets: [{
         data: dataArr,
         backgroundColor: [
@@ -143,9 +143,9 @@ function updateChart(dataArr, details) {
                 ];
               }
               if (idx === 3) {
-                return `เงินผ่อน: ${details.installment.toLocaleString()} บาท`;
+                return `เงินซ้อมผ่อน: ${details.installment.toLocaleString()} บาท`;
               }
-              const lbl = ["รายรับ","รายจ่าย","เงินออม","เงินผ่อน","หนี้สิน","เงินคงเหลือ"][idx];
+              const lbl = ["รายรับ","รายจ่าย","เงินออม","เงินซ้อมผ่อน","หนี้สิน","เงินคงเหลือ"][idx];
               return `${lbl}: ${val}`;
             }
           }
