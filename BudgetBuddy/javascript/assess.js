@@ -46,7 +46,7 @@ async function loadAssessmentData() {
     const transaction = transactionDoc.data();
 
     // Count debt-related transactions
-    if (["debt", "loan", "installment", "DCA", "bill"].includes(transaction.type)) {
+    if (["other", "bill"].includes(transaction.type)) {
       totalDebtTransactions++;
       if (transaction.paid === false) hasUnpaidDebt = true;
       if (transaction.onTime === false) hasLatePayment = true;

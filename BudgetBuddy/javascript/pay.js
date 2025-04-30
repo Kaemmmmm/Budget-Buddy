@@ -63,7 +63,9 @@ import {
   
         payBtn.addEventListener("click", async () => {
           const now = new Date();
-          const onTime = now <= dueDate;
+          const paidDate = now.toISOString().split("T")[0];
+          const dueDateOnly = data.date; // already "YYYY-MM-DD"
+          const onTime = paidDate <= dueDateOnly;          
         
           try {
             //  Update transaction status
@@ -132,16 +134,7 @@ import {
                 date: now.toLocaleString("th-TH", { timeZone: "Asia/Bangkok" })
               });
             }
-            
-            // ถ้าธุรกรรมเป็นประเภท bill หรือ installment ให้เพิ่มจำนวนเงินที่จ่ายเข้าไปใน debt
-            if (type === "bill" || type === "installment") {
-              const goalRef = doc(db, "goal", user.uid);
-              const goalSnap = await getDoc(goalRef);
-              let currentDebt = goalSnap.data()?.debt || 0;
-              await updateDoc(goalRef, {
-                debt: currentDebt + data.amount
-              });
-            }          
+       
         
             alert("✅ ทำรายการสำเร็จ กำลังกลับไปหน้าปฏิทิน...");
             location.href = "calendar.html";

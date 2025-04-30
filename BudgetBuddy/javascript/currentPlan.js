@@ -88,15 +88,15 @@ async function loadAssessmentData() {
 
   snapshot.forEach((transactionDoc) => {
     const transaction = transactionDoc.data();
-    if (["debt", "loan", "installment", "DCA", "bill"].includes(transaction.type)) {
+
+    // Count debt-related transactions
+    if (["other", "bill"].includes(transaction.type)) {
+      totalDebtTransactions++;
       if (transaction.paid === false) hasUnpaidDebt = true;
       if (transaction.onTime === false) hasLatePayment = true;
     }
-    if (!["dca", "saving"].includes(transaction.type.toLowerCase())) {
-      totalDebtTransactions += 1;
-    }
   });
-
+  
   let savingsStatus, wealthStatus, emergencyStatus, debtStatus;
 
   // การออม
