@@ -32,7 +32,7 @@
 ---
 
 ## 🖥️ Live Demo
-👉 [Try BudgetBuddy](https://your-live-demo-link.com)
+👉 [Try BudgetBuddy](https://budgetbuddy-cac4f.web.app/html/login.html)
 
 ## 📁 GitHub
 👉 [View Repository](https://github.com/your-team/budgetbuddy)
@@ -41,6 +41,8 @@
 
 ## 🛠 Tools & Technologies
 - **JavaScript**
+- **HTML**
+- **CSS**
 - **Firebase** (Authentication, Realtime Database)
 - **Chart.js**
 - **Figma**
